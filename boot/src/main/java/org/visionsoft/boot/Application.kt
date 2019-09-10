@@ -21,7 +21,7 @@ class Application {
             val beanNames = ctx.beanDefinitionNames
             Arrays.sort(beanNames)
             for (beanName in beanNames) {
-                println(beanName)
+               // println(beanName)
             }
         }
     }
@@ -31,6 +31,7 @@ class Application {
 
         @JvmStatic
         fun main(args: Array<String>) {
+            print("Starting App")
             SpringApplication.run(Application::class.java, *args)
         }
     }
