@@ -1,8 +1,8 @@
-package org.visionsoft.boot.domain.service
+package org.visionsoft.domain.service
 
 import org.springframework.stereotype.Component
 import org.visionsoft.boot.IUserService
-import org.visionsoft.boot.domain.scheme.User
+import org.visionsoft.domain.scheme.User
 
 @Component("userService")
 class UserService: IUserService<User> {

@@ -19,7 +19,8 @@ import org.visionsoft.boot.IUserService
 import org.visionsoft.boot.transaction.transaction
 import javax.annotation.Resource
 
-
+@EnableResourceServer
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 abstract class OauthSecurityConfiguration<U:IUser> : ResourceServerConfigurerAdapter() {
 
     @Resource(name = "userService")

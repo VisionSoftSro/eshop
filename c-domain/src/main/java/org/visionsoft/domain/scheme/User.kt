@@ -1,4 +1,4 @@
-package org.visionsoft.boot.domain.scheme
+package org.visionsoft.domain.scheme
 
 import org.visionsoft.boot.IUser
 

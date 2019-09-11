@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import org.visionsoft.boot.currentUser
-import org.visionsoft.boot.domain.scheme.User
+import org.visionsoft.domain.scheme.User
 import java.security.Principal
 
 @RestController

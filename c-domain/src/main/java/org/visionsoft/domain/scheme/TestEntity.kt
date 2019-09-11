@@ -1,4 +1,4 @@
-package org.visionsoft.boot.domain.scheme
+package org.visionsoft.domain.scheme
 
 import javax.persistence.*
 
