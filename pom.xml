@@ -10,9 +10,10 @@
     <version>1.0.0</version>
 
     <modules>
-        <module>backend</module>
-        <module>boot</module>
-        <module>domain</module>
+        <module>a-boot</module>
+        <module>a-main</module>
+        <module>c-domain</module>
+        <module>c-backend</module>
     </modules>
 
 
@@ -70,6 +71,11 @@
                 <artifactId>domain</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.visionsoft</groupId>
+                <artifactId>main</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -104,8 +110,6 @@
                         <plugin>all-open</plugin>
                         <plugin>spring</plugin>
                     </compilerPlugins>
-
-
                 </configuration>
                 <dependencies>
                     <dependency>
