@@ -27,7 +27,7 @@
 
         <dependency>
             <groupId>org.visionsoft</groupId>
-            <artifactId>main</artifactId>
+            <artifactId>common</artifactId>
         </dependency>
 
     </dependencies>

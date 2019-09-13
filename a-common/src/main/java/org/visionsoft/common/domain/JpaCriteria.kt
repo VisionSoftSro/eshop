@@ -18,6 +18,7 @@ abstract class JpaCriteria<T>(var entityManager: EntityManager): Predicable<T> {
 
     internal abstract var domainClass: Class<T>
     internal abstract var maxResult:Int
+    var useDistinct = false
     var criteriaBuilder:CriteriaBuilder = entityManager.criteriaBuilder
 
     init {
@@ -64,26 +65,29 @@ abstract class JpaCriteria<T>(var entityManager: EntityManager): Predicable<T> {
 
     private fun createTypedQuery(): TypedQuery<T> {
         val conditionalOrder = CriteriaOrder()
-        val query = this.getQuery<T>()
+        val (query, root) = this.getQuery<T>()
         val orderList = ArrayList<Order>()
 //        if (conditionalOrder.getConditionalOrder() != null) {
 //            orderList.addAll(conditionalOrder.getConditionalOrder())
 //        }
-        val simpleOrder = orderBy(criteriaBuilder, query.from(domainClass))
+        val simpleOrder = orderBy(criteriaBuilder, root)
         orderList.addAll(simpleOrder)
+        if(orderList.isNotEmpty())
         query.orderBy(orderList)
+        query.distinct(useDistinct)
         return this.entityManager.createQuery<T>(query)
     }
 
-    fun orderBy(cb: CriteriaBuilder, root: Root<T>): List<Order> = listOf()
+    open fun orderBy(cb: CriteriaBuilder, root: Root<T>): List<Order> = listOf()
 
 
 
-    fun <U>getQuery(count:Boolean = false): CriteriaQuery<U> {
 
-        val cq = this.criteriaBuilder.createQuery()
+    data class QueryWrapper<U, T>(val query:CriteriaQuery<U>, val root:Root<T>)
+    fun <U>getQuery(count:Boolean = false): QueryWrapper<U, T> {
+        var cq = this.criteriaBuilder.createQuery()
         val root = cq.from(domainClass)
-        if(count) {
+        cq = if(count) {
             cq.select(criteriaBuilder.count(root))
         } else {
             cq.select(root)
@@ -91,16 +95,53 @@ abstract class JpaCriteria<T>(var entityManager: EntityManager): Predicable<T> {
 
         val where = where(this, criteriaBuilder, root)
         if (where != null) {
-            cq.where(where)
+            cq = cq.where(where)
         }
 
-        return cq as CriteriaQuery<U>
+        return QueryWrapper<U, T>(cq as CriteriaQuery<U>, root)
     }
 
 
-    fun count(): Long? {
-        val q = this.entityManager.createQuery<Long>(this.getQuery(true))
+    fun count(): Long {
+        val (query) = this.getQuery<Long>(true)
+        val q = this.entityManager.createQuery<Long>(query)
         return q.singleResult
+    }
+
+
+    fun createOrderFromSource(root:Root<T>, source: List<OrderClause>?, convertor: OrderConvertor<T>?): List<Order> {
+        val list = ArrayList<Order>()
+        if (source != null)
+            for (order in source) {
+                if (convertor != null) {
+                    val _order = convertor!!.convertOrder(order, this)
+                    if (_order != null) {
+                        list.add(_order)
+                        continue
+                    }
+                }
+                val exp = createExpresionFromName(order.name!!, root)
+                val dir = order.dir
+                if ("asc" == dir) {
+                    list.add(criteriaBuilder.asc(exp))
+                } else {
+                    list.add(criteriaBuilder.desc(exp))
+                }
+            }
+        return list
+    }
+
+    fun createExpresionFromName(name: String, root:Root<T>): Expression<*>? {
+        val path = name.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        var exp: Path<*>? = null
+        for (s in path) {
+            if (exp == null) {
+                exp = root.get<Any>(s)
+            } else {
+                exp = exp.get<Any>(s)
+            }
+        }
+        return exp
     }
 
 }
@@ -133,4 +174,9 @@ class CriteriaOrder {
         return clause
     }
 
+}
+
+
+interface OrderConvertor<E> {
+    fun convertOrder(clause: OrderClause, crit: JpaCriteria<E>): Order
 }

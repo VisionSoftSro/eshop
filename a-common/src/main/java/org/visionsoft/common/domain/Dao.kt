@@ -19,7 +19,7 @@ abstract class GenericDao<T>(var entityClass:Class<T>) {
         }
     }
 
-    fun <ID>find(id:ID) = entityManager.find(entityClass, id)
+    fun <ID>findById(id:ID) = entityManager.find(entityClass, id)
 
     fun find(max:Int = 10, predicate: Predicable<T>? = null): List<T> {
         return createCriteria(max, predicate).list()

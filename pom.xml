@@ -10,8 +10,8 @@
     <version>1.0.0</version>
 
     <modules>
-        <module>a-boot</module>
-        <module>a-main</module>
+        <module>c-boot</module>
+        <module>a-common</module>
         <module>c-domain</module>
         <module>c-backend</module>
     </modules>
@@ -73,7 +73,7 @@
             </dependency>
             <dependency>
                 <groupId>org.visionsoft</groupId>
-                <artifactId>main</artifactId>
+                <artifactId>common</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

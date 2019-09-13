@@ -4,6 +4,7 @@ create table a_user (
     email text not null,
     CONSTRAINT users_pkey PRIMARY KEY (id)
 );
+CREATE SEQUENCE user_id_seq INCREMENT 1 START 1;
 
 create table roles (
     a_user bigint not null,
@@ -14,4 +15,10 @@ alter table roles add CONSTRAINT fk_user_role FOREIGN KEY (a_user)
       REFERENCES a_user (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION;
 
-CREATE SEQUENCE user_id_seq INCREMENT 1 START 1;
+
+create table my_table (
+    id bigint DEFAULT nextval(('my_table_id_seq'::text)::regclass) NOT NULL,
+    note text not null
+);
+
+CREATE SEQUENCE my_table_id_seq INCREMENT 1 START 1;
