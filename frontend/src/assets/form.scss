@@ -1,0 +1,44 @@
+.has-error .form-control {
+  border-color: #ab291a
+}
+.dropzone {
+  position: relative;
+}
+
+.dropzone-active > .ui-block {
+  background-color: #bee2be;
+}
+.dropzone-progress {
+  top: 0;
+  left: 0;
+  height: 100%;
+  position: absolute;
+  background-color: #c6c9ff;
+  border-radius: inherit;
+}
+
+.dropzone-progress.upload-failed {
+  background-color: #ffa6b5;
+}
+
+.form-checkbox input {
+  margin-right: 5px;
+}
+
+.form-checkbox {
+  display: none;
+}
+.ig-checkbox {
+  background-color: #fff!important;
+}
+
+.upload-zone>.ui-block-title {
+  border:0!important;
+  padding:0!important;
+}
+
+.input-highlight .input-group {
+  border: #00ff5d 1px solid;
+  border-radius: 5px;
+  box-shadow: 0px 0px 6px 0px #00ff5d;
+}

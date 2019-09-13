@@ -1,0 +1,34 @@
+
+@import '~react-datetime/css/react-datetime.css';
+@import '~bootstrap/dist/css/bootstrap-reboot.css';
+@import '~bootstrap/dist/css/bootstrap.css';
+@import '~bootstrap/dist/css/bootstrap-grid.css';
+@import '~material-design-iconic-font/dist/css/material-design-iconic-font.css';
+@import '~react-toastify/dist/ReactToastify.css';
+//
+// //fonts
+//template css
+//@import 'modular/user/index.scss';
+
+
+@import 'input-icon';
+@import 'form';
+@import 'landing.module';
+@import "user.module";
+
+//node_modules
+@import '~bootstrap/dist/css/bootstrap.css';
+
+@import 'generics.css';
+@import 'pricing-table.scss';
+
+
+@import 'font/Nunito/style.css';
+@import 'font/Varela/style.css';
+@import 'font/glyphicons/glyph-icon.css';
+@import 'font/linecons/style.css';
+@import 'font/pe/pe-icon-7-stroke.css';
+@import 'font/nucleo/styles.css';
+
+@import 'loading';
+@import 'custom';
