@@ -2,16 +2,19 @@ package org.visionsoft.common
 
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.autoconfigure.domain.EntityScan
+import org.springframework.boot.autoconfigure.web.servlet.DispatcherServletAutoConfiguration
+import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration
 import org.springframework.boot.builder.SpringApplicationBuilder
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
-import org.springframework.context.annotation.ComponentScan
-import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.EnableAspectJAutoProxy
-import org.springframework.transaction.annotation.EnableTransactionManagement
+import org.springframework.context.annotation.Import
+import org.visionsoft.cmr.mvc.config.MvcConfig
+import org.visionsoft.crm.domain.config.DomainConfig
 
-@SpringBootApplication
 
+@SpringBootApplication//(exclude=[DispatcherServletAutoConfiguration::class])
+@EnableAspectJAutoProxy
+@Import(DomainConfig::class, MvcConfig::class)
 class Application: SpringBootServletInitializer() {
 
     override fun configure(builder: SpringApplicationBuilder) = builder.sources(Application::class.java)!!
@@ -20,16 +23,8 @@ class Application: SpringBootServletInitializer() {
 
         @JvmStatic
         fun main(args: Array<String>) {
-            print("Starting App")
             SpringApplication.run(Application::class.java, *args)
         }
     }
 
 }
-
-@Configuration
-@EnableTransactionManagement
-@ComponentScan("org.visionsoft")
-@EntityScan( "org.visionsoft.domain.scheme" )
-@EnableAspectJAutoProxy
-class ApplicationBoot

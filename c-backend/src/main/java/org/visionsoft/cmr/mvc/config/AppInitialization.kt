@@ -1,4 +1,4 @@
-package org.visionsoft.smersever.config
+package org.visionsoft.cmr.mvc.config
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.context.event.ApplicationReadyEvent
@@ -6,13 +6,12 @@ import org.springframework.context.ApplicationListener
 import org.springframework.stereotype.Component
 import org.visionsoft.common.applyAndPersist
 import org.visionsoft.common.transaction.transaction
-import org.visionsoft.domain.scheme.RoleCode
-import org.visionsoft.domain.scheme.User
-import org.visionsoft.domain.service.UserService
+import org.visionsoft.crm.domain.scheme.RoleCode
+import org.visionsoft.crm.domain.scheme.User
+import org.visionsoft.crm.domain.service.UserService
 
 @Component
-class AppConfig: ApplicationListener<ApplicationReadyEvent>{
-
+class AppInitialization: ApplicationListener<ApplicationReadyEvent> {
     @Autowired
     lateinit var userService: UserService
 

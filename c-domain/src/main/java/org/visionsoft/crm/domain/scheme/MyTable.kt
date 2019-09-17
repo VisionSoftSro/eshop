@@ -1,4 +1,4 @@
-package org.visionsoft.domain.scheme
+package org.visionsoft.crm.domain.scheme
 
 import javax.persistence.*
 

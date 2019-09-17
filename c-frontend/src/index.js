@@ -20,6 +20,7 @@ export const ChangeLocale = locale => {
 
 import { Provider } from 'react-redux';
 import store from './ts/redux/ReduxStore';
+import {DeleteThis} from "./DeleteThis";
 
 const testEnvVars = () => {
     return process.env.REACT_APP_BINARIA_BACKEND_URL&&process.env.REACT_APP_LOGPORT_URL&&process.env.REACT_APP_BINARIA_API_KEY;
@@ -27,7 +28,7 @@ const testEnvVars = () => {
 
 if(testEnvVars()) {
     // ReactDOM.render(<Provider store={store}><MainPage /></Provider>, document.getElementById('root'));
-    ReactDOM.render(<div>My awesome app</div>, document.getElementById('root'));
+    ReactDOM.render(<div><DeleteThis /></div>, document.getElementById('root'));
 } else {
     ReactDOM.render(<div>App is not properly configured. Run app with env variable <strong>REACT_APP_RAAL_BACKEND_URL</strong> set</div>, document.getElementById('root'));
 }

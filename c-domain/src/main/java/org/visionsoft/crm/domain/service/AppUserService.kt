@@ -1,10 +1,10 @@
-package org.visionsoft.domain.service
+package org.visionsoft.crm.domain.service
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import org.visionsoft.common.IUserService
-import org.visionsoft.domain.dao.UserDao
-import org.visionsoft.domain.scheme.User
+import org.visionsoft.crm.domain.dao.UserDao
+import org.visionsoft.crm.domain.scheme.User
 
 @Component("userService")
 class UserService: IUserService<User> {

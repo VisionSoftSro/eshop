@@ -1,4 +1,4 @@
-package org.visionsoft.smersever.config
+package org.visionsoft.cmr.mvc.config
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.context.properties.ConfigurationProperties
@@ -10,9 +10,9 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.visionsoft.common.applyAndPersist
 import org.visionsoft.common.config.security.OauthSecurityConfiguration
 import org.visionsoft.common.transaction.transaction
-import org.visionsoft.domain.scheme.RoleCode
-import org.visionsoft.domain.scheme.User
-import org.visionsoft.domain.service.UserService
+import org.visionsoft.crm.domain.scheme.RoleCode
+import org.visionsoft.crm.domain.scheme.User
+import org.visionsoft.crm.domain.service.UserService
 
 
 @EnableResourceServer
@@ -25,7 +25,7 @@ class SecurityConfig: OauthSecurityConfiguration<User>() {
     lateinit var userService: UserService
 
     override fun extractAuthentication(auth: Authentication): User {
-        var user:User? = userService.findUser(auth.name)
+        var user: User? = userService.findUser(auth.name)
         if(user == null) {
             user = transaction {
                 User().applyAndPersist {
@@ -42,9 +42,15 @@ class SecurityConfig: OauthSecurityConfiguration<User>() {
         http
                 .antMatcher("/**")
                 .authorizeRequests()
-                .antMatchers("/", "/error**", "/static/**")
-                .permitAll()
-                .anyRequest()
+
+                //authenticate api requests
+                .antMatchers("/api/**")
                 .authenticated()
+
+                //any other request is not secured
+                .anyRequest()
+                .permitAll()
+
+
     }
 }
