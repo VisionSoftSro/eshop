@@ -42,7 +42,7 @@ class SecurityConfig: OauthSecurityConfiguration<User>() {
         http
                 .antMatcher("/**")
                 .authorizeRequests()
-                .antMatchers("/", "/error**")
+                .antMatchers("/", "/error**", "/static/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

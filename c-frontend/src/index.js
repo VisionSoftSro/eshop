@@ -26,7 +26,8 @@ const testEnvVars = () => {
 };
 
 if(testEnvVars()) {
-    ReactDOM.render(<Provider store={store}><MainPage /></Provider>, document.getElementById('root'));
+    // ReactDOM.render(<Provider store={store}><MainPage /></Provider>, document.getElementById('root'));
+    ReactDOM.render(<div>My awesome app</div>, document.getElementById('root'));
 } else {
     ReactDOM.render(<div>App is not properly configured. Run app with env variable <strong>REACT_APP_RAAL_BACKEND_URL</strong> set</div>, document.getElementById('root'));
 }

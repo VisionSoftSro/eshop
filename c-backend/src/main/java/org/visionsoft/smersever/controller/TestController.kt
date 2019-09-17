@@ -13,7 +13,7 @@ import org.visionsoft.domain.scheme.User
 import java.security.Principal
 
 @RestController
-@RequestMapping
+@RequestMapping("test")
 class TestController {
 
     @Autowired

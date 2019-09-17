@@ -5,15 +5,16 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.visionsoft</groupId>
-    <artifactId>smersever</artifactId>
+    <artifactId>parent</artifactId>
     <packaging>pom</packaging>
     <version>1.0.0</version>
 
     <modules>
-        <module>c-boot</module>
         <module>a-common</module>
         <module>c-domain</module>
         <module>c-backend</module>
+        <module>c-frontend</module>
+        <module>c-boot</module>
     </modules>
 
 
@@ -63,17 +64,22 @@
         <dependencies>
             <dependency>
                 <groupId>org.visionsoft</groupId>
-                <artifactId>backend</artifactId>
+                <artifactId>cmr-backend</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.visionsoft</groupId>
-                <artifactId>domain</artifactId>
+                <artifactId>cmr-domain</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.visionsoft</groupId>
-                <artifactId>common</artifactId>
+                <artifactId>cmr-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.visionsoft</groupId>
+                <artifactId>cmr-frontend</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
