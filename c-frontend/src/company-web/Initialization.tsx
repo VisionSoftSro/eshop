@@ -4,11 +4,11 @@ import './Global';
 import './assets/main.scss';
 import * as Locs from "../common/Localization";
 import { Provider } from 'react-redux';
-import store from '../common/redux/ReduxStore';
 import DataStorage from "../common/DataStorage";
 import moment from 'moment';
 import 'moment/locale/cs';
-import {Root} from "./pages/Root";
+import Root from "./pages/Root";
+import store from './redux/WebRedux';
 const i18n = Locs.init(require('./i18n/all'));
 export const ChangeLocale = (locale:string) => {
     i18n.setLanguage(locale);

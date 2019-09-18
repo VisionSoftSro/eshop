@@ -1,8 +1,8 @@
 import {Action} from "redux";
-import {ReducerDispatch} from "../ReducerDispatchInterfaceDeclaration";
+import {ReducerDispatch} from "../../../common/redux/ReducerDispatchInterfaceDeclaration";
 
 export enum TestActionType {
-    Test
+    Test="test/test"
 }
 
 export interface TestState extends ReducerDispatch<TestAction> {

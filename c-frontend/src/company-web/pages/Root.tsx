@@ -1,7 +1,17 @@
 import * as React from "react";
+import {connect} from "react-redux";
+import {WebCombinedState} from "../redux/WebRedux";
+import {Link} from "../../common/component/Link";
+import {TestActionType, TestState} from "../redux/reducers/TestReducer";
 
-export class Root extends React.Component {
+class Root extends React.Component<TestState> {
+
+    click = () => {
+      this.props.dispatch({type:TestActionType.Test, value:this.props.value+1});
+    };
+
     render() {
-        return "Root";
+        return <Link href={this.click}>Klik {this.props.value}</Link>;
     }
 }
+export default connect((state:WebCombinedState) => state.test)(Root);
