@@ -8,6 +8,7 @@ import store from '../common/redux/ReduxStore';
 import DataStorage from "../common/DataStorage";
 import moment from 'moment';
 import 'moment/locale/cs';
+import {Root} from "./pages/Root";
 const i18n = Locs.init(require('./i18n/all'));
 export const ChangeLocale = (locale:string) => {
     i18n.setLanguage(locale);
@@ -22,8 +23,7 @@ const testEnvVars = () => {
 };
 
 if(testEnvVars()) {
-    // ReactDOM.render(<Provider store={store}>jj</Provider>, document.getElementById('root'));
-    ReactDOM.render(<div>Application</div>, document.getElementById('root'));
+    ReactDOM.render(<Provider store={store}><Root /></Provider>, document.getElementById('root'));
 } else {
     ReactDOM.render(<div>App is not properly configured. Run app with env variable <strong>REACT_APP_RAAL_BACKEND_URL</strong> set</div>, document.getElementById('root'));
 }

@@ -9,12 +9,12 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>cmr-backend</artifactId>
+    <artifactId>cms-backend</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>org.visionsoft</groupId>
-            <artifactId>cmr-domain</artifactId>
+            <artifactId>cms-domain</artifactId>
         </dependency>
 
         <dependency>

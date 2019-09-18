@@ -64,22 +64,22 @@
         <dependencies>
             <dependency>
                 <groupId>org.visionsoft</groupId>
-                <artifactId>cmr-backend</artifactId>
+                <artifactId>cms-backend</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.visionsoft</groupId>
-                <artifactId>cmr-domain</artifactId>
+                <artifactId>cms-domain</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.visionsoft</groupId>
-                <artifactId>cmr-common</artifactId>
+                <artifactId>cms-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.visionsoft</groupId>
-                <artifactId>cmr-frontend</artifactId>
+                <artifactId>cms-frontend</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

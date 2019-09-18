@@ -9,8 +9,8 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>cmr-frontend</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>cms-frontend</artifactId>
+    <packaging>jar</packaging>
 
     <profiles>
         <profile>
