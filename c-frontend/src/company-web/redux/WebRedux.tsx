@@ -13,7 +13,7 @@ export interface WebReducersState
     extends ReducerMembers<WebsocketState, LoginState>, WebReducerMembers<TestState> {
 }
 
-export interface WebCombinedState extends WebReducerMembers, CombinedState {}
+export interface WebCombinedState extends WebReducersState, CombinedState {}
 
 
 const reducers: WebReducerMembers = {

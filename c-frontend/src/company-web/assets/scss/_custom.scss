@@ -1,0 +1,787 @@
+/*------- custom css -------*/
+
+html {
+    height: 100%;
+}
+
+body {
+    position: relative;
+}
+
+html, body {
+    color: $text-color;
+    background-color: $white;
+    font-weight: $regular;
+    letter-spacing: $letter-spacing;
+}
+
+.container.boxed {
+    width: 100% !important;
+    max-width: 1300px;
+}
+
+.container {
+    max-width: 1260px;
+}
+
+.content {
+    background: $light-bg-color;
+    padding: 30px 65px;
+}
+
+img {
+    -webkit-backface-visibility: hidden;
+}
+
+/*--- spacers ---*/
+
+.spacer {
+    margin: 15px 0;
+    line-height: 0;
+}
+
+.spacer-2x {
+    margin: 30px 0;
+    line-height: 0;
+}
+
+.spacer-3x {
+    margin: 45px 0;
+    line-height: 0;
+}
+
+.spacer-line {
+    width: 50px;
+    line-height: 0;
+    border-bottom: 2px solid $light-grey;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.spacer-line-2x {
+    width: 100px;
+    line-height: 0;
+    border-bottom: 2px solid $light-grey;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.spacer-line-solid {
+    width: 50px;
+    line-height: 0;
+    border-bottom: 4px solid $light-grey;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.spacer-line-solid-2x {
+    width: 100px;
+    line-height: 0;
+    border-bottom: 4px solid $light-grey;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.spacer-line-full-width {
+    width: 100%;
+    line-height: 0;
+    border-bottom: 2px solid $light-grey;
+}
+
+.space {
+    margin: 15px !important;
+}
+
+.space-2x {
+    margin: 30px !important;
+}
+
+.space-3x {
+    margin: 45px !important;
+}
+
+.space-top {
+    margin-top: 15px !important;
+}
+
+.space-top-2x {
+    margin-top: 30px !important;
+}
+
+.space-bottom {
+    margin-bottom: 15px !important;
+}
+
+.space-bottom-2x {
+    margin-bottom: 30px !important;
+}
+
+.space-left {
+    margin-left: 15px !important;
+}
+
+.space-left-2x {
+    margin-left: 30px !important;
+}
+
+.space-right {
+    margin-right: 15px !important;
+}
+
+.space-right-2x {
+    margin-right: 30px !important;
+}
+
+.inner-space {
+    padding: 15px !important;
+}
+
+.inner-space-2x {
+    padding: 30px !important;
+}
+
+.inner-space-3x {
+    padding: 45px !important;
+}
+
+.inner-space-top {
+    padding-top: 15px !important;
+}
+
+.inner-space-top-2x {
+    padding-top: 30px !important;
+}
+
+.inner-space-bottom {
+    padding-bottom: 15px !important;
+}
+
+.inner-space-bottom-2x {
+    padding-bottom: 30px !important;
+}
+
+.inner-space-left {
+    padding-left: 15px !important;
+}
+
+.inner-space-left-2x {
+    padding-left: 30px !important;
+}
+
+.inner-space-right {
+    padding-right: 15px !important;
+}
+
+.inner-space-right-2x {
+    padding-right: 30px !important;
+}
+
+.no-margin {
+    margin: 0 !important;
+}
+
+.no-margin-top {
+    margin-top: 0 !important;
+}
+
+.no-margin-bottom {
+    margin-bottom: 0 !important;
+}
+
+.no-margin-left {
+    margin-left: 0 !important;
+}
+
+.no-margin-right {
+    margin-right: 0 !important;
+}
+
+.no-padding {
+    padding: 0 !important;
+}
+
+.no-padding-top {
+    padding-top: 0 !important;
+}
+
+.no-padding-bottom {
+    padding-bottom: 0 !important;
+}
+
+.no-padding-left {
+    padding-left: 0 !important;
+}
+
+.no-padding-right {
+    padding-right: 0 !important;
+}
+
+/*--- end of spacers ---*/
+
+
+/*--- custom colors ---*/
+
+.bg-transparent {
+    background-color: transparent !important;
+}
+
+.bg-white {
+    background-color: $white !important;
+}
+
+.bg-black {
+    background-color: $black !important;
+}
+
+.bg-faded {
+    background-color: $secondary !important;
+}
+
+.bg-light {
+    background-color: $light-bg-color !important;
+}
+
+.bg-lightgrey {
+    background-color: $light-grey !important;
+}
+
+.bg-grey {
+    background-color: $grey !important;
+}
+
+.bg-midgrey {
+    background-color: $mid-grey !important;
+}
+
+.bg-darkgrey {
+    background-color: $dark-grey !important;
+}
+
+.bg-deepgrey {
+    background-color: $deep-grey !important;
+}
+
+.bg-inverse {
+    background-color: $inverse-color !important;
+}
+
+.bg-primary {
+    background-color: $primary !important;
+}
+
+.bg-primary-hover {
+    background-color: $primary-hover !important;
+}
+
+.bg-secondary {
+    background-color: $secondary !important;
+}
+
+.bg-secondary-hover {
+    background-color: $secondary-hover !important;
+}
+
+.bg-success {
+    background-color: $success !important;
+}
+
+.bg-success-hover {
+    background-color: $success-hover !important;
+}
+
+.bg-info {
+    background-color: $info !important;
+}
+
+.bg-info-hover {
+    background-color: $info-hover !important;
+}
+
+.bg-warning {
+    background-color: $warning !important;
+}
+
+.bg-danger {
+    background-color: $danger !important;
+}
+
+.w-border {
+    border: 1px solid transparent;
+}
+
+.w-border-2x {
+    border: 2px solid transparent;
+}
+
+.w-border-3x {
+    border: 3px solid transparent;
+}
+
+.border-white {
+    border-color: $white !important;
+}
+
+.border-black {
+    border-color: $black !important;
+}
+
+.border-faded {
+    border-color: $secondary !important;
+}
+
+.border-inverse {
+    border-color: $dark-grey !important;
+}
+
+.border-primary {
+    border-color: $primary !important;
+}
+
+.border-secondary {
+    border-color: $secondary !important;
+}
+
+.border-success {
+    border-color: $success !important;
+}
+
+.border-info {
+    border-color: $info !important;
+}
+
+.border-warning {
+    border-color: $warning !important;
+}
+
+.border-danger {
+    border-color: $danger !important;
+}
+
+.text-muted {
+    color: $grey !important;
+}
+
+.text-white {
+    color: $white !important;
+}
+
+.text-black {
+    color: $black !important;
+}
+
+.text-primary {
+    color: $primary !important;
+}
+
+.text-secondary {
+    color: $secondary !important;
+}
+
+.text-success {
+    color: $success !important;
+}
+
+.text-info {
+    color: $info !important;
+}
+
+.text-warning {
+    color: $warning !important;
+}
+
+.text-danger {
+    color: $danger !important;
+}
+
+a.text-white:focus, a.text-white:hover {
+    color: #f7f7f7 !important;
+}
+
+a.text-black:focus, a.text-black:hover {
+    color: #555 !important;
+}
+
+a.text-primary:focus, a.text-primary:hover {
+    color: $primary-hover !important;
+}
+
+a.text-secondary:focus, a.text-secondary:hover {
+    color: $secondary-hover !important;
+}
+
+a.text-success:focus, a.text-success:hover {
+    color: $success-hover !important;
+}
+
+a.text-info:focus, a.text-info:hover {
+    color: $info-hover !important;
+}
+
+a.text-warning:focus, a.text-warning:hover {
+    color: $warning-hover !important;
+}
+
+a.text-danger:focus, a.text-danger:hover {
+    color: $danger-hover !important;
+}
+
+/*--- end of custom colors ---*/
+
+
+/*--- custom attributes ---*/
+
+.container.full-width {
+    width: 100% !important;
+    padding: 0 !important;
+}
+
+.w80 {
+    max-width: 80% !important;
+}
+
+.w70 {
+    max-width: 70% !important;
+}
+
+.w60 {
+    max-width: 60% !important;
+}
+
+.w50 {
+    max-width: 50% !important;
+}
+
+.w40 {
+    max-width: 40% !important;
+}
+
+.w35 {
+    max-width: 35% !important;
+}
+
+.w30 {
+    max-width: 30% !important;
+}
+
+.w20 {
+    max-width: 20% !important;
+}
+
+.w10 {
+    max-width: 10% !important;
+}
+
+button:focus {
+    outline: none !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+}
+
+.opc-75 {
+    opacity: 0.75 !important;
+}
+
+.opc-50 {
+    opacity: 0.5 !important;
+}
+
+.opc-25 {
+    opacity: 0.25 !important;
+}
+
+.pull-left {
+    float: left !important;
+}
+
+.pull-right {
+    float: right !important;
+}
+
+.no-border {
+    border: none !important;
+}
+
+.no-border-radius {
+    border-radius: 0 !important;
+}
+
+.rectangle {
+    border-radius: 0 !important;
+}
+
+.rounded {
+    border-radius: 5px !important;
+}
+
+.rounded-2x {
+    border-radius: 10px !important;
+}
+
+.pill {
+    border-radius: 50px !important;
+}
+
+.circle {
+    border-radius: 100% !important;
+}
+
+h3.sub-title {
+    font-size: 1.5rem;
+}
+
+.sub-title {
+    font-size: 1.25rem;
+}
+
+.title-font {
+    font-family: $title-font !important;
+}
+
+img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+}
+
+.img-auto {
+    width: auto !important;
+}
+
+.img-thumbnail {
+    padding: 5px;
+    background-color: #fff;
+    border: 1px solid $light-grey;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.fa {
+    vertical-align: middle;
+}
+
+.animated {
+    -webkit-animation-duration: 1s !important;
+    animation-duration: 1s !important;
+}
+
+.animated.fast {
+    -webkit-animation-duration: 0.4s !important;
+    animation-duration: 0.4s !important;
+}
+
+.animated.first {
+    -webkit-animation-duration: 1.5s !important;
+    animation-duration: 1.5s !important;
+    animation-delay: 0.5s;
+}
+
+.animated.second {
+    -webkit-animation-duration: 1.6s !important;
+    animation-duration: 1.6s !important;
+    animation-delay: 1s;
+}
+
+.animated.third {
+    -webkit-animation-duration: 1.5s !important;
+    animation-duration: 1.5s !important;
+    animation-delay: 1.3s;
+}
+
+.animated.fourth {
+    -webkit-animation-duration: 1.6s !important;
+    animation-duration: 1.6s !important;
+    animation-delay: 1.8s;
+}
+
+.animated.fifth {
+    -webkit-animation-duration: 1.5s !important;
+    animation-duration: 1.5s !important;
+    animation-delay: 2s;
+}
+
+.animated.sixth {
+    -webkit-animation-duration: 1.5s !important;
+    animation-duration: 1.5s !important;
+    animation-delay: 2.5s;
+}
+
+.animated.seventh {
+    -webkit-animation-duration: 1.6s !important;
+    animation-duration: 1.6s !important;
+    animation-delay: 3.2s;
+}
+
+.animated.eighth {
+    -webkit-animation-duration: 1.5s !important;
+    animation-duration: 1.5s !important;
+    animation-delay: 3.5s;
+}
+
+.animated.nineth {
+    -webkit-animation-duration: 1.6s !important;
+    animation-duration: 1.6s !important;
+    animation-delay: 3.8s;
+}
+
+::-moz-selection {
+    color: $white;
+    background: $primary-transparent;
+}
+
+::selection {
+    color: $white; 
+    background: $primary-transparent;
+}
+
+.vcenter {
+    display: flex;
+    align-items: center;
+}
+
+.va-middle {
+    vertical-align: middle !important;
+}
+
+.parallax {
+    background-attachment: fixed !important;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.text-regular {
+    font-weight: $regular;
+}
+
+.d-inline-block {
+    display: inline-block;
+}
+
+.after-dropdown {
+    margin-left: 10px;
+}
+
+.move {
+    -moz-transition: 0.2s ease-in-out;
+    -o-transition: 0.2s ease-in-out;
+    -webkit-transition: 0.2s ease-in-out;
+    transition: 0.2s ease-in-out;
+}
+
+.move:hover {
+    transform: translateY(-2px) !important;
+}
+
+.no-move:hover {
+    transform: translateY(0) !important;
+}
+
+.raised {
+    -webkit-box-shadow: 0 1px 6px rgba(0,0,0,0.05), 0 1px 6px rgba(0,0,0,0.1) !important;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.05), 0 1px 6px rgba(0,0,0,0.1) !important;
+}
+
+.raised.move:hover {
+    -webkit-box-shadow: 0 3px 12px rgba(0,0,0,0.05), 0 3px 12px rgba(0,0,0,0.1) !important;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.05), 0 3px 12px rgba(0,0,0,0.1) !important;
+}
+
+.no-shadow {
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    box-shadow: none !important;
+}
+
+.count {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    color: $title-color;
+    background: $white;
+    width: 16px;
+    height: 16px;
+    font-size: 10px;
+    line-height: 16px;
+    text-align: center;
+    border-radius: 50%;
+}
+
+.count-inverse {
+    color: $white;
+    background: $dark-grey;
+}
+
+.count-primary {
+    color: $white;
+    background: $primary;
+}
+
+.bg-img {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+/*--- end of custom attributes ---*/
+
+
+/*--- preloader ---*/
+
+.dark #preloader {
+    background-color: $inverse-color;
+}
+
+#preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: $light-bg-color;
+    z-index: 999999;
+}
+
+.preloader {
+    width: 50px;
+    height: 50px;
+    display: inline-block;
+    padding: 0px;
+    text-align: left;
+    box-sizing: border-box;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -25px;
+    margin-top: -25px;
+}
+
+.preloader span {
+    position: absolute;
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    background: $primary;
+    -webkit-animation: preloader 1.3s linear infinite;
+    animation: preloader 1.3s linear infinite;
+}
+
+.preloader span:last-child {
+    animation-delay: -0.8s;
+    -webkit-animation-delay: -0.8s;
+}
+
+@keyframes preloader {
+    0% {transform: scale(0, 0);opacity:0.5;}
+    100% {transform: scale(1, 1);opacity:0;}
+}
+
+@-webkit-keyframes preloader {
+    0% {-webkit-transform: scale(0, 0);opacity:0.5;}
+    100% {-webkit-transform: scale(1, 1);opacity:0;}
+}
+
+/*--- end of preloader ---*/
+
+/*------- end of custom css -------*/
