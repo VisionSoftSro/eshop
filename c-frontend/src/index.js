@@ -1,5 +1,7 @@
 //IE fix
 import "babel-polyfill";
+import 'proxy-polyfill';
+
 import * as serviceWorker from './serviceWorker';
 import './company-web/Initialization';
 

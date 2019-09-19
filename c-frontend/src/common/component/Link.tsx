@@ -1,6 +1,15 @@
 import * as React from "react";
 import browserHistory from '../utils/History';
 import cs from 'classnames';
+// @ts-ignore
+import {Link as AnchorLink, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll';
+
+interface SmoothScrollProps {
+    offset?:number;
+    duration?:number;
+    delay?:number;
+    smooth?:string|boolean;
+}
 
 interface LinkProps extends React.HTMLAttributes<"a"> {
     external?:boolean,
@@ -8,6 +17,7 @@ interface LinkProps extends React.HTMLAttributes<"a"> {
     className?:string,
     callback?:()=>void,
     href:(()=>void)|string,
+    smooth?:SmoothScrollProps|boolean
 }
 
 export class Link extends React.Component<LinkProps> {
@@ -15,10 +25,11 @@ export class Link extends React.Component<LinkProps> {
     static defaultProps = {
         external:false,
         history:true,
+        smooth:false,
         callback:()=>{}
     };
     render() {
-        const {href, external, callback, history, ...props2} = this.props;
+        const {href, smooth, external, callback, history, ...props2} = this.props;
 
         const props:{[key:string]:any} = {...props2};
         if(typeof href === 'function') {
@@ -26,7 +37,19 @@ export class Link extends React.Component<LinkProps> {
             props["href"] = "";
         } else {
             const href2 = `${process.env.PUBLIC_URL}${href}`;
-            if(history && !href.includes("#")) {
+            if(smooth) {
+                props["href"] = "#" + href;
+                props['onClick'] = (e:any) =>{
+                    e.preventDefault();
+                    scroller.scrollTo(href, {...{
+                            duration: 800,
+                            delay: 0,
+                            offset:0,
+                            smooth: "easeInOutQuart"
+                        }, ...(smooth as {})});
+                };
+                //return <AnchorLink className={this.props.className} to={href} spy smooth duration={500}>{this.props.children}</AnchorLink>;
+            } else if(history && !href.includes("#")) {
                 props["onClick"] = (e:any) => {
                     e.preventDefault();
                     callback(); /*window.brHistory.push(href2);*/
@@ -36,18 +59,9 @@ export class Link extends React.Component<LinkProps> {
                 props["href"] = href2;
             } else {
                 props["href"] = href2;
-            }
 
+            }
         }
         return <a {...props} ref={o=>this.dom=o}>{this.props.children}</a>;
-    }
-}
-interface EasingLinkProps {
-    placeholder:string;
-    className?:string;
-}
-export class EasingLink extends React.Component<EasingLinkProps> {
-    render() {
-        return <a className={cs("js-scroll-trigger", this.props.className)} href={"#"+this.props.placeholder}>{this.props.children}</a>;
     }
 }

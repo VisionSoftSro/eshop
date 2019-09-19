@@ -8,7 +8,6 @@ import Wrapper from "../../../common/component/Wrapper";
 import {Link} from "../../../common/component/Link";
 import {SectionType} from "./Sections";
 
-
 interface Props {
     sections:Array<SectionType>
 }
@@ -35,6 +34,10 @@ export class Header extends React.Component<Props> {
         }
     };
 
+    scrollTo = (id:string) => {
+
+    };
+
     render() {
         return <Wrapper>
             <div id="top" />
@@ -45,16 +48,16 @@ export class Header extends React.Component<Props> {
                             <div className="col-sm-9">
                                 <div className="features-small has-contained-menu">
                                     <p>
-                                        <FontAwesomeIcon icon={faIcon.faPhone} className={"fa text-white mr-1"}/>
-                                        <span><b>0123 456 7890</b></span>
-                                        <FontAwesomeIcon icon={faIcon.faEnvelope} className={"fa text-white ml-3 mr-1"}/>
-                                        <span><b>office@yoursite.com</b></span>
+                                        {/*<FontAwesomeIcon icon={faIcon.faPhone} className={"fa text-white mr-1"}/>*/}
+                                        {/*<span><b>0123 456 7890</b></span>*/}
+                                        <FontAwesomeIcon icon={faIcon.faEnvelope} className={"fa text-white mr-1"}/>
+                                        <span><b>info@vision-soft.cz</b></span>
                                     </p>
                                 </div>
                             </div>
-                            {/*<div className="col-sm-3">*/}
-                            {/*    <a className="btn btn-info smooth-scroll pull-right mr-3" href="#contact">Request Quote</a>*/}
-                            {/*</div>*/}
+                            <div className="col-sm-3">
+                                <a className="btn btn-info smooth-scroll pull-right mr-3" href="#contact">Napište nám</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -75,7 +78,9 @@ export class Header extends React.Component<Props> {
                         <div className="collapse navbar-collapse" id="navbar-toggle-1">
                             <ul className="navbar-nav vcenter ml-auto">
                                 {this.props.sections.map(i=><li className="nav-item" key={i.props.id}>
-                                    <Link className="nav-link smooth-scroll" href={`#${i.props.id}`}><span>{i.name}</span></Link>
+                                    <Link className="nav-link" href={i.props.id} smooth={{
+                                        offset:-80
+                                    }}><span>{i.name}</span></Link>
                                 </li>)}
                             </ul>
                         </div>
