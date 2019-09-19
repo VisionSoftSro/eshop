@@ -1,23 +1,22 @@
 import {CombinedState, defaultReducers, ReducerMembers, ReducersState} from '../../common/redux/Reducers';
 import {applyMiddleware, createStore, combineReducers, Action} from 'redux';
 import thunk from "redux-thunk";
-import {testReducer, TestState} from "./reducers/TestReducer";
 import {WebsocketState} from "../../common/redux/reducers/websocket/WebsocketReducer";
 import {LoginState} from "../../common/redux/reducers/login/LoginReducer";
+import {LocaleState} from "../../common/redux/reducers/locale/LocaleReducer";
 
 interface WebReducerMembers<S1=any> {
-    test:S1
 }
 
 export interface WebReducersState
-    extends ReducerMembers<WebsocketState, LoginState>, WebReducerMembers<TestState> {
+    extends ReducerMembers<WebsocketState, LoginState, LocaleState>, WebReducerMembers {
 }
 
 export interface WebCombinedState extends WebReducersState, CombinedState {}
 
 
 const reducers: WebReducerMembers = {
-    test: testReducer
+
 };
 
 

@@ -1,5 +1,8 @@
 export default {
     cs: {
-        Title:"Title"
+        Offers:"Pro vás"
+    },
+    en: {
+        Offers:"For you"
     }
 }

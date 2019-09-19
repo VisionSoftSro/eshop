@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './Global';
-import * as Locs from "../common/Localization";
 import { Provider } from 'react-redux';
 import DataStorage from "../common/DataStorage";
 import moment from 'moment';
@@ -9,15 +8,12 @@ import 'moment/locale/cs';
 import Root from "./pages/Root";
 import store from './redux/WebRedux';
 import './assets/scss/main.scss';
-const i18n = Locs.init(require('./i18n/all'));
 
-
-export const ChangeLocale = (locale:string) => {
-    i18n.setLanguage(locale);
-    moment.locale(locale);
-    DataStorage.set("locale", locale);
-};
-
+//localizations
+import * as Locs from "../common/Localization";
+import {changeLocale} from "./redux/reducers/LocaleActions";
+const i18n = Locs.init(require('./i18n/all').default);
+window.Strings = i18n;
 
 
 const testEnvVars = () => {
@@ -29,5 +25,3 @@ if(testEnvVars()) {
 } else {
     ReactDOM.render(<div>App is not properly configured. Run app with env variable <strong>REACT_APP_RAAL_BACKEND_URL</strong> set</div>, document.getElementById('root'));
 }
-
-ChangeLocale(DataStorage.get("locale")||"cs");

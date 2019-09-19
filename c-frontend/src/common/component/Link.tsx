@@ -26,7 +26,7 @@ export class Link extends React.Component<LinkProps> {
             props["href"] = "";
         } else {
             const href2 = `${process.env.PUBLIC_URL}${href}`;
-            if(history) {
+            if(history && !href.includes("#")) {
                 props["onClick"] = (e:any) => {
                     e.preventDefault();
                     callback(); /*window.brHistory.push(href2);*/

@@ -5,7 +5,14 @@ import * as faIcon from '@fortawesome/free-solid-svg-icons';
 import {addScrollListener, removeScrollListener} from "../../../common/utils/Util";
 import cs from 'classnames';
 import Wrapper from "../../../common/component/Wrapper";
-export class Header extends React.Component {
+import {Link} from "../../../common/component/Link";
+import {SectionType} from "./Sections";
+
+
+interface Props {
+    sections:Array<SectionType>
+}
+export class Header extends React.Component<Props> {
 
     state = {onTop:true};
     scrollListener:number;
@@ -45,9 +52,9 @@ export class Header extends React.Component {
                                     </p>
                                 </div>
                             </div>
-                            <div className="col-sm-3">
-                                <a className="btn btn-info smooth-scroll pull-right mr-3" href="#contact">Request Quote</a>
-                            </div>
+                            {/*<div className="col-sm-3">*/}
+                            {/*    <a className="btn btn-info smooth-scroll pull-right mr-3" href="#contact">Request Quote</a>*/}
+                            {/*</div>*/}
                         </div>
                     </div>
                 </div>
@@ -56,38 +63,20 @@ export class Header extends React.Component {
                      className={cs("navbar navbar-contained navbar-content navbar-expand-lg navbar-light bg-white menu-line menu-rounded fixed-top has-top-menu-big", this.state.onTop?"is-hidden":"nav-scroll")}
                      data-nav-status="scroll">
                     <div className="container">
-                        <a className="navbar-brand" href="#x"><img src={AssetCache.Image.Logo} alt=""/></a>
+                        <Link className="navbar-brand" href=""><img src={AssetCache.Image.Logo} alt=""/></Link>
 
-                        <button className="navbar-toggler collapsed menu-text" type="button" data-toggle="collapse"
-                                data-target="#navbar-toggle-1" aria-controls="navbar-toggle-1" aria-expanded="false"
-                                aria-label="Toggle navigation">
-                            <span className="icon-bar top-bar"></span>
-                            <span className="icon-bar middle-bar"></span>
-                            <span className="icon-bar bottom-bar"></span>
+                        <button className="navbar-toggler collapsed menu-text" type="button">
+                            <span className="icon-bar top-bar"/>
+                            <span className="icon-bar middle-bar"/>
+                            <span className="icon-bar bottom-bar"/>
                             <span className="sr-only">Toggle navigation</span>
                         </button>
 
                         <div className="collapse navbar-collapse" id="navbar-toggle-1">
                             <ul className="navbar-nav vcenter ml-auto">
-                                <li className="nav-item">
-                                    <a className="nav-link smooth-scroll" href="#top"><span>HOME</span></a>
-                                </li>
-                                <li className="nav-item">
-                                    <a className="nav-link smooth-scroll" href="#about"><span>ABOUT</span></a>
-                                </li>
-                                <li className="nav-item">
-                                    <a className="nav-link smooth-scroll" href="#services"><span>SERVICES</span></a>
-                                </li>
-                                <li className="nav-item">
-                                    <a className="nav-link smooth-scroll" href="#portfolio"><span>PORTFOLIO</span></a>
-                                </li>
-                                <li className="nav-item">
-                                    <a className="nav-link smooth-scroll" href="#clients"><span>CLIENTS</span></a>
-                                </li>
-                                <li className="nav-item">
-                                    <a className="nav-link smooth-scroll last-menu-item"
-                                       href="#contact"><span>CONTACT</span></a>
-                                </li>
+                                {this.props.sections.map(i=><li className="nav-item" key={i.props.id}>
+                                    <Link className="nav-link smooth-scroll" href={`#${i.props.id}`}><span>{i.name}</span></Link>
+                                </li>)}
                             </ul>
                         </div>
                     </div>
