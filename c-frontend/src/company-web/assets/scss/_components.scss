@@ -2318,21 +2318,21 @@ nav .btn-xs {
 
 /* animated hamburger icon */
 
-.navbar-toggler.menu-text:before {
-    content: 'MENU';
-    font-family: $title-font !important;
-    font-weight: $bold;
-    font-size: 1.1rem;
-    letter-spacing: $letter-spacing-big;
-    color: $black;
-    float: left;
-    margin-left: -57px;
-    margin-top: 3px;
-}
-
-.navbar-inverse .navbar-toggler.menu-text:before {
-    color: $white;
-}
+//.navbar-toggler.menu-text:before {
+//    content: 'MENU';
+//    font-family: $title-font !important;
+//    font-weight: $bold;
+//    font-size: 1.1rem;
+//    letter-spacing: $letter-spacing-big;
+//    color: $black;
+//    float: left;
+//    margin-left: -57px;
+//    margin-top: 3px;
+//}
+//
+//.navbar-inverse .navbar-toggler.menu-text:before {
+//    color: $white;
+//}
 
 .navbar-toggler {
   border: none;

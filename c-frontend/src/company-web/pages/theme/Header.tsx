@@ -13,7 +13,7 @@ interface Props {
 }
 export class Header extends React.Component<Props> {
 
-    state = {onTop:true};
+    state = {onTop:true, menuOpened:false};
     scrollListener:number;
     componentDidMount(): void {
         this.scrollListener = addScrollListener(this.onScroll)
@@ -68,14 +68,14 @@ export class Header extends React.Component<Props> {
                     <div className="container">
                         <Link className="navbar-brand" href=""><img src={AssetCache.Image.Logo} alt=""/></Link>
 
-                        <button className="navbar-toggler collapsed menu-text" type="button">
+                        <button className="navbar-toggler collapsed menu-text" type="button" onClick={()=>this.setState({menuOpened:!this.state.menuOpened})}>
                             <span className="icon-bar top-bar"/>
                             <span className="icon-bar middle-bar"/>
                             <span className="icon-bar bottom-bar"/>
                             <span className="sr-only">Toggle navigation</span>
                         </button>
 
-                        <div className="collapse navbar-collapse" id="navbar-toggle-1">
+                        <div className={cs("collapse navbar-collapse", this.state.menuOpened?"show":"")} id="navbar-toggle-1">
                             <ul className="navbar-nav vcenter ml-auto">
                                 {this.props.sections.map(i=><li className="nav-item" key={i.props.id}>
                                     <Link className="nav-link" href={i.props.id} smooth={{
