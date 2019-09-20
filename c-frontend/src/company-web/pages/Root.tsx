@@ -1,6 +1,6 @@
 import * as React from "react";
 import {connect} from "react-redux";
-import store, {WebReducersState} from "../redux/WebRedux";
+import {WebReducersState} from "../redux/WebRedux";
 import Wrapper from "../../common/component/Wrapper";
 import {Header} from "./theme/Header";
 import {SectionType} from './theme/Sections';
@@ -8,8 +8,8 @@ import {OffersSection} from "./sections/OffersSection";
 import {LocaleState} from "../../common/redux/reducers/locale/LocaleReducer";
 import {changeLocale} from "../redux/reducers/LocaleActions";
 import DataStorage from "../../common/DataStorage";
-import {Link} from "../../common/component/Link";
 import {ProjectsSection} from "./sections/ProjectsSection";
+import {ContactSection} from "./sections/ContactSection";
 import moment from "moment";
 
 const sections = () => {
@@ -24,6 +24,12 @@ const sections = () => {
         component: ProjectsSection,
         props: {
             id: "projects"
+        }
+    },{
+        name: Strings.Contact,
+        component: ContactSection,
+        props: {
+            id: "contact"
         }
     }];
     return sections;

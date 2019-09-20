@@ -91,13 +91,11 @@ export class Header extends React.Component<Props> {
                     <div className="container">
                         <div className="row vcenter">
                             <div className="col-md-6 header-content-left">
-                                <h1>SIMPLYCITY</h1>
-                                <h3 className="mb-3">MULTIPURPOSE THEME</h3>
-                                <p className="header-text hide-mobile">Lorem ipsum dolor sit amet, consectetur adipiscing
-                                    elit. Sed laoreet sapien velit, sed faucibus nunc euismod vitae. Interdum et malesuada
-                                    fames ac ante ipsum primis in faucibus velit finibus, congue.</p>
-                                <a className="btn btn-info mr-3 smooth-scroll" href="#about">Learn More</a>
-                                <a className="btn btn-info mr-3 smooth-scroll" href="#services">Services</a>
+                                <h1>Vision Soft</h1>
+                                <h3 className="mb-3">BUDOUCNOST MÍŘÍ K MYSLI</h3>
+                                <p className="header-text hide-mobile">Vision Soft je česká společnost věnující se vývoji online aplikací spojujících inovátorské myšlenky s řešením potřeb uživatelů internetu.</p>
+                                {/*<a className="btn btn-info mr-3 smooth-scroll" href="#about">Learn More</a>*/}
+                                {/*<a className="btn btn-info mr-3 smooth-scroll" href="#services">Services</a>*/}
                             </div>
                             <div className="col-md-6 header-content-right">
                                 <img src={AssetCache.Image.Laptop} alt=""/>
