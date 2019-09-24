@@ -101,10 +101,14 @@ class ScrollableList<A> extends JsonList<A>{
 
 const DEFAULT_PAGE = 1;
 const DEFAULT_ROWS = 10;
-
+class SortOrder {
+    dir:string;
+    name:string;
+}
 class Filter {
     page:number = DEFAULT_PAGE;
     rows:number = 10;
+    order:Array<SortOrder> = new Array<SortOrder>();
     data:FilterData = {};
 
     resetPage() {
@@ -114,7 +118,8 @@ class Filter {
     toParams() {
         const pagination = `page=${this.page}&pageSize=${this.rows}`;
         const params = qs.stringify(this.data, {allowDots: true, arrayFormat: 'indices'});
-        return `${pagination}&${params}`;
+        const sortParam = `${this.order.map((row, index)=>`order[${index}].dir=${row.dir}&order[${index}].name=${row.name}`)}`;
+        return `${pagination}&${params}&${sortParam}`;
     }
 
 }
@@ -211,7 +216,10 @@ class Table<A> extends React.Component<TableProps<A>, AjaxTableState<A>> {
         await this.getData();
     }
 
-
+    sort = async (column: {selector:string}, direction: string) => {
+        this.filter.order = [{dir:direction, name:column.selector}];
+        await this.getData();
+    };
 
     render() {
         if(this.state.loading) {
@@ -224,6 +232,9 @@ class Table<A> extends React.Component<TableProps<A>, AjaxTableState<A>> {
                           paginationServer
                           paginationPerPage={this.filter.rows}
                           paginationTotalRows={this.state.list.total}
+                          sortFunction={(rows:Array<A>)=>rows}
+                          sortServer={true}
+                          onSort={this.sort}
 
         />;
     }

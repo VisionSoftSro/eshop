@@ -82,7 +82,7 @@ module.exports = function(proxy, allowedHost) {
     },
     public: allowedHost,
     proxy: {
-      '/cmr-api': 'http://localhost:8080/cmr-api'
+      '/cmr-api': 'http://localhost:8080'
     },
     before(app, server) {
       if (fs.existsSync(paths.proxySetup)) {
