@@ -1,14 +1,25 @@
 import {ObjectMapper} from "./ObjectMapper";
 import {toast} from 'react-toastify';
-import {TokenStore} from "../TokenStore";
 import _ from 'lodash';
-import config from '../../Config';
-import {JsonList} from "./Util";
+import {GenericMap, JsonList} from "./Util";
 export class HttpResult<Data> {
     data: Data;
     json:any;
     response: Response;
 }
+
+interface HttpUtilsConfig {
+    apiUrl?:string;
+    token?:string;
+}
+
+let httpConfig:HttpUtilsConfig = {
+
+};
+
+export const setConfig = (c:HttpUtilsConfig) => {
+    httpConfig = _.merge(httpConfig, c);
+};
 
 
 export async function httpEndpointList<A>(constructor: { new(): A }, url: string, init?: RequestInit): Promise<HttpResult<JsonList<A>>> {
@@ -19,12 +30,14 @@ export async function httpEndpointList<A>(constructor: { new(): A }, url: string
 
 
 export async function httpEndpoint<A>(constructor: { new(): A }, url: string, init?: RequestInit): Promise<HttpResult<A>> {
-    const init2 = {
-        headers: {
-            "Authorization": `Bearer ${TokenStore.getToken().accessToken}`
-        }
+    const init2:RequestInit = {
+        headers: {}
     };
-    return await http<A>(constructor, `${config.backendUrl}/${url}`, _.merge(init2, init || {}));
+    if(httpConfig.token) {
+        // @ts-ignore
+        init2.headers["Authorization"] = `Bearer ${httpConfig.token}`;
+    }
+    return await http<A>(constructor, `${httpConfig.apiUrl}${url}`, _.merge(init2, init || {}));
 }
 
 export function http<T>(constructor: { new(): T }, input: RequestInfo, init?: RequestInit): Promise<HttpResult<T>> {

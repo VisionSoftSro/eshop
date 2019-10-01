@@ -9,6 +9,7 @@ const fs = require('fs');
 
 const protocol = process.env.HTTPS === 'true' ? 'https' : 'http';
 const host = process.env.HOST || '0.0.0.0';
+const defaultBackendUrl = "http://localhost:8080";
 
 module.exports = function(proxy, allowedHost) {
   return {
@@ -82,7 +83,7 @@ module.exports = function(proxy, allowedHost) {
     },
     public: allowedHost,
     proxy: {
-      '/cmr-api': 'http://localhost:8080'
+      '/cmr-api': `${process.env.REACT_APP_CMS_BACKEND_URL||defaultBackendUrl}`,
     },
     before(app, server) {
       if (fs.existsSync(paths.proxySetup)) {

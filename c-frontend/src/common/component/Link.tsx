@@ -17,6 +17,7 @@ interface LinkProps extends React.HTMLAttributes<"a"> {
     className?:string,
     callback?:()=>void,
     href:(()=>void)|string,
+    target?:string
     smooth?:SmoothScrollProps|boolean
 }
 
