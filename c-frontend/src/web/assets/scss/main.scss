@@ -1,2 +1,18 @@
-
+@import '~bootstrap/dist/css/bootstrap.css';
+// eslint-disable-next-line
+@import '~react-datetime/css/react-datetime.css';
+//fonts
+@import '~material-design-iconic-font/dist/css/material-design-iconic-font.css';
+//toggle
+@import "~react-bootstrap-toggle/dist/bootstrap2-toggle.css";
+@import "~react-toggle/style.css";
+@import "~leaflet/dist/leaflet.css";
+//@import "~react-sortable-list/style.css";
+//toastify
+@import '~react-toastify/dist/ReactToastify.css';
+@import 'style';
+//@import url('https://fonts.googleapis.com/css?family=Comfortaa:300,400,700');
+//@import url('https://fonts.googleapis.com/css?family=Roboto+Slab:300,400,700');
+//@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+//@import 'input-icon';
 @import "style";
