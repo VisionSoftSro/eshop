@@ -10,13 +10,15 @@ interface SmoothScrollProps {
     delay?:number;
     smooth?:string|boolean;
 }
-
+type FuncArgs = Array<any>|any;
 interface LinkProps extends React.HTMLAttributes<"a"> {
     external?:boolean,
     history?:boolean,
     className?:string,
     callback?:()=>void,
-    href:(()=>void)|string,
+    href:((args?:FuncArgs)=>void)|string,
+    funcArgs?:FuncArgs
+    displayHref?:String
     target?:string
     smooth?:SmoothScrollProps|boolean
 }
@@ -30,12 +32,12 @@ export class Link extends React.Component<LinkProps> {
         callback:()=>{}
     };
     render() {
-        const {href, smooth, external, callback, history, ...props2} = this.props;
+        const {href, smooth, external, callback, history, funcArgs, displayHref, ...props2} = this.props;
 
         const props:{[key:string]:any} = {...props2};
         if(typeof href === 'function') {
-            props["onClick"] = (e:MouseEvent) => {e.preventDefault(); href(); callback()};
-            props["href"] = "";
+            props["onClick"] = (e:MouseEvent) => {e.preventDefault(); href(funcArgs); callback()};
+            props["href"] = displayHref||"";
         } else {
             const href2 = `${process.env.PUBLIC_URL}${href}`;
             if(smooth) {
