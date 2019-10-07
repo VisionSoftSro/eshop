@@ -13,7 +13,7 @@ import org.visionsoft.crm.domain.config.DomainConfig
 
 @SpringBootApplication//(exclude=[DispatcherServletAutoConfiguration::class])
 @EnableAspectJAutoProxy
-@Import(DomainConfig::class, MvcConfig::class, WebSocketClientConfig::class)
+@Import(DomainConfig::class, MvcConfig::class)
 class Application: SpringBootServletInitializer() {
 
     override fun configure(builder: SpringApplicationBuilder) = builder.sources(Application::class.java)!!
