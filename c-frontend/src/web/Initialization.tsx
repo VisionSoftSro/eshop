@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import 'moment/locale/cs';
 import Root from "./pages/Root";
 import store from './redux/WebRedux';
-import './assets/scss/main.scss';
+// import './assets/scss/main.scss';
 
 //localizations
 import * as Locs from "../common/Localization";
