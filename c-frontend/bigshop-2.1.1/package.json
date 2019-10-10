@@ -1,0 +1,36 @@
+{
+  "name": "bigshop-responsive-e-commerce-template",
+  "version": "1.0.0",
+  "description": "Bigshop Responsive E-commerce Template",
+  "main": "index.js",
+  "scripts": {
+    "gulp": "gulp"
+  },
+  "author": "Designing-World",
+  "license": "WrapBootstrap-License",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-sass": "^4.0.2",
+    "node-sass": "^4.11.0",
+    "pug": "^2.0.4",
+    "gulp-pug": "^4.0.1",
+    "gulp-watch": "^5.0.1"
+  },
+  "dependencies": {
+    "bootstrap": "^4.3.1",
+    "counterup": "^1.0.2",
+    "font-awesome": "^4.7.0",
+    "jarallax": "^1.10.6",
+    "jquery": "^2.2.4",
+    "jquery-countdown": "^2.2.0",
+    "jquery-nice-select": "^1.1.0",
+    "jquery-ui-slider": "^1.12.1",
+    "jquery-waypoints": "^2.0.5",
+    "jquery.easing": "^1.4.1",
+    "magnific-popup": "^1.1.0",
+    "owl.carousel2": "^2.2.1",
+    "popper.js": "^1.14.7",
+    "wowjs": "^1.1.3"
+  }
+}

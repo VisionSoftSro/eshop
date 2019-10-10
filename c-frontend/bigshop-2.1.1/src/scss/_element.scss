@@ -1,0 +1,245 @@
+/* Element CSS */
+
+.shortcodes_content {
+    border: 3px solid $bg-gray;
+    padding: 20px;
+}
+
+.bigshop-accordian {
+    position: relative;
+    z-index: 1;
+
+    .card {
+        border: 0;
+
+        .card-header {
+            margin-bottom: 0;
+            background-color: $bg-gray;
+            border-bottom-color: $border-color;
+
+            .btn {
+                color: $hover-color;
+                font-weight: 700;
+
+                &.collapsed {
+                    color: $heading-color;
+                }
+            }
+        }
+
+        &:last-of-type {
+            .card-header {
+                border-bottom: 0;
+            }
+        }
+    }
+}
+
+.bigshop-accordian-with-icon {
+    position: relative;
+    z-index: 1;
+
+    .card {
+        border: 0;
+
+        .card-header {
+            margin-bottom: 0;
+            background-color: $bg-gray;
+            border-bottom-color: $border-color;
+
+            .btn {
+                color: $hover-color;
+                font-weight: 700;
+
+                .icofont-rounded-down {
+                    display: none;
+                }
+
+                .icofont-rounded-up {
+                    display: inline-block;
+                }
+
+                &.collapsed {
+                    color: $heading-color;
+
+                    .icofont-rounded-down {
+                        display: inline-block;
+                    }
+
+                    .icofont-rounded-up {
+                        display: none;
+                    }
+                }
+            }
+        }
+
+        &:last-of-type {
+            .card-header {
+                border-bottom: 0;
+            }
+        }
+    }
+}
+
+.bigshop-form {
+    position: relative;
+    z-index: 1;
+
+    .form-control {
+        font-size: 13px;
+        height: 45px;
+        padding: 5px 20px;
+        border-color: $border-color;
+
+        &:focus {
+            border-color: $heading-color;
+        }
+    }
+
+    textarea {
+        &.form-control {
+            height: 200px;
+            padding: 15px 20px;
+        }
+    }
+}
+
+.bigshop-gallery-area {
+    position: relative;
+    z-index: 1;
+
+    .single-gallery-item {
+        @include flex(0 0 25%);
+        width: 25%;
+        min-width: 25%;
+
+        @media #{$breakpoint-xs} {
+            @include flex(0 0 50%);
+            width: 50%;
+            min-width: 50%;
+        }
+    }
+}
+
+.single_icon {
+    @include flex(0 0 calc(25% - 2rem));
+    width: calc(25% - 2rem);
+    min-width: calc(25% - 2rem);
+    position: relative;
+    z-index: 1;
+    border: 3px solid $bg-gray;
+    padding: 30px;
+    text-align: center;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-bottom: 2rem;
+
+    @media #{$breakpoint-xs} {
+        @include flex(0 0 calc(100% - 2rem));
+        width: calc(100% - 2rem);
+        min-width: calc(100% - 2rem);
+    }
+
+    @media #{$breakpoint-sm} {
+        @include flex(0 0 calc(50% - 2rem));
+        width: calc(50% - 2rem);
+        min-width: calc(50% - 2rem);
+    }
+
+    i {
+        display: block;
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+    }
+
+    code {
+        display: block;
+    }
+}
+
+.bigshop-label {
+    background-color: $bg-gray;
+    font-size: 75%;
+    padding: 5px 10px;
+    border-radius: 4px;
+
+    &.bigshop-label-success {
+        color: $white-color;
+        background-color: #27ae60;
+    }
+
+    &.bigshop-label-info {
+        color: $white-color;
+        background-color: #3498db;
+    }
+
+    &.bigshop-label-warning {
+        color: $white-color;
+        background-color: #f39c12;
+    }
+
+    &.bigshop-label-danger {
+        color: $white-color;
+        background-color: #c0392b;
+    }
+
+    &.bigshop-label-pill {
+        border-radius: 30px;
+    }
+}
+
+.demo-hero-area {
+    position: relative;
+    z-index: 1;
+    
+    h2 {
+        line-height: 1.7;
+        
+        @media #{$breakpoint-md} {
+            font-size: 1.6rem;
+        }
+        
+        @media #{$breakpoint-xs} {
+            font-size: 1.2rem;
+        }
+    }
+}
+
+.single-demo-area {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+
+    a {
+        display: block;
+    }
+
+    img {
+        border: 1px solid $border-color;
+        border-radius: 6px;
+        @include transition-duration(500ms);
+        box-shadow: 0 0 88px 8px rgba(47, 91, 234, 0.125);
+    }
+
+    .demo-title {
+        margin-top: 30px;
+        display: inline-block;
+        padding: 8px 40px;
+        color: #fff;
+        background-color: $text-color;
+        font-size: 14px;
+        border-radius: 30px;
+
+        &:hover,
+        &:focus {
+            background-color: $hover-color;
+        }
+    }
+
+    &:hover,
+    &:focus {
+        img {
+            border: 1px solid $heading-color;
+        }
+    }
+}

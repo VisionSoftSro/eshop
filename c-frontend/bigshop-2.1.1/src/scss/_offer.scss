@@ -1,0 +1,345 @@
+/* Offer CSS */
+
+.featured_offer_area {
+    background-position: center center;
+    background-size: cover;
+    height: 100%;
+    position: relative;
+    width: 100%;
+    z-index: 1;
+    
+    @media #{$breakpoint-md} {
+        height: 600px;
+        margin-bottom: 50px;
+    }
+    
+    @media #{$breakpoint-xs} {
+        height: 500px;
+        margin-bottom: 50px;
+    }
+
+    &::after {
+        background-color: transparent;
+        border: 5px solid $bg-gray;
+        bottom: 30px;
+        content: "";
+        height: calc(100% - 60px);
+        position: absolute;
+        right: 30px;
+        top: 30px;
+        width: calc(100% - 60px);
+        z-index: -1;
+    }
+
+    .featured_offer_text {
+        background-color: $white-color;
+        display: inline-block;
+        margin-left: 15px;
+        padding: 50px;
+        box-shadow: 0 0 88px 8px rgba(47, 91, 234, 0.125);
+        border-radius: 6px;
+        
+        @media #{$breakpoint-xs} {
+            padding: 30px;
+        }
+
+        h2 {
+            font-weight: 700;
+        }
+
+        p,
+        h2,
+        h4 {
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        h4 {
+            text-transform: uppercase;
+        }
+    }
+}
+
+.featured_product_area {
+    position: relative;
+    overflow: hidden;
+
+    .owl-nav {
+        position: absolute;
+        top: -90px;
+        width: 100%;
+        right: 0;
+    }
+
+    .owl-next,
+    .owl-prev {
+        @include transition-duration(500ms);
+        color: $white-color;
+        display: inline-block;
+        font-size: 20px;
+        height: 40px;
+        position: absolute;
+        right: 0;
+        text-align: center;
+        top: 0;
+        width: 30px;
+
+        i {
+            line-height: 40px;
+        }
+
+        &:hover,
+        &:focus {
+            background-color: $heading-color;
+        }
+    }
+
+    .owl-prev {
+        right: 30px !important;
+    }
+}
+
+/* Beach Offer Area */
+
+.beach_offer_area {
+    position: relative;
+    z-index: 1;
+    background-color: $hover-color;
+    border-radius: 6px;
+
+    img {
+        border-radius: 6px;
+    }
+
+    .beach_offer_info {
+        left: 30px;
+        position: absolute;
+        top: 50px;
+        z-index: 9;
+
+        p {
+            color: $white-color;
+            margin-bottom: 0.5rem;
+        }
+
+        h3 {
+            color: $white-color;
+            text-transform: uppercase;
+        }
+
+        a {
+            background-color: $white-color;
+            color: $heading-color;
+
+            &:hover,
+            &:focus {
+                background-color: $heading-color;
+                color: $white-color;
+            }
+        }
+    }
+}
+
+/* Apparels Offer Area */
+
+.apparels_offer_area {
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    border-radius: 6px;
+
+    img {
+        border-radius: 6px;
+        @include transition-duration(500ms);
+    }
+
+    .apparels_offer_info {
+        background-color: rgba(0, 0, 0, 0.7);
+        height: 100%;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 2;
+        padding-left: 30px;
+    }
+
+    h4 {
+        color: $white-color;
+        font-weight: 400;
+    }
+
+    span {
+        font-size: 30px;
+    }
+
+    .btn {
+        background-color: transparent;
+        box-shadow: none;
+        color: $white-color;
+        line-height: 1;
+        padding: 0;
+        font-weight: 700;
+
+        &:hover,
+        &:focus {
+            color: $hover-color;
+        }
+    }
+
+    &:hover img {
+        -webkit-transform: scale(1.1);
+        transform: scale(1.1);
+    }
+}
+
+/* Backpack & Elect Offer Area */
+
+.elect_offer_area {
+    position: relative;
+    z-index: 1;
+    border-radius: 6px;
+
+    img {
+        border-radius: 6px;
+    }
+
+    .elect_offer_info {
+        height: 100%;
+        left: 0;
+        padding-left: 30px;
+        position: absolute;
+        top: 0;
+        width: 100%;
+
+        h4 {
+            font-weight: 400;
+            line-height: 1;
+            margin-bottom: 5px;
+            font-size: 18px;
+        }
+
+        .btn {
+            background-color: transparent;
+            box-shadow: none;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 0;
+
+            &:hover,
+            &:focus {
+                color: $hover-color;
+            }
+        }
+    }
+}
+
+.backpack_offer_area {
+    border: 1px solid $bg-gray;
+    position: relative;
+    z-index: 1;
+
+    .backpack_offer_info {
+        bottom: 0;
+        height: auto;
+        padding: 25px 25px 15px;
+        position: absolute;
+        text-align: right;
+        width: 100%;
+        z-index: 2;
+
+        h4 {
+            font-weight: 400;
+            line-height: 1;
+            margin-bottom: 5px;
+            font-size: 18px;
+        }
+
+        .btn {
+            background-color: transparent;
+            box-shadow: none;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 0;
+
+            &:hover,
+            &:focus {
+                color: $hover-color;
+            }
+        }
+    }
+}
+
+/* Weekly Deals Info */
+
+.weekly_deals_area {
+    position: relative;
+    z-index: 1;
+    border-radius: 6px;
+
+    img {
+        border-radius: 6px;
+    }
+
+    .weekly_deals_info {
+        height: 100%;
+        left: 0;
+        padding: 30px;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 3;
+        
+        @media #{$breakpoint-lg} {
+            padding: 10px;
+        }
+        
+        @media #{$breakpoint-xs} {
+            padding: 10px;
+        }
+        
+        @media #{$breakpoint-sm} {
+            padding: 40px;
+        }
+
+        h4 {
+            font-weight: 400;
+            margin-bottom: 5px;
+            font-size: 18px;
+        }
+
+        .deals_timer li {
+            background-color: $hover-color;
+            border-radius: 50%;
+            color: $text-color;
+            display: inline-block;
+            font-size: 11px;
+            height: 40px;
+            margin-right: 15px;
+            margin-top: 5px;
+            text-align: center;
+            text-transform: capitalize;
+            width: 40px;
+
+            &.blank-timer {
+                height: 1px !important;
+                width: 1px !important;
+                background-color: transparent !important;
+            }
+
+            span {
+                color: $white-color;
+                display: block;
+                line-height: 40px;
+                font-size: 12px;
+            }
+        }
+    }
+}
+
+.backpack_offer_area img,
+.elect_offer_area img,
+.beach_offer_area img,
+.weekly_deals_area img,
+.apparels_offer_area img {
+    width: 100%;
+}

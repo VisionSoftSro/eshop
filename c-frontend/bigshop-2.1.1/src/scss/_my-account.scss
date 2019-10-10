@@ -1,0 +1,83 @@
+/* Account CSS */
+
+.my-account-navigation {
+    position: relative;
+    z-index: 1;
+    padding: 30px;
+    background-color: $bg-gray;
+    border-radius: 6px;
+
+    li {
+        a {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid $border-color;
+            padding-bottom: 1rem;
+        }
+
+        &:last-child {
+            a {
+                padding-bottom: 0;
+                margin-bottom: 0;
+                border-bottom: 0;
+            }
+        }
+
+        &.active {
+            a {
+                color: $hover-color;
+            }
+        }
+    }
+}
+
+.my-account-content {
+    position: relative;
+    z-index: 1;
+    padding: 30px;
+    background-color: $bg-gray;
+    border-radius: 6px;
+
+    p {
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    .action-btn {
+        padding: 5px 15px;
+        border-radius: 20px;
+        border: 2px solid $hover-color;
+        font-size: 12px;
+        font-weight: 700;
+        color: $hover-color;
+
+        &:hover,
+        &:focus {
+            border-color: $hover-color;
+            background-color: $hover-color;
+            color: $white-color;
+        }
+    }
+    
+    address {
+        color: $text-color;
+    }
+
+    label {
+        font-size: 13px;
+        font-weight: 700;
+    }
+    
+    .form-control {
+        font-size: 13px;
+        height: 45px;
+        padding: 5px 20px;
+        border-color: $border-color;
+
+        &:focus {
+            border-color: $heading-color;
+        }
+    }
+}

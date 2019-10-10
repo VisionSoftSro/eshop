@@ -1,0 +1,58 @@
+/* Coming Soon CSS */
+
+.comingsoon_area {
+    position: relative;
+    z-index: 4;
+
+    .cs-icon {
+        font-size: 12rem;
+        color: $heading-color;
+        display: block;
+        line-height: 1;
+    }
+
+    .coming_soon_timer {
+        li {
+            color: $heading-color;
+            display: inline-block;
+            font-size: 42px;
+            margin-right: 15px;
+            
+            @media #{$breakpoint-xs} {
+                font-size: 28px;
+            }
+            
+            @media #{$breakpoint-sm} {
+                font-size: 36px;
+            }
+
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+    }
+
+    .subscribe_bar {
+        p {
+            font-size: 18px;
+            margin: 15px auto;
+            max-width: 500px;
+        }
+
+        input#mail {
+            border: medium none;
+            height: 45px;
+            padding: 5px 20px;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        button {
+            background-color: $hover-color;
+            border: medium none;
+            color: #fff;
+            height: 45px;
+            width: 150px;
+        }
+    }
+}

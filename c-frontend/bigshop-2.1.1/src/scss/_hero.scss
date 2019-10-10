@@ -1,0 +1,284 @@
+/* Hero CSS */
+
+.single_slide {
+    position: relative;
+    z-index: 1;
+    background-position: center center;
+    background-size: cover;
+    height: 600px;
+    
+    @media #{$breakpoint-xs} {
+        height: 450px;
+    }
+
+    .welcome_slide_text {
+        position: relative;
+        z-index: 1;
+
+        p {
+            color: $dark-color;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            
+            @media #{$breakpoint-xs} {
+                letter-spacing: 2px;
+            }
+        }
+
+        h2 {
+            text-transform: capitalize;
+            font-size: 4.5rem;
+            margin-bottom: 1rem;
+            
+            @media #{$breakpoint-lg} {
+                font-size: 3.5rem;
+            }
+            
+            @media #{$breakpoint-md} {
+                font-size: 3rem;
+            }
+            
+            @media #{$breakpoint-xs} {
+                font-size: 2.5rem;
+            }
+        }
+
+        h4 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            
+            @media #{$breakpoint-xs} {
+                font-size: 1.5rem;
+            }
+        }
+
+        .regular-price {
+            margin-left: 0.5rem;
+            color: $text-color;
+            text-decoration: line-through;
+        }
+    }
+
+    .welcome_slide_image {
+        position: relative;
+        z-index: 1;
+
+        img {
+            display: block;
+            margin: auto;
+            max-width: 240px;
+        }
+
+        .discount_badge {
+            background-color: $heading-color;
+            border-radius: 50%;
+            color: $white-color;
+            height: 90px;
+            padding: 15px;
+            position: absolute;
+            right: 70px;
+            text-align: center;
+            top: 10%;
+            width: 90px;
+            z-index: 1000;
+            box-shadow: 0 2px 12px 2px rgba(0, 0, 0, 0.1);
+            @include display-flex(flex);
+            @include justify-content-center;
+            @include align-items-center;
+            
+            @media #{$breakpoint-xs} {
+                right: 0;
+            }
+
+            span {
+                font-size: 16px;
+                line-height: 1.5;
+                font-weight: 700;
+            }
+        }
+    }
+}
+
+.welcome_slides {
+    position: relative;
+    z-index: 10;
+
+    .owl-dots {
+        position: absolute;
+        z-index: 2;
+        text-align: center;
+        bottom: 30px;
+        width: 100%;
+        left: 0;
+
+        .owl-dot {
+            background-color: $white-color;
+            border-radius: 50%;
+            display: inline-block;
+            height: 10px;
+            margin: 0 5px;
+            width: 10px;
+
+            &.active {
+                background-color: $hover-color;
+            }
+        }
+    }
+
+    .owl-prev,
+    .owl-next {
+        @include transition-duration(500ms);
+        position: absolute;
+        z-index: 100;
+        width: 50px;
+        display: inline-block;
+        height: 50px;
+        text-align: center;
+        line-height: 50px;
+        font-size: 24px;
+        background-color: $heading-color;
+        color: $white-color;
+        margin-top: -25px;
+        left: 70px;
+        top: 50%;
+        border-radius: 4px;
+        opacity: 0;
+        visibility: hidden;
+        
+        @media #{$breakpoint-xs} {
+            left: 20px;
+        }
+
+        &:hover,
+        &:focus {
+            color: $hover-color;
+        }
+    }
+
+    .owl-next {
+        left: auto;
+        right: 70px;
+        
+        @media #{$breakpoint-xs} {
+            right: 20px;
+        }
+    }
+
+    &:hover,
+    &:focus {
+
+        .owl-prev,
+        .owl-next {
+            opacity: 1;
+            visibility: visible;
+        }
+    }
+
+    &.modern-slides {
+        .single_slide {
+            height: 750px;
+            
+            @media #{$breakpoint-lg} {
+                height: 600px;
+            }
+            
+            @media #{$breakpoint-md} {
+                height: 600px;
+            }
+            
+            @media #{$breakpoint-xs} {
+                height: 500px;
+            }
+        }
+    }
+}
+
+.welSlideTwo {
+    position: relative;
+    z-index: 10;
+
+    .single_slide {
+        position: relative;
+        z-index: 1;
+
+        &::after {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            content: "";
+            top: 0;
+            left: 0;
+            z-index: -1;
+            background-color: $heading-color;
+            opacity: 0.5;
+        }
+
+        p,
+        h2 {
+            color: $white-color;
+        }
+    }
+
+    .owl-dots {
+        bottom: 30px;
+        width: 100%;
+        position: absolute;
+        left: 0;
+        z-index: 2;
+        text-align: center;
+
+        .owl-dot {
+            background-color: $white-color;
+            border-radius: 50%;
+            display: inline-block;
+            height: 10px;
+            margin: 0 5px;
+            width: 10px;
+
+            &.active {
+                background-color: $heading-color;
+            }
+        }
+    }
+
+    .owl-prev,
+    .owl-next {
+        @include transition-duration(500ms);
+        position: absolute;
+        z-index: 100;
+        width: 50px;
+        display: inline-block;
+        height: 50px;
+        text-align: center;
+        line-height: 50px;
+        font-size: 24px;
+        background-color: $heading-color;
+        color: $white-color;
+        margin-top: -25px;
+        left: 70px;
+        top: 50%;
+        border-radius: 4px;
+        opacity: 0;
+        visibility: hidden;
+
+        &:hover,
+        &:focus {
+            color: $hover-color;
+        }
+    }
+
+    .owl-next {
+        left: auto;
+        right: 70px;
+    }
+
+    &:hover,
+    &:focus {
+
+        .owl-prev,
+        .owl-next {
+            opacity: 1;
+            visibility: visible;
+        }
+    }
+}

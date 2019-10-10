@@ -1,0 +1,129 @@
+/* Shop List CSS */
+
+.shop_list_product_area {
+    position: relative;
+    z-index: 1;
+
+    .single-product-area {
+        @include display-flex(flex);
+
+        .product_image {
+            overflow: hidden;
+            @include flex(0 0 270px);
+            width: 270px;
+            max-width: 270px;
+
+            @media #{$breakpoint-md} {
+                @include flex(0 0 170px);
+                width: 170px;
+                max-width: 170px;
+            }
+
+            @media #{$breakpoint-xs} {
+                @include flex(0 0 110px);
+                width: 110px;
+                max-width: 110px;
+            }
+
+            @media #{$breakpoint-xs-landscape} {
+                @include flex(0 0 160px);
+                width: 160px;
+                max-width: 160px;
+            }
+
+            @media #{$breakpoint-sm} {
+                @include flex(0 0 180px);
+                width: 180px;
+                max-width: 180px;
+            }
+        }
+
+        .product_description {
+            position: relative;
+            text-align: left;
+            z-index: 1;
+            padding: 30px;
+            @include flex(0 0 calc(100% - 270px));
+            width: calc(100% - 270px);
+            max-width: calc(100% - 270px);
+
+            @media #{$breakpoint-md} {
+                @include flex(0 0 calc(100% - 170px));
+                width: calc(100% - 170px);
+                max-width: calc(100% - 170px);
+            }
+
+            @media #{$breakpoint-xs} {
+                padding: 10px 15px;
+                @include flex(0 0 calc(100% - 110px));
+                width: calc(100% - 110px);
+                max-width: calc(100% - 110px);
+            }
+
+            @media #{$breakpoint-xs-landscape} {
+                padding: 30px;
+                @include flex(0 0 calc(100% - 160px));
+                width: calc(100% - 160px);
+                max-width: calc(100% - 160px);
+            }
+
+            @media #{$breakpoint-sm} {
+                padding: 30px;
+                @include flex(0 0 calc(100% - 180px));
+                width: calc(100% - 180px);
+                max-width: calc(100% - 180px);
+            }
+
+            .product-short-desc {
+                margin-top: 1rem;
+                margin-bottom: 0;
+                font-size: 14px;
+
+                @media #{$breakpoint-md} {
+                    display: none;
+                }
+
+                @media #{$breakpoint-xs} {
+                    display: none;
+                }
+            }
+
+            .brand_name {
+                @media #{$breakpoint-xs} {
+                    display: none;
+                }
+
+                @media #{$breakpoint-sm} {
+                    display: block;
+                }
+            }
+
+            .product_add_to_cart a,
+            .product_quick_view a {
+                top: auto;
+                bottom: 0;
+                visibility: visible;
+                opacity: 1;
+                margin-bottom: 0;
+                
+                @media #{$breakpoint-xs} {
+                    font-size: 11px;
+                }
+
+                i {
+                    @media #{$breakpoint-xs} {
+                        display: none;
+                    }
+                }
+
+                &:hover,
+                &:focus {
+                    top: auto;
+                    bottom: 0;
+                    visibility: visible;
+                    opacity: 1;
+                }
+            }
+        }
+    }
+}
