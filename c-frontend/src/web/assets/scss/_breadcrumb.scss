@@ -1,0 +1,21 @@
+/* Breadcumb CSS */
+
+.breadcumb_area {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 170px;
+    background-color: $bg-gray;
+}
+
+.breadcumb_area .breadcrumb {
+    margin-bottom: 0;
+    background-color: transparent;
+    padding: 0;
+}
+
+.breadcumb_area .breadcrumb-item,
+.breadcumb_area .breadcrumb-item > a {
+    text-transform: capitalize;
+    font-weight: 700;
+}

@@ -1,0 +1,20 @@
+/* Login CSS */
+
+.login_form {
+    position: relative;
+    z-index: 1;
+    padding: 40px;
+    background-color: $bg-gray;
+    border-radius: 6px;
+
+    .form-control {
+        font-size: 13px;
+        height: 45px;
+        padding: 5px 20px;
+        border-color: $border-color;
+
+        &:focus {
+            border-color: $heading-color;
+        }
+    }
+}

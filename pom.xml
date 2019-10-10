@@ -20,10 +20,12 @@
 
 
     <properties>
+        <m2e.apt.activation>jdt_apt</m2e.apt.activation>
         <java.version>1.8</java.version>
         <spring.version>1</spring.version>
         <spring.boot.version>2.1.8.RELEASE</spring.boot.version>
         <kotlin.version>1.3.50</kotlin.version>
+        <org.mapstruct.version>1.3.1.Final</org.mapstruct.version>
     </properties>
 
     <dependencies>
@@ -72,6 +74,11 @@
             <groupId>org.webjars</groupId>
             <artifactId>stomp-websocket</artifactId>
             <version>2.3.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${org.mapstruct.version}</version>
         </dependency>
     </dependencies>
 
@@ -123,9 +130,28 @@
                             <goal>test-compile</goal>
                         </goals>
                     </execution>
+                    <execution>
+                        <id>kapt</id>
+                        <goals>
+                            <goal>kapt</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <sourceDir>src/main/kotlin</sourceDir>
+                                <sourceDir>src/main/java</sourceDir>
+                            </sourceDirs>
+                            <annotationProcessorPaths>
+                                <annotationProcessorPath>
+                                    <groupId>org.mapstruct</groupId>
+                                    <artifactId>mapstruct-processor</artifactId>
+                                    <version>${org.mapstruct.version}</version>
+                                </annotationProcessorPath>
+                            </annotationProcessorPaths>
+                        </configuration>
+                    </execution>
                 </executions>
                 <configuration>
-                    <jvmTarget>1.8</jvmTarget>
+                    <jvmTarget>${java.version}</jvmTarget>
                     <compilerPlugins>
                         <!-- Or "spring" for the Spring support -->
                         <plugin>all-open</plugin>
@@ -139,6 +165,7 @@
                         <version>${kotlin.version}</version>
                     </dependency>
                 </dependencies>
+
             </plugin>
         </plugins>
     </build>

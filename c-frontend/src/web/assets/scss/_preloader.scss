@@ -1,0 +1,19 @@
+/* Preloader CSS */
+
+#preloader {
+    position: fixed;
+    z-index: 99999999;
+    width: 100%;
+    height: 100%;
+    background-color: $white-color;
+    top: 0;
+    left: 0;
+    right: 0;
+    @include display-flex(flex);
+    @include align-items-center;
+    @include justify-content-center;
+    
+    .spinner-grow {
+        background-color: $heading-color;
+    }
+}

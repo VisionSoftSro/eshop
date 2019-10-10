@@ -1,0 +1,54 @@
+/* Contact CSS */
+
+.single-contact-info {
+    position: relative;
+    z-index: 1;
+    background-color: $bg-gray;
+    padding: 30px;
+    border-radius: 6px;
+
+    i {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        display: block;
+        color: $heading-color;
+    }
+
+    p {
+        margin-bottom: 0;
+    }
+}
+
+.contact_from {
+    position: relative;
+    z-index: 1;
+
+    .form-control {
+        font-size: 13px;
+        height: 45px;
+        padding: 5px 20px;
+        border-color: $border-color;
+
+        &:focus {
+            border-color: $heading-color;
+        }
+    }
+
+    textarea {
+        &.form-control {
+            height: 200px;
+            padding: 15px 20px;
+        }
+    }
+}
+
+.google-map {
+    position: relative;
+    z-index: 1;
+
+    iframe {
+        width: 100%;
+        height: 300px;
+        border: 0;
+    }
+}

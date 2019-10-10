@@ -6,8 +6,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.EnableAspectJAutoProxy
 import org.springframework.context.annotation.Import
-import org.visionsoft.cmr.mvc.config.MvcConfig
-import org.visionsoft.cmr.mvc.config.WebSocketClientConfig
+import org.visionsoft.cms.mvc.config.MvcConfig
 import org.visionsoft.crm.domain.config.DomainConfig
 
 

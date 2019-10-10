@@ -7,8 +7,9 @@ import {LocaleState} from "../../common/redux/reducers/locale/LocaleReducer";
 import {changeLocale} from "../redux/reducers/LocaleActions";
 import DataStorage from "../../common/DataStorage";
 import moment from "moment";
-import {TopBar} from "./TopBar";
+import {Header} from "./Header";
 import '../assets/scss/main.scss';
+import {NavBar} from "./NavBar";
 
 class Root extends React.Component<LocaleState> {
 
@@ -23,8 +24,9 @@ class Root extends React.Component<LocaleState> {
 
     render() {
         return <Wrapper>
-            <TopBar />
-            eshop
+            <Header />
+
+
         </Wrapper>;
     }
 }

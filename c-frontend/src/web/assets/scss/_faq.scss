@@ -1,0 +1,57 @@
+/* FAQ CSS */
+
+.faq_quesition_search_form {
+    position: relative;
+    z-index: 1;
+
+    h2 {
+        font-size: 42px;
+        margin-bottom: 30px;
+        text-align: center;
+        color: $white-color;
+        
+        @media #{$breakpoint-xs} {
+            font-size: 30px;
+        }
+    }
+
+    .faq_form {
+        position: relative;
+        z-index: 1;
+
+        input {
+            border: medium none;
+            border-radius: 30px;
+            height: 60px;
+            padding: 0 30px;
+        }
+
+        button {
+            background-color: transparent;
+            box-shadow: none;
+            cursor: pointer;
+            font-size: 24px;
+            line-height: 60px;
+            padding: 0;
+            position: absolute;
+            right: 30px;
+            top: 0;
+            z-index: 5;
+        }
+    }
+}
+
+.single-faq {
+    position: relative;
+    z-index: 1;
+    
+    p {
+        margin-bottom: 0;
+    }
+}
+
+.cannot_find_text i {
+    display: block;
+    font-size: 80px;
+    margin-bottom: 15px;
+}

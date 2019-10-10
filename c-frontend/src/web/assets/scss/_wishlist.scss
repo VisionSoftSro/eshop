@@ -1,0 +1,15 @@
+/* Wishlist CSS */
+
+.wishlist-table {
+    position: relative;
+    z-index: 1;
+
+    .btn {
+        font-weight: 700;
+        font-size: 12px;
+
+        &:focus {
+            color: $white-color;
+        }
+    }
+}

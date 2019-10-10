@@ -1,0 +1,54 @@
+/* Feature CSS */
+
+.special_feature_area {
+    position: relative;
+    z-index: 1;
+    background-color: $bg-gray;
+}
+
+.single_feature_area {
+    position: relative;
+    z-index: 1;
+    @include transition-duration(500ms);
+
+    .feature_icon {
+        text-align: center;
+        position: relative;
+        z-index: 2;
+        margin-right: 15px;
+        height: 70px;
+        @include transition-duration(500ms);
+        border-right: 1px solid $border-color;
+        padding-right: 30px;        
+
+        i {
+            font-size: 36px;
+            line-height: 70px;
+        }
+
+        span i {
+            background-color: $hover-color;
+            border-radius: 50%;
+            color: $white-color;
+            font-size: 13px;
+            width: 24px;
+            height: 24px;
+            line-height: 24px;
+            position: absolute;
+            right: 15px;
+            top: 0;
+        }
+    }
+
+    .feature_content {
+        h6 {
+            text-transform: uppercase;
+        }
+
+        p {
+            font-size: 13px;
+            margin-bottom: 0;
+            line-height: 1;
+        }
+    }
+}

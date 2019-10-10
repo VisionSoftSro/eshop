@@ -1,0 +1,183 @@
+/* Product Sidebar CSS */
+
+.custom-control-input:checked ~ .custom-control-label::before {
+    border-color: $hover-color;
+    background-color: $hover-color;
+    box-shadow: none !important;
+}
+
+.custom-checkbox .custom-control-label::before {
+    border-radius: 50%;
+}
+
+.shop_top_sidebar_area {
+    position: relative;
+    z-index: 100;
+    padding: 15px 30px;
+    background-color: $bg-gray;
+    border-radius: 6px;
+    margin-bottom: 30px;
+
+    .custom-select:focus {
+        box-shadow: none;
+    }
+}
+
+.widget {
+    position: relative;
+    z-index: 1;
+    padding: 30px;
+    background-color: $bg-gray;
+    border-radius: 6px;
+
+    .widget-title {
+        font-size: 16px;
+        text-transform: capitalize;
+        margin-bottom: 1rem;
+    }
+
+    .widget-desc {
+        label {
+            text-transform: capitalize;
+        }
+    }
+
+    .custom-control-input:checked ~ .custom-control-label::before {
+        border-color: $hover-color;
+        background-color: $hover-color;
+        box-shadow: none !important;
+    }
+
+    .custom-checkbox .custom-control-label::before {
+        border-radius: 50%;
+    }
+
+    &.rating {
+        .widget-desc {
+            li {
+                a {
+                    display: block;
+                    color: #ff9800;
+                    font-size: 14px;
+                    margin-bottom: 0.7rem;
+
+                    span {
+                        font-weight: 400;
+                    }
+                }
+
+                &:last-child {
+                    a {
+                        margin-bottom: 0;
+                    }
+                }
+            }
+        }
+    }
+
+    &.size {
+        .widget-desc {
+            li {
+                display: inline-block;
+                margin-top: 4px;
+            }
+
+            a {
+                background-color: $hover-color;
+                color: $white-color;
+                display: block;
+                font-size: 11px;
+                padding: 5px 10px;
+                border-radius: 3px;
+
+                &:hover,
+                &:focus,
+                &:visited {
+                    background-color: $heading-color;
+                }
+            }
+        }
+    }
+
+    &.price {
+        .ui-slider-handle {
+            background-color: $hover-color;
+            border: none;
+            border-radius: 0;
+            width: 12px;
+            height: 12px;
+            top: -3px;
+            margin-left: -2px;
+        }
+
+        .ui-slider-range.ui-corner-all.ui-widget-header {
+            background-color: $hover-color;
+        }
+
+        .ui-slider-horizontal {
+            height: 8px;
+        }
+
+        .range-price {
+            font-size: 14px;
+            font-weight: 700;
+            margin-top: 15px;
+            text-transform: capitalize;
+        }
+
+        .ui-widget.ui-widget-content {
+            border: 1px solid $border-color;
+        }
+    }
+}
+
+.custom-control-input:checked ~ .custom-control-label.black:before,
+.custom-control-label.black:before {
+    background-color: #000;
+}
+
+.custom-control-input:checked ~ .custom-control-label.pink:before,
+.custom-control-label.pink:before {
+    background-color: #E91E63;
+}
+
+.custom-control-input:checked ~ .custom-control-label.red:before,
+.custom-control-label.red:before {
+    background-color: #F44336;
+}
+
+.custom-control-input:checked ~ .custom-control-label.purple:before,
+.custom-control-label.purple:before {
+    background-color: #9C27B0;
+}
+
+
+.custom-control-input:checked ~ .custom-control-label.orange:before,
+.custom-control-label.orange:before {
+    background-color: orange;
+}
+
+.shop_pagination_area {
+    position: relative;
+    z-index: 1;
+
+    .page-item {
+        .page-link {
+            border: 1px solid transparent;
+            color: $heading-color;
+            border-radius: 4px;
+            padding: 2px 10px;
+
+            &:focus {
+                box-shadow: none;
+            }
+        }
+
+        &.active {
+            .page-link {
+                background-color: $hover-color;
+                color: $white-color;
+            }
+        }
+    }
+}
