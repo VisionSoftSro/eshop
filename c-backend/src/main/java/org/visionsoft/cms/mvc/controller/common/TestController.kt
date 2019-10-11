@@ -5,9 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import org.visionsoft.cms.mvc.model.converter.Person
-import org.visionsoft.cms.mvc.model.converter.PersonConverter
 import org.visionsoft.cms.mvc.model.converter.TestConverter
+import org.visionsoft.cms.mvc.model.dto.Person
+import org.visionsoft.cms.mvc.model.dto.PersonAddress
 import org.visionsoft.common.controller.DataControllerSingleType
 import org.visionsoft.common.currentUser
 import org.visionsoft.common.domain.JpaCriteria
@@ -48,7 +48,7 @@ class TestController {
     @GetMapping("mapstruct")
     fun get2() {
         val converter = Mappers.getMapper(TestConverter::class.java)
-        val person = Person("Samuel", "Jackson", "0123 334466", LocalDate.of(1948, 12, 21))
+        val person = Person("Samuel", "Jackson", "0123 334466", LocalDate.of(1948, 12, 21), PersonAddress("aaa"))
 
         val personDto = converter.convertToDto(person)
         println(personDto)

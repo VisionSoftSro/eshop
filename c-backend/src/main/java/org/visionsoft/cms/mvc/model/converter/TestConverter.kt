@@ -3,19 +3,17 @@ package org.visionsoft.cms.mvc.model.converter
 import org.mapstruct.InheritInverseConfiguration
 import org.mapstruct.Mapper
 import org.mapstruct.Mapping
-import java.time.LocalDate
+import org.mapstruct.Mappings
+import org.visionsoft.cms.mvc.model.dto.Person
+import org.visionsoft.cms.mvc.model.dto.PersonDto
 
-data class Person(var firstName: String?, var lastName: String?, var phoneNumber: String?, var birthdate: LocalDate?) {
-    // Necessary for MapStruct
-    constructor() : this(null, null, null, null)
-}
-data class PersonDto(var firstName: String?, var lastName: String?, var phone: String?, var birthdate: LocalDate?) {
-    // Necessary for MapStruct
-    constructor() : this(null, null, null, null)
-}
+
 @Mapper
 interface TestConverter {
-    @Mapping(source = "phoneNumber", target = "phone")
+    @Mappings(
+            Mapping(source = "phoneNumber", target = "phone"),
+            Mapping(source = "address.cityA", target = "address.cityB")
+    )
     fun convertToDto(person: Person) : PersonDto
 
     @InheritInverseConfiguration
