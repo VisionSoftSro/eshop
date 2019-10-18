@@ -1,6 +1,6 @@
-
-(function ($) {
-    'use strict';
+import $ from 'jquery';
+import * as wow from '../wow.min';
+export const initBigShop = () => {
 
     // :: All Variables
 
@@ -22,7 +22,7 @@
         $('#bigshopNav').classyNav();
     }
 
-    // :: Fixed Top Dropdown Code    
+    // :: Fixed Top Dropdown Code
 
     $(".classy-navbar-toggler").on("click", function () {
         $(".top-header-area").toggleClass("z-index-reduce");
@@ -35,7 +35,7 @@
         $(".navbarToggler").removeClass("active");
     });
 
-    // :: Search Form Code    
+    // :: Search Form Code
     $(".search-btn").on("click", function () {
         $(".search-form").toggleClass("active");
     });
@@ -450,7 +450,7 @@
     //::  WoW Active Code
 
     if (bigshopWindow.width() > 767) {
-        new WOW().init();
+        new wow.WOW().init();
     }
 
-})(jQuery);
+};

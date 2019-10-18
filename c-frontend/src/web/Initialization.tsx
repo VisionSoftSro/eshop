@@ -3,9 +3,8 @@ import ReactDOM from 'react-dom';
 import './Global';
 import { Provider } from 'react-redux';
 import 'moment/locale/cs';
-import Root from "./pages/Root";
+import Root from "./decorator/Root";
 import store from './redux/WebRedux';
-import './assets/scss/main.scss';
 
 //localizations
 import * as Locs from "../common/Localization";
