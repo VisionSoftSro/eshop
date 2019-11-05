@@ -83,7 +83,7 @@ module.exports = function(proxy, allowedHost) {
     },
     public: allowedHost,
     proxy: {
-      '/api': `${defaultBackendUrl}`,
+      '/api': `${defaultBackendUrl}`
     },
     before(app, server) {
       if (fs.existsSync(paths.proxySetup)) {

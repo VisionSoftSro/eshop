@@ -2,6 +2,70 @@ import * as React from "react";
 import {AssetCache} from "../AssetCache";
 import {Link} from "../../common/component/Link";
 
+class Cart extends React.Component {
+    render() {
+        return (
+            <div className="cart-area">
+                <div className="cart--btn"><i className="icofont-cart"></i> <span
+                    className="cart_quantity">2</span></div>
+
+                <div className="cart-dropdown-content">
+                    <ul className="cart-list">
+                        <li>
+                            <div className="cart-item-desc">
+                                <a href="#" className="image">
+                                    <img src="img/product-img/top-1.png" className="cart-thumb"
+                                         alt=""/>
+                                </a>
+                                <div>
+                                    <a href="#">Kid's Fashion</a>
+                                    <p>1 x - <span className="price">$32.99</span></p>
+                                </div>
+                            </div>
+                            <span className="dropdown-product-remove"><i
+                                className="icofont-bin"></i></span>
+                        </li>
+                        <li>
+                            <div className="cart-item-desc">
+                                <a href="#" className="image">
+                                    <img src="img/product-img/best-4.png" className="cart-thumb"
+                                         alt=""/>
+                                </a>
+                                <div>
+                                    <a href="#">Headphone</a>
+                                    <p>2x - <span className="price">$49.99</span></p>
+                                </div>
+                            </div>
+                            <span className="dropdown-product-remove"><i
+                                className="icofont-bin"></i></span>
+                        </li>
+                    </ul>
+                    <div className="cart-pricing my-4">
+                        <ul>
+                            <li>
+                                <span>Sub Total:</span>
+                                <span>$822.96</span>
+                            </li>
+                            <li>
+                                <span>Shipping:</span>
+                                <span>$30.00</span>
+                            </li>
+                            <li>
+                                <span>Total:</span>
+                                <span>$856.63</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div className="cart-box">
+                        <a href="checkout-1.html"
+                           className="btn bigshop-btn d-block">Checkout</a>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+}
+
 export class Header extends React.Component {
 
     changeLocale = (locale: string) => {
@@ -9,6 +73,38 @@ export class Header extends React.Component {
     };
 
     render() {
+        return (
+            <header className="header_area">
+                <div className="bigshop-main-menu" id="sticker">
+                    <div className="container">
+                        <div className="classy-nav-container breakpoint-off">
+                            <nav className="classy-navbar" id="bigshopNav">
+                                <a href="index.html" className="nav-brand"><img src={AssetCache.Image.Logo} alt="logo"/></a>
+                                <div className="classy-navbar-toggler">
+                                    <span className="navbarToggler"><span/><span/><span/></span>
+                                </div>
+                                <div className="classy-menu">
+                                    <div className="classycloseIcon">
+                                        <div className="cross-wrap"><span className="top"/><span
+                                            className="bottom"/></div>
+                                    </div>
+                                    <div className="classynav">
+                                        <ul>
+                                            <li><a href="/">Produkty</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div className="hero_meta_area ml-auto d-flex align-items-center justify-content-end">
+                                    <Cart />
+                                </div>
+                            </nav>
+
+                        </div>
+
+                    </div>
+                </div>
+            </header>
+        );
         return (
             <header className="header_area">
                 <div className="top-header-area">

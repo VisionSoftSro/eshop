@@ -5,5 +5,6 @@ export const AssetCache = {
       // Spanish:require('./assets/images/flags/spanish.png'),
       // English:require('./assets/images/flags/usa.png'),
     }
+
   }
 };

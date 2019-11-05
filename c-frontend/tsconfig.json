@@ -27,8 +27,7 @@
     "sourceMap": true,
     "importHelpers": true,
     "declaration": false,
-    "removeComments": true,
-    
+    "removeComments": true
   },
   "files":[
   ],
@@ -36,6 +35,8 @@
     "node_modules"
   ],
   "include": [
-    "src/web/assets/js/*"
+    "src",
+    "src/web/assets/js/*",
+    "src/data/*"
   ]
 }
