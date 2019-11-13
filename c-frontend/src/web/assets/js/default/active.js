@@ -1,4 +1,3 @@
-import $ from 'jquery';
 // @ts-ignore
 import * as wow from '../wow.min';
 export const initBigShop = () => {

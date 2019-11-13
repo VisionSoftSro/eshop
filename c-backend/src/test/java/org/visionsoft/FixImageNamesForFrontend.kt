@@ -20,7 +20,7 @@ fun main() {
                             filesToRename.add(f)
                         }
                     }
-                    var index = 0
+                    var index = 1
                     filesToRename.forEach {
                         it.renameTo(File("$path$d/${index++}.jpg"))
                     }

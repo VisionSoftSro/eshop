@@ -13,9 +13,16 @@
 /* ------------------
 :: 2.0 Import All CSS
 ------------------ */
+
+
 @import url(css/bootstrap.min.css);
 @import url(css/default/classy-nav.min.css);
+
+
+/*@import url(~owl.carousel/dist/assets/owl.carousel.css);*/
+/*@import url(~owl.carousel/dist/assets/owl.theme.default.css);*/
 @import url(css/owl.carousel.min.css);
+
 @import url(css/nice-select.css);
 @import url(css/animate.css);
 @import url(css/jquery-ui.min.css);
@@ -23,3 +30,4 @@
 @import url(css/font-awesome.min.css);
 @import url(css/default/icofont.min.css);
 @import url(css/Bigshop.css);
+

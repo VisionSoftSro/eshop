@@ -70,7 +70,12 @@ module.exports = function(webpackEnv) {
   // common function to get style loaders
   const getStyleLoaders = (cssOptions, preProcessor) => {
     const loaders = [
-      isEnvDevelopment && require.resolve('style-loader'),
+      isEnvDevelopment && {
+        loader:require.resolve('style-loader'),
+        options:{
+          singleton: true
+        }
+      },
       isEnvProduction && {
         loader: MiniCssExtractPlugin.loader,
         options: Object.assign(
@@ -100,7 +105,7 @@ module.exports = function(webpackEnv) {
               stage: 3,
             }),
           ],
-          sourceMap: isEnvProduction && shouldUseSourceMap,
+          sourceMap: isEnvProduction && shouldUseSourceMap
         },
       }
     ].filter(Boolean);
@@ -287,6 +292,7 @@ module.exports = function(webpackEnv) {
         // please link the files into your node_modules/ and let module-resolution kick in.
         // Make sure your source files are compiled, as they will not be processed in any way.
         new ModuleScopePlugin(paths.appSrc, [paths.appPackageJson]),
+
       ],
     },
     resolveLoader: {
@@ -623,7 +629,12 @@ module.exports = function(webpackEnv) {
         }),
         new CopyPlugin([
           { from: 'src/web/assets/product-img', to: 'static/product-img' }
-        ])
+        ]),
+        new webpack.ProvidePlugin({
+          $: 'jquery',
+          jQuery: 'jquery',
+          'window.jQuery': 'jquery'
+        }),
     ].filter(Boolean),
     // Some libraries import Node modules but don't use them in the browser.
     // Tell Webpack to provide empty mocks for them so importing them works.

@@ -74,6 +74,7 @@
         "react-localization": "^1.0.13",
         "react-motion": "^0.5.2",
         "react-number-format": "^4.0.7",
+        "react-owl-carousel": "^2.3.1",
         "react-redux": "^7.1.0",
         "react-router-dom": "^5.0.0",
         "react-scroll": "^1.7.14",

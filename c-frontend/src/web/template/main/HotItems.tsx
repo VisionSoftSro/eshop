@@ -3,11 +3,17 @@ import {ItemsState} from "../../redux/reducers/cart/ItemsReducer";
 import {productImageUrl} from "../../TemplateUtil";
 import {connect} from "react-redux";
 import {reduceStateToPlainObject} from "../../../common/redux/Reducers";
+import OwlCarousel from 'react-owl-carousel';
 
 class HotItems extends React.Component<ItemsState> {
     render() {
         return <section className="welcome_area">
-            <div className="welSlideTwo owl-carousel">
+            {this.props.items.length > 0 &&<OwlCarousel
+                className="welSlideTwo"
+                loop
+                margin={10}
+                nav
+            >
                 {this.props.items.filter(i=>i.hot).map(item=>(
                     <div key={item.id} className="single_slide home-3 bg-img" style={{backgroundImage:`url(${productImageUrl(item.id, 1)})`}}>
                         <div className="container h-100">
@@ -24,9 +30,11 @@ class HotItems extends React.Component<ItemsState> {
                         </div>
                     </div>
                 ))}
-            </div>
+            </OwlCarousel>}
         </section>;
     }
 }
 
 export default connect((state:ItemsState) => reduceStateToPlainObject(state))(HotItems);
+
+

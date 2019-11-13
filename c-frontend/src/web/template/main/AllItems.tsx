@@ -50,7 +50,7 @@ class Item extends React.Component<{item:Goods}> {
 }
 class AllItems extends React.Component<ItemsState> {
     render() {
-        return <section className="best-selling-products-area mb-70">
+        return <section className="best-selling-products-area mb-70 section_padding_100">
             <div className="container">
                 <div className="row">
                     <div className="col-12">
