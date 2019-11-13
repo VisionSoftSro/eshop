@@ -12,5 +12,4 @@ export const changeLocale = (locale:string) => {
         DataStorage.set("locale", locale);
         dispatch({type:LocaleActionType.SetLocale, locale:locale});
     }
-
 };

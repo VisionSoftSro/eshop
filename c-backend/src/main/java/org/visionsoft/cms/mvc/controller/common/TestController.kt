@@ -12,7 +12,6 @@ import org.visionsoft.common.controller.DataControllerSingleType
 import org.visionsoft.common.currentUser
 import org.visionsoft.common.domain.JpaCriteria
 import org.visionsoft.common.transaction.entityManager
-import org.visionsoft.crm.domain.dao.MyDao
 import org.visionsoft.crm.domain.dao.UserDao
 import org.visionsoft.crm.domain.scheme.User
 import java.security.Principal
@@ -27,10 +26,6 @@ class TestController {
 
     @Autowired
     lateinit var userDao: UserDao
-
-    @Autowired
-    lateinit var myDao: MyDao
-
 
     @GetMapping
     fun get() = "test"

@@ -67,7 +67,7 @@ const throwError = (instance:any, fieldKey:string, value?:any, index?:number) =>
 export class ObjectMapper<A> {
 
     config:ObjectMapperConfig<A>;
-    instance:A;
+    // instance:A;
     constructor(config?: ObjectMapperConfig<A>) {
         this.config = Object.assign(new ObjectMapperConfig<A>(), config);
     }
@@ -134,7 +134,7 @@ export class ObjectMapper<A> {
 
     writeValueAsString(obj:A) {
         return JSON.stringify(obj, (key, value) => {
-            if (value && typeof value === 'object') {
+            if (value && typeof value === 'object' && !Array.isArray(value)) {
                 let replacement: { [key: string]: any } = {};
                 for (let k in value) {
                     if (Object.hasOwnProperty.call(value, k)) {
@@ -169,8 +169,6 @@ export class ObjectMapper<A> {
     }
 
     readValueInternal<A>(instance:A, data:any):A {
-        // @ts-ignore
-        this.instance = instance;
         Object.keys(instance).forEach((key: string) => {
             let meta = this.getJsonProperty(instance, key);
             if(data === null || data === undefined) {
@@ -199,7 +197,8 @@ export class ObjectMapper<A> {
                 }
                 if(meta.localize !== undefined) {
                     const cfg:LocalizedProperty = Object.assign({textsProvider:"texts"}, meta.localize);
-                    const providers = this.config.dataProviders(this.instance);
+                    // @ts-ignore
+                    const providers = this.config.dataProviders(instance);
                     const texts = providers.get(cfg.textsProvider);
                     if(texts === null || typeof texts === 'undefined') {
                         throw new Error(`Texts provider named ${cfg.textsProvider} is not provided!!! cannot use LocalizedProperty`);
@@ -222,7 +221,8 @@ export class ObjectMapper<A> {
                         }
                     }
                 } else if(meta.dataProvider) {
-                    const providers = this.config.dataProviders(this.instance);
+                    // @ts-ignore
+                    const providers = this.config.dataProviders(instance);
                     //default set null
                     setValue(null);
                     if(providers && value !== undefined) {

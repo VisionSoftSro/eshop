@@ -17,13 +17,13 @@ class AppInitialization: ApplicationListener<ApplicationReadyEvent> {
 
     override fun onApplicationEvent(event: ApplicationReadyEvent) {
         transaction {
-            if(userService.findUser("admin") == null) {
-                User().applyAndPersist {
-                    email = "admin"
-                    roles = RoleCode.values().toMutableList()
-                    enabled = true
-                }
-            }
+//            if(userService.findUser("admin") == null) {
+//                User().applyAndPersist {
+//                    email = "admin"
+//                    roles = RoleCode.values().toMutableList()
+//                    enabled = true
+//                }
+//            }
         }
     }
 }

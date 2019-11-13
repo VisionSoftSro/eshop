@@ -29,8 +29,8 @@
     "declaration": false,
     "removeComments": true
   },
-  "files":[
-  ],
+//  "files":[
+//  ],
   "exclude": [
     "node_modules"
   ],

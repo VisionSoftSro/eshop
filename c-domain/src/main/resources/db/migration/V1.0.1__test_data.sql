@@ -1,0 +1,15 @@
+insert into goods (id, name, description, hot, images, stock, price) values ('1', 'Kaleidoskop', 'test', false, 5, 2, 120);
+insert into goods (id, name, description, hot, images, stock, price) values ('2', 'Magické omalovánky', 'test', false, 6, 1, 175);
+insert into goods (id, name, description, hot, images, stock, price) values ('3', 'Sada hudebních nástrojů (5ks)', 'test', false, 6, 1, 175);
+insert into goods (id, name, description, hot, images, stock, price) values ('4', 'Foukací harmonika', 'test', false, 6, 6, 65);
+insert into goods (id, name, description, hot, images, stock, price) values ('5', 'Plyšová hračka Prasátko Peppa (30 cm)', 'test', true, 6, 2, 255);
+insert into goods (id, name, description, hot, images, stock, price) values ('6', 'Prasátko Peppa - rodinné balení', 'test', true, 6, 1, 599);
+insert into goods (id, name, description, hot, images, stock, price) values ('7', 'Dřevěné puzzle se zvířátky (20 dílků)', 'test', false, 6, 6, 125);
+insert into goods (id, name, description, hot, images, stock, price) values ('8', 'Dětský xylofon', 'test', false, 6, 2, 170);
+insert into goods (id, name, description, hot, images, stock, price) values ('9', 'Plyšová hračka Králík Bing (30 cm)', 'test', false, 2, 2, 120);
+insert into goods (id, name, description, hot, images, stock, price) values ('10', 'Dinosauří vejce k vylíhnutí (5*5*7 cm)', 'test', false, 6, 3, 89);
+insert into goods (id, name, description, hot, images, stock, price) values ('11', 'Dětské ukulele', 'test', false, 6, 2, 179);
+insert into goods (id, name, description, hot, images, stock, price) values ('12', 'Dětská medvědí skládačka', 'test', true, 5, 2, 255);
+insert into goods (id, name, description, hot, images, stock, price) values ('13', 'Dřevěné chrastítko (2 ks)', 'test', false, 5, 2, 79);
+insert into goods (id, name, description, hot, images, stock, price) values ('14', 'Vrhací parašutista', 'test', false, 5, 2, 99);
+insert into goods (id, name, description, hot, images, stock, price) values ('15', 'Dětské vrhací kruhy', 'test', false, 6, 2, 179);

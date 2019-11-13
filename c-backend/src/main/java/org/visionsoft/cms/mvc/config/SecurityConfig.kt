@@ -3,8 +3,11 @@ package org.visionsoft.cms.mvc.config
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Configuration
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.core.Authentication
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer
 import org.visionsoft.common.applyAndPersist
@@ -15,10 +18,24 @@ import org.visionsoft.crm.domain.scheme.User
 import org.visionsoft.crm.domain.service.UserService
 
 
-@EnableResourceServer
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-@Configuration
-@ConfigurationProperties(prefix = "oauth")
+@EnableWebSecurity
+class WebSecurity: WebSecurityConfigurerAdapter() {
+
+    override fun configure(http: HttpSecurity) {
+        http
+                .authorizeRequests()
+
+                //any other request is not secured
+                .anyRequest()
+                .permitAll()
+    }
+
+}
+
+//@EnableResourceServer
+//@EnableGlobalMethodSecurity(prePostEnabled = true)
+//@Configuration
+//@ConfigurationProperties(prefix = "oauth")
 class SecurityConfig: OauthSecurityConfiguration<User>() {
 
     @Autowired

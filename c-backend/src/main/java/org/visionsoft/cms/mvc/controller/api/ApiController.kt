@@ -18,7 +18,4 @@ class TestApiController{
     @GetMapping
     fun get() = userDao.find()
 
-
-
-
 }

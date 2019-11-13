@@ -22,14 +22,18 @@ export const setConfig = (c:HttpUtilsConfig) => {
 };
 
 
-export async function httpEndpointList<A>(constructor: { new(): A }, url: string, init?: RequestInit): Promise<HttpResult<JsonList<A>>> {
-    const result = await httpEndpoint<JsonList<A>>(JsonList, url, init);
+export async function httpEndpointJsonList<A>(constructor: { new(): A }, url: string, init?: RequestInit): Promise<HttpResult<JsonList<A>>> {
+    const result = await httpEndpoint<JsonList<A>>(JsonList, url, false, init);
     result.data.list = new ObjectMapper<A>().readValueAsArray(constructor, result.data.list);
     return result;
 }
 
-
-export async function httpEndpoint<A>(constructor: { new(): A }, url: string, init?: RequestInit): Promise<HttpResult<A>> {
+export async function httpEndpointArray<A>(constructor: { new(): A }, url: string, init?: RequestInit): Promise<HttpResult<Array<A>>> {
+    const result = await httpEndpoint<Array<A>>(Array, url, true, init);
+    result.data = result.json.map((i:any)=>new ObjectMapper<A>().readValue(constructor, i));
+    return result;
+}
+export async function httpEndpoint<A>(constructor: { new(): A }, url: string, customMapping:boolean = false, init?: RequestInit): Promise<HttpResult<A>> {
     const init2:RequestInit = {
         headers: {}
     };
@@ -37,18 +41,17 @@ export async function httpEndpoint<A>(constructor: { new(): A }, url: string, in
         // @ts-ignore
         init2.headers["Authorization"] = `Bearer ${httpConfig.token}`;
     }
-    return await http<A>(constructor, `${httpConfig.apiUrl}${url}`, _.merge(init2, init || {}));
+    return await http<A>(constructor, `${httpConfig.apiUrl}${url}`, customMapping, _.merge(init2, init || {}));
 }
 
-export function http<T>(constructor: { new(): T }, input: RequestInfo, init?: RequestInit): Promise<HttpResult<T>> {
+export function http<T>(constructor: { new(): T }, input: RequestInfo, customMapping:boolean = false, init?: RequestInit): Promise<HttpResult<T>> {
     return fetch(input, init).then(r => {
         const result = new HttpResult<T>();
         result.response = r;
         if(r.body !== null) {
             return r.json().then(e => {
-
                 result.json = e;
-                if(r.status === 200) {
+                if(r.status === 200 && customMapping) {
                     result.data = new ObjectMapper<T>().readValue(constructor, e);
                 }
                 return result;

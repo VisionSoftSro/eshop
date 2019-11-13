@@ -23,3 +23,17 @@ export const defaultReducers: ReducerMembers = {
     login: loginReducer,
     locale: localeReducer
 };
+
+export class PlainReduceState {
+    toPlain() {
+        return reduceStateToPlainObject(this);
+    }
+}
+
+export const reduceStateToPlainObject = (obj:any) => {
+  const plain:any = {};
+  Object.keys(obj).forEach(i=>{
+     plain[i] = obj[i];
+  });
+  return plain;
+};

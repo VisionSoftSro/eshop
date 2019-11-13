@@ -5,8 +5,8 @@ import org.springframework.security.core.GrantedAuthority
 import org.visionsoft.common.IUser
 import javax.persistence.*
 
-@Entity
-@Table(name="a_user")
+//@Entity
+//@Table(name="a_user")
 class User : IUser {
 
     @Id

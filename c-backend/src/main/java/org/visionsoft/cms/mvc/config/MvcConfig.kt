@@ -9,7 +9,8 @@ import org.springframework.context.annotation.*
 
 
 @Configuration
-@ComponentScan(basePackages = ["org.visionsoft.cms.mvc.config", "org.visionsoft.cms.mvc.controller.common"])
+@ComponentScan(basePackages = ["org.visionsoft.cms.mvc.controller.common"])
+@Import(WebSecurity::class)
 class MvcConfig {
 
     @Bean

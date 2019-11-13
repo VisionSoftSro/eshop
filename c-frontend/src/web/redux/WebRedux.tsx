@@ -4,12 +4,16 @@ import thunk from "redux-thunk";
 import {WebsocketState} from "../../common/redux/reducers/websocket/WebsocketReducer";
 import {LoginState} from "../../common/redux/reducers/login/LoginReducer";
 import {LocaleState} from "../../common/redux/reducers/locale/LocaleReducer";
+import {cartReducer, CartState} from "./reducers/cart/CartReducer";
+import {loadState, saveState} from "../../common/redux/ReduxStoreStorage";
+import {itemsReducer} from "./reducers/cart/ItemsReducer";
 
-interface WebReducerMembers<S1=any> {
+interface WebReducerMembers<CART=any> {
+
 }
 
-export interface WebReducersState
-    extends ReducerMembers<WebsocketState, LoginState, LocaleState>, WebReducerMembers {
+export interface WebReducersState extends ReducerMembers<WebsocketState, LoginState, LocaleState>, WebReducerMembers {
+
 }
 
 export interface WebCombinedState extends WebReducersState, CombinedState {}
@@ -20,6 +24,10 @@ const reducers: WebReducerMembers = {
 };
 
 
-export const store = createStore(combineReducers({...defaultReducers, ...reducers}), applyMiddleware(thunk));
+export const cartStore = createStore(cartReducer, loadState(CartState, "cartState"));
+cartStore.subscribe(() => {
+    saveState<CartState>("cartState", cartStore.getState());
+});
+export const itemsStore = createStore(itemsReducer);
 
-export default store;
+export const mainStore = createStore(combineReducers({...defaultReducers, ...reducers}), applyMiddleware(thunk));

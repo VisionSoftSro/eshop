@@ -2,14 +2,12 @@ import {JsonProperty} from "./ObjectMapper";
 import browserHistory from '../utils/History';
 import DataStorage from "../DataStorage";
 import {TokenStore} from "../TokenStore";
-import {Price, PriceResult} from "../model/Price";
-
-export const jsonToFormData = (json:any, dataConvertor:(field:any)=>any = (field)=>field) => {
+export const jsonToFormData = (json:any, dataConverter:(field:any)=>any = (field)=>field) => {
     const formData = new FormData();
     Object.keys(json).forEach(e=>{
         const value = json[e];
         if(value !== undefined)
-       formData.set(e, dataConvertor(value));
+       formData.set(e, dataConverter(value));
     });
     return formData;
 };
@@ -23,37 +21,18 @@ export class JsonList<E> {
     list:Array<E>;
 }
 
-export const isAuthenticated = () => {
-    return TokenStore.getToken() !== null;
-};
-
-
+// export const isAuthenticated = () => {
+//     return TokenStore.getToken() !== null;
+// };
 export const currentLocale = () => {
-    return DataStorage.get("locale");
+    // @ts-ignore
+    return window.locale || DataStorage.get("locale");
 };
-
-
-let scrollIndex = 0;
-let scrollListeners = new Map();
-export const addScrollListener = (method:(ev:Event)=>void):number => {
-    scrollIndex++;
-    scrollListeners.set(scrollIndex, method);
-    return scrollIndex;
-};
-export const removeScrollListener = (id:number) => {
-    scrollListeners.delete(id);
-};
-window.onscroll = (ev:Event) => {
-    scrollListeners.forEach((value, key, map) => {
-        value(ev);
-    })
-};
-
 
 export const formatNumber = (value:number) => {
     return value.toLocaleString(currentLocale());
 };
 
-export const formatPrice = (result:PriceResult) => {
-    return result.value.toLocaleString(currentLocale(), {style: 'currency', currency: result.currency});
+export const formatPrice = (value:number, currency:string) => {
+    return value.toLocaleString(currentLocale(), {style: 'currency', currency: currency});
 };

@@ -33,7 +33,7 @@ abstract class OauthSecurityConfiguration<U : IUser> : ResourceServerConfigurerA
     }
 
 
-    @EnableWebSecurity
+//    @EnableWebSecurity
     class WebSecurity: WebSecurityConfigurerAdapter() {
         override fun configure(auth: AuthenticationManagerBuilder) {
             println("************** WEB SECURITY ****************")
