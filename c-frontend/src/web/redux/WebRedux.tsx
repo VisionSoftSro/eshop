@@ -7,6 +7,7 @@ import {LocaleState} from "../../common/redux/reducers/locale/LocaleReducer";
 import {cartReducer, CartState} from "./reducers/cart/CartReducer";
 import {loadState, saveState} from "../../common/redux/ReduxStoreStorage";
 import {itemsReducer} from "./reducers/cart/ItemsReducer";
+import {itemReducer} from "./reducers/cart/ItemReducer";
 
 interface WebReducerMembers<CART=any> {
 
@@ -28,6 +29,8 @@ export const cartStore = createStore(cartReducer, loadState(CartState, "cartStat
 cartStore.subscribe(() => {
     saveState<CartState>("cartState", cartStore.getState());
 });
-export const itemsStore = createStore(itemsReducer);
 
+export const selectedItemStore = createStore(itemReducer);
+
+export const itemsStore = createStore(itemsReducer);
 export const mainStore = createStore(combineReducers({...defaultReducers, ...reducers}), applyMiddleware(thunk));

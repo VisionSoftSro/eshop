@@ -6,7 +6,10 @@ export default {
         AddToCart:"Přidat do košíku",
         QuickView:"Prohlédnout",
         TotalPrice:"Celkem",
-        CartIsEmpty:"Košík je prázdný"
+        CartIsEmpty:"Košík je prázdný",
+        OutOfStock: "Není skladem",
+        BuyNow:"Koupit",
+        InStock:"Skladem"
     },
     en: {
         Offers:"For you"

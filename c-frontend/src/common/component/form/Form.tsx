@@ -316,7 +316,7 @@ export interface FormProps<Data> extends HiddenFormProps {
     onChange?: (form: Form<Data>) => void
 }
 
-const voidFormSubmit = (e: FormEvent) => e.preventDefault();
+export const voidFormSubmit = (e: FormEvent) => e.preventDefault();
 
 class FormState {
     errors:ValidationError = new ValidationError();

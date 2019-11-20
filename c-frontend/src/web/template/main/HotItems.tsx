@@ -4,8 +4,13 @@ import {productImageUrl} from "../../TemplateUtil";
 import {connect} from "react-redux";
 import {reduceStateToPlainObject} from "../../../common/redux/Reducers";
 import OwlCarousel from 'react-owl-carousel';
+import {selectedItemStore} from "../../redux/WebRedux";
+import {ItemAction, ItemActionType} from "../../redux/reducers/cart/ItemReducer";
+import {Link} from "../../../common/component/Link";
 
 class HotItems extends React.Component<ItemsState> {
+
+
     render() {
         return <section className="welcome_area">
             {this.props.items.length > 0 &&<OwlCarousel
@@ -22,8 +27,10 @@ class HotItems extends React.Component<ItemsState> {
                                     <div className="welcome_slide_text text-center">
                                         <p data-animation="fadeInUp" data-delay="100ms">{item.name}</p>
                                         <h2 data-animation="fadeInUp" data-delay="300ms">{item.getPrice().format()}</h2>
-                                        <a href="#" className="btn bigshop-btn" data-animation="fadeInUp"
-                                           data-delay="500ms">Buy Now</a>
+                                        <Link href={()=>{
+                                            selectedItemStore.dispatch<ItemAction>({type: ItemActionType.Show, item:item, pcs:1});
+                                        }} className="btn bigshop-btn" data-animation="fadeInUp"
+                                           data-delay="500ms">{Strings["BuyNow"]}</Link>
                                     </div>
                                 </div>
                             </div>

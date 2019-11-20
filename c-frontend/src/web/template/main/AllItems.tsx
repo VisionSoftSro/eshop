@@ -1,16 +1,22 @@
 import * as React from "react";
 import {ItemsState} from "../../redux/reducers/cart/ItemsReducer";
 import {CartGoods, Goods} from "../../dto/Goods";
-import {cartStore} from "../../redux/WebRedux";
+import {cartStore, itemsStore, selectedItemStore} from "../../redux/WebRedux";
 import {CartAction, CartActionType} from "../../redux/reducers/cart/CartReducer";
 import {productImageUrl} from "../../TemplateUtil";
 import {Link} from "../../../common/component/Link";
 import {connect} from "react-redux";
 import {reduceStateToPlainObject} from "../../../common/redux/Reducers";
+import {ItemAction, ItemActionType} from "../../redux/reducers/cart/ItemReducer";
+
 class Item extends React.Component<{item:Goods}> {
 
     addToCart = () => {
         cartStore.dispatch<CartAction>({ type: CartActionType.AddCart, item:new CartGoods(this.props.item, 1)});
+    };
+
+    showDetail = () => {
+        selectedItemStore.dispatch<ItemAction>({type: ItemActionType.Show, item:this.props.item, pcs:1});
     };
 
     render() {
@@ -32,12 +38,15 @@ class Item extends React.Component<{item:Goods}> {
 
                     <div className="product_description">
                         <div className="product_add_to_cart">
-                            <Link href={this.addToCart}><i className="icofont-cart"/> {Strings["AddToCart"]}</Link>
+                            <Link href={this.addToCart}>
+                                <i className="icofont-cart"/> {Strings["AddToCart"]}
+                            </Link>
                         </div>
 
                         <div className="product_quick_view">
-                            <a href="#" data-toggle="modal" data-target="#quickview"><i
-                                className="icofont-eye-alt"/> {Strings["QuickView"]}</a>
+                            <Link href={this.showDetail}>
+                                <i className="icofont-eye-alt"/> {Strings["QuickView"]}
+                            </Link>
                         </div>
 
                         <a href="#">{this.props.item.name}</a>

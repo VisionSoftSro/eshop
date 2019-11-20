@@ -36,3 +36,5 @@ export const formatNumber = (value:number) => {
 export const formatPrice = (value:number, currency:string) => {
     return value.toLocaleString(currentLocale(), {style: 'currency', currency: currency});
 };
+
+export function clamp(v:number, min:number, max:number) { return v < min ? min : v > max ? max : v; }
