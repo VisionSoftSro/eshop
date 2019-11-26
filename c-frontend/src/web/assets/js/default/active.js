@@ -1,5 +1,6 @@
 // @ts-ignore
 import * as wow from '../wow.min';
+import './sticky';
 export const initBigShop = () => {
 
     // :: All Variables

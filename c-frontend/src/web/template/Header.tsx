@@ -33,40 +33,40 @@ class Header extends React.Component<DataState> {
     render() {
         return (
             <header className="header_area">
+                <div className="bigshop-main-menu" id={"sticker"}>
+                    <div className="container">
+                        <div className="classy-nav-container breakpoint-off">
+                            <nav className="classy-navbar" id="bigshopNav">
+                                <Link href="/" className="nav-brand"><img src={AssetCache.Image.Logo} alt="logo"/></Link>
+                                <div className="classy-navbar-toggler">
+                                    <span className="navbarToggler"><span/><span/><span/></span>
+                                </div>
+                                <div className="classy-menu">
+                                    <div className="classycloseIcon">
+                                        <div className="cross-wrap"><span className="top"/><span
+                                            className="bottom"/></div>
+                                    </div>
+                                    <div className="classynav">
+                                        <ul>
+                                            {this.props.categories.map(i=><li key={i.id}><Link href={"/"} callback={()=>this.setCategory(i)} className={this.props.currentCategory === i && "active" || ""}>{Strings[`Categories.${i.id}`]}</Link></li>)}
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div className="hero_meta_area ml-auto d-flex align-items-center justify-content-end">
+                                    <Provider store={cartStore}>
+                                        <CartPopup />
+                                    </Provider>
+                                </div>
+                            </nav>
 
+                        </div>
+
+                    </div>
+                </div>
                     <Sticky>
                         {({style})=>(
                             <div style={style}>
-                                <div className="bigshop-main-menu" >
-                                    <div className="container">
-                                        <div className="classy-nav-container breakpoint-off">
-                                            <nav className="classy-navbar" id="bigshopNav">
-                                                <Link href="/" className="nav-brand"><img src={AssetCache.Image.Logo} alt="logo"/></Link>
-                                                <div className="classy-navbar-toggler">
-                                                    <span className="navbarToggler"><span/><span/><span/></span>
-                                                </div>
-                                                <div className="classy-menu">
-                                                    <div className="classycloseIcon">
-                                                        <div className="cross-wrap"><span className="top"/><span
-                                                            className="bottom"/></div>
-                                                    </div>
-                                                    <div className="classynav">
-                                                        <ul>
-                                                            {this.props.categories.map(i=><li key={i.id}><Link href={"/"} callback={()=>this.setCategory(i)} className={this.props.currentCategory === i && "active" || ""}>{Strings[`Categories.${i.id}`]}</Link></li>)}
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div className="hero_meta_area ml-auto d-flex align-items-center justify-content-end">
-                                                    <Provider store={cartStore}>
-                                                        <CartPopup />
-                                                    </Provider>
-                                                </div>
-                                            </nav>
 
-                                        </div>
-
-                                    </div>
-                                </div>
                             </div>
                         )}
                     </Sticky>
