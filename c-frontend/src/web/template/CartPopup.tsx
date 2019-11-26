@@ -26,7 +26,7 @@ class CartPopup extends React.Component<CartState> {
                             <li key={item.goods.id}>
                                 <div className="cart-item-desc">
                                     <a href="#" className="image">
-                                        <img src={productImageUrl(item.goods.id, 1)} className="cart-thumb" alt=""/>
+                                        <img src={productImageUrl(item.goods.code, 1)} className="cart-thumb" alt=""/>
                                     </a>
                                     <div>
                                         <a href="#">{item.goods.name}</a>

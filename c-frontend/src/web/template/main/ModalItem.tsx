@@ -49,8 +49,8 @@ class ModalItem extends React.Component<ItemState> {
                                     <div className="row">
                                         <div className="col-12 col-lg-5">
                                             <div className="quickview_pro_img">
-                                                <img className="first_img" src={productImageUrl(this.props.item.id, 1)} alt=""/>
-                                                <img className="hover_img" src={productImageUrl(this.props.item.id, 2)} alt=""/>
+                                                <img className="first_img" src={productImageUrl(this.props.item.code, 1)} alt=""/>
+                                                <img className="hover_img" src={productImageUrl(this.props.item.code, 2)} alt=""/>
                                                 {this.props.item.hot&&(
                                                     <div className="product_badge">
                                                         <span className="badge-new">Top</span>
@@ -69,8 +69,9 @@ class ModalItem extends React.Component<ItemState> {
                                                     <i className="fa fa-star" aria-hidden="true"/>
                                                 </div>
                                                 <h5 className="price">{this.props.item.getPrice().format}</h5>
-                                                <p>{this.props.item.description}</p>
-                                                <p>{Strings["InStock"]}: {this.props.item.stock} ks</p>
+                                                <p dangerouslySetInnerHTML={{__html:this.props.item.description}} />
+                                                <p><strong>{Strings["InStock"]}:</strong> {this.props.item.stock} ks</p>
+                                                <p><strong>{Strings["Price"]}:</strong> {this.props.item.getPrice().format()}</p>
                                                 {/*<a href="#">View Full Product Details</a>*/}
                                             </div>
                                             <form className="cart" method="post" onSubmitCapture={voidFormSubmit} onSubmit={voidFormSubmit}>

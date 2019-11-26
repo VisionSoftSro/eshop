@@ -1,5 +1,6 @@
 export default {
     cs: {
+        Goods:"Zboží",
         Offers:"Pro vás",
         Projects:"Naše projekty",
         Contact:"Kontakt",
@@ -9,7 +10,13 @@ export default {
         CartIsEmpty:"Košík je prázdný",
         OutOfStock: "Není skladem",
         BuyNow:"Koupit",
-        InStock:"Skladem"
+        InStock:"Skladem",
+        Category:"Kategorie",
+        Price:"Cena",
+        Categories: {
+            parties:"Na oslavy",
+            gifts:"Dárky"
+        }
     },
     en: {
         Offers:"For you"

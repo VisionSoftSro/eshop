@@ -1,13 +1,22 @@
 import {formatPrice} from "../../common/utils/Util";
 import {JsonProperty} from "../../common/utils/ObjectMapper";
 
+
+export class Category {
+    id:string
+}
+
 export class Goods {
-    id:string;
+    id:number;
+    code:string;
     name:string;
     description:string;
     stock:number;
     price:number;
     hot:boolean;
+
+    @JsonProperty({strict:{isArray:true}, clazz:Category})
+    categories:Array<Category>;
 
     getPrice():Price {
         return new Price(this.price, 'CZK');

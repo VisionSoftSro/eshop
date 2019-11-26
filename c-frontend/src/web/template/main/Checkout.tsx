@@ -10,6 +10,9 @@ interface CheckoutPartProps {
 
 
 class Complete extends React.Component {
+
+
+
     render() {
         return <div className="checkout_area section_padding_100">
             <div className="container">
@@ -578,6 +581,10 @@ export class Checkout extends React.Component<any, {index:number}> {
     state = {index:0};
 
     steps:Array<Step> = [{name:"Billing"}, {name:"Shipping"}, {name:"Payment"}, {name:"Review"}];
+
+    componentDidMount(): void {
+        window.scrollTo(0, 0);
+    }
 
     next = () => {
         this.setState({index:this.state.index+1})

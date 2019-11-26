@@ -81,6 +81,7 @@
         "react-select": "^2.4.3",
         "react-sortable-hoc": "^1.9.1",
         "react-sortable-list": "^1.1.0",
+        "react-sticky": "^6.0.3",
         "react-switch": "^5.0.0",
         "react-toastify": "^5.1.0",
         "react-toggle": "^4.0.2",
@@ -126,10 +127,12 @@
         "@types/react-redux": "^7.1.2",
         "@types/react-router-dom": "^4.3.1",
         "@types/react-select": "^3.0.2",
+        "@types/react-sticky": "^6.0.3",
         "@types/sockjs-client": "^1.1.1",
         "@types/stompjs": "^2.3.4",
         "@types/string-format": "^2.0.0",
         "concurrently": "3.4.0",
+        "copy-webpack-plugin": "^5.0.4",
         "extract-text-webpack-plugin": "^4.0.0-beta.0",
         "font-awesome-loader": "^1.0.2",
         "image-webpack-loader": "^4.6.0",
@@ -137,8 +140,7 @@
         "node-sass": "^4.12.0",
         "resolve-url-loader": "^3.1.0",
         "transfer-webpack-plugin": "^0.1.4",
-        "typescript": "^3.4.2",
-        "copy-webpack-plugin": "^5.0.4"
+        "typescript": "^3.4.2"
     },
     "jest": {
         "collectCoverageFrom": [

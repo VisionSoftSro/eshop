@@ -2,50 +2,74 @@ import * as React from "react";
 import {AssetCache} from "../AssetCache";
 import {Link} from "../../common/component/Link";
 import CartPopup from "./CartPopup";
-import {cartStore} from "../redux/WebRedux";
+import {cartStore, dataStore} from "../redux/WebRedux";
 import Root from "./Root";
-import {Provider} from "react-redux";
+import {connect, Provider} from "react-redux";
+import {changeLocale} from "../redux/reducers/LocaleActions";
+import {httpEndpoint, httpEndpointArray} from "../../common/utils/HttpUtils";
+import {Category, Goods} from "../dto/Goods";
+import {DataAction, DataActionType} from "../redux/reducers/cart/DataReducer";
+import {reduceStateToPlainObject} from "../../common/redux/Reducers";
+import {DataState} from "../redux/reducers/cart/DataReducer";
+import {StickyContainer, Sticky} from 'react-sticky';
 
-
-export class Header extends React.Component {
+class Header extends React.Component<DataState> {
 
     changeLocale = (locale: string) => {
-        console.log(locale)
+        changeLocale(locale)
     };
+
+    async componentDidMount() {
+        const result = await httpEndpointArray<Category>(Category, "categories");
+        dataStore.dispatch<DataAction>({type:DataActionType.SetCategories, categories:result.data});
+        this.setCategory(result.data[0]);
+    }
+
+    setCategory(category:Category) {
+        dataStore.dispatch<DataAction>({type:DataActionType.SetCategory, currentCategory:category});
+
+    }
 
     render() {
         return (
             <header className="header_area">
-                <div className="bigshop-main-menu" id="sticker">
-                    <div className="container">
-                        <div className="classy-nav-container breakpoint-off">
-                            <nav className="classy-navbar" id="bigshopNav">
-                                <Link href="/" className="nav-brand"><img src={AssetCache.Image.Logo} alt="logo"/></Link>
-                                <div className="classy-navbar-toggler">
-                                    <span className="navbarToggler"><span/><span/><span/></span>
-                                </div>
-                                <div className="classy-menu">
-                                    <div className="classycloseIcon">
-                                        <div className="cross-wrap"><span className="top"/><span
-                                            className="bottom"/></div>
-                                    </div>
-                                    <div className="classynav">
-                                        <ul>
-                                            <li><Link href="/">Produkty</Link></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div className="hero_meta_area ml-auto d-flex align-items-center justify-content-end">
-                                    <Provider store={cartStore}>
-                                        <CartPopup />
-                                    </Provider>
-                                </div>
-                            </nav>
 
-                        </div>
+                    <Sticky>
+                        {({style})=>(
+                            <div style={style}>
+                                <div className="bigshop-main-menu" >
+                                    <div className="container">
+                                        <div className="classy-nav-container breakpoint-off">
+                                            <nav className="classy-navbar" id="bigshopNav">
+                                                <Link href="/" className="nav-brand"><img src={AssetCache.Image.Logo} alt="logo"/></Link>
+                                                <div className="classy-navbar-toggler">
+                                                    <span className="navbarToggler"><span/><span/><span/></span>
+                                                </div>
+                                                <div className="classy-menu">
+                                                    <div className="classycloseIcon">
+                                                        <div className="cross-wrap"><span className="top"/><span
+                                                            className="bottom"/></div>
+                                                    </div>
+                                                    <div className="classynav">
+                                                        <ul>
+                                                            {this.props.categories.map(i=><li key={i.id}><Link href={"/"} callback={()=>this.setCategory(i)} className={this.props.currentCategory === i && "active" || ""}>{Strings[`Categories.${i.id}`]}</Link></li>)}
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div className="hero_meta_area ml-auto d-flex align-items-center justify-content-end">
+                                                    <Provider store={cartStore}>
+                                                        <CartPopup />
+                                                    </Provider>
+                                                </div>
+                                            </nav>
 
-                    </div>
-                </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </Sticky>
             </header>
         );
         // return (
@@ -346,3 +370,4 @@ export class Header extends React.Component {
     }
 
 }
+export default connect((state:DataState) => reduceStateToPlainObject(state))(Header);

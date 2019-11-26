@@ -1,5 +1,5 @@
 import * as React from "react";
-import {ItemsState} from "../../redux/reducers/cart/ItemsReducer";
+import {DataState} from "../../redux/reducers/cart/DataReducer";
 import {productImageUrl} from "../../TemplateUtil";
 import {connect} from "react-redux";
 import {reduceStateToPlainObject} from "../../../common/redux/Reducers";
@@ -8,19 +8,20 @@ import {selectedItemStore} from "../../redux/WebRedux";
 import {ItemAction, ItemActionType} from "../../redux/reducers/cart/ItemReducer";
 import {Link} from "../../../common/component/Link";
 
-class HotItems extends React.Component<ItemsState> {
+class HotItems extends React.Component<DataState> {
 
 
     render() {
         return <section className="welcome_area">
-            {this.props.items.length > 0 &&<OwlCarousel
+            {this.props.goods.length > 0 &&<OwlCarousel
                 className="welSlideTwo"
                 loop
                 margin={10}
                 nav
+                items={1}
             >
-                {this.props.items.filter(i=>i.hot).map(item=>(
-                    <div key={item.id} className="single_slide home-3 bg-img" style={{backgroundImage:`url(${productImageUrl(item.id, 1)})`}}>
+                {this.props.goods.filter(i=>i.hot).map(item=>(
+                    <div key={item.id} className="single_slide home-3 bg-img" style={{backgroundImage:`url(${productImageUrl(item.code, 1)})`}}>
                         <div className="container h-100">
                             <div className="row h-100 align-items-center">
                                 <div className="col-12">
@@ -42,6 +43,6 @@ class HotItems extends React.Component<ItemsState> {
     }
 }
 
-export default connect((state:ItemsState) => reduceStateToPlainObject(state))(HotItems);
+export default connect((state:DataState) => reduceStateToPlainObject(state))(HotItems);
 
 
