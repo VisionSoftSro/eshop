@@ -5,8 +5,13 @@ import {productImageUrl} from "../TemplateUtil";
 import {Price} from "../dto/Goods";
 import {cartStore} from "../redux/WebRedux";
 import {reduceStateToPlainObject} from "../../common/redux/Reducers";
+import {Link} from "../../common/component/Link";
 
 class CartPopup extends React.Component<CartState> {
+
+    showCheckout() {
+
+    }
 
     render() {
         return (
@@ -51,8 +56,8 @@ class CartPopup extends React.Component<CartState> {
                         </ul>
                     </div>
                     <div className="cart-box">
-                        <a href="checkout-1.html"
-                           className="btn bigshop-btn d-block">Checkout</a>
+                        <Link href={"checkout"}
+                           className="btn bigshop-btn d-block">K pokladně</Link>
                     </div>
                 </div>
             </div>

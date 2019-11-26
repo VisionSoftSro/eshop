@@ -9,11 +9,15 @@ import config from '../Config';
 //localizations
 import * as Locs from "../common/Localization";
 import {setConfig} from "../common/utils/HttpUtils";
-import {saveState} from "../common/redux/ReduxStoreStorage";
-import {CartState} from "./redux/reducers/cart/CartReducer";
+import {currentLocale, exist} from "../common/utils/Util";
+import {changeLocale} from "./redux/reducers/LocaleActions";
 const i18n = Locs.init(require('./i18n/all').default);
 window.Strings = i18n;
-
+const loc = currentLocale();
+if (!exist(loc)) {
+    // @ts-ignore
+    mainStore.dispatch(changeLocale("cs"))
+}
 setConfig({
     apiUrl:`${config.backendUrl}/api/`
 });

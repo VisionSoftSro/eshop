@@ -12,6 +12,7 @@ import {Header} from "./Header";
 import {init} from "./Bigshop";
 import {GoodsPage} from "./Goods";
 
+
 class Root extends React.Component<LocaleState> {
 
     componentDidMount(): void {

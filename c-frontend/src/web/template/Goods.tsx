@@ -9,6 +9,9 @@ import {connect, Provider} from "react-redux";
 import AllItems from "./main/AllItems";
 import HotItems from "./main/HotItems";
 import ModalItem from "./main/ModalItem";
+import {Router, BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
+import history from '../../common/utils/History';
+import {Checkout} from "./main/Checkout";
 
 export class GoodsPage extends React.Component {
 
@@ -21,8 +24,19 @@ export class GoodsPage extends React.Component {
         return (
             <Wrapper>
                 <Provider store={itemsStore}>
-                    <HotItems />
-                    <AllItems />
+                    <Router history={history}>
+                        <Switch>
+                            <Route path={"/checkout"} component={Checkout}/>
+                            <Route path={"/"} render={()=>(
+                                <Wrapper>
+                                    <HotItems />
+                                    <AllItems />
+                                </Wrapper>
+                            )}/>
+                            <Redirect to={"/"} />
+                        </Switch>
+                    </Router>
+
                 </Provider>
                 <Provider store={selectedItemStore}>
                     <ModalItem />

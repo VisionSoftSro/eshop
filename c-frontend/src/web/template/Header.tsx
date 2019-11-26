@@ -20,7 +20,7 @@ export class Header extends React.Component {
                     <div className="container">
                         <div className="classy-nav-container breakpoint-off">
                             <nav className="classy-navbar" id="bigshopNav">
-                                <a href="index.html" className="nav-brand"><img src={AssetCache.Image.Logo} alt="logo"/></a>
+                                <Link href="/" className="nav-brand"><img src={AssetCache.Image.Logo} alt="logo"/></Link>
                                 <div className="classy-navbar-toggler">
                                     <span className="navbarToggler"><span/><span/><span/></span>
                                 </div>
@@ -31,7 +31,7 @@ export class Header extends React.Component {
                                     </div>
                                     <div className="classynav">
                                         <ul>
-                                            <li><a href="/">Produkty</a></li>
+                                            <li><Link href="/">Produkty</Link></li>
                                         </ul>
                                     </div>
                                 </div>
