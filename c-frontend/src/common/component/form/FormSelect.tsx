@@ -112,7 +112,7 @@ export class FormSelect extends React.Component<FormSelectProps, FormSelectState
         // @ts-ignore
         params[ajax.searchKey||"term"] = inputValue;
         const result = await httpEndpoint<JsonList<GenericMap<any>>>(JsonList, `${ajax.url}?${qs.stringify(params)}`);
-        return formatOptions(result.data.data, this.props.selectProps);
+        return formatOptions(result.data.list, this.props.selectProps);
     };
 
     render() {

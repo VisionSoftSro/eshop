@@ -2,10 +2,11 @@ import React from "react";
 import {connect} from "react-redux";
 import {CartAction, CartActionType, CartState} from "../redux/reducers/cart/CartReducer";
 import {productImageUrl} from "../TemplateUtil";
-import {Price} from "../dto/Goods";
-import {cartStore} from "../redux/WebRedux";
+import {Price} from "../dto/GoodsDto";
+import {cartStore, checkoutStore} from "../redux/WebRedux";
 import {reduceStateToPlainObject} from "../../common/redux/Reducers";
 import {Link} from "../../common/component/Link";
+import {CheckoutAction, CheckoutActionType} from "../redux/reducers/cart/CheckoutReducer";
 
 class CartPopup extends React.Component<CartState> {
 
@@ -19,7 +20,7 @@ class CartPopup extends React.Component<CartState> {
                 <div className="cart--btn"><i className="icofont-cart"/> <span
                     className="cart_quantity">{this.props.cart.length}</span></div>
 
-                <div className="cart-dropdown-content">
+                <div className="cart-dropdown-content" style={{maxHeight: "90vh", overflow:"auto"}}>
                     <ul className="cart-list">
                         {this.props.cart.length === 0 && <div>{Strings["CartIsEmpty"]}</div>}
                         {this.props.cart.map(item=>(
@@ -56,7 +57,7 @@ class CartPopup extends React.Component<CartState> {
                         </ul>
                     </div>
                     <div className="cart-box">
-                        <Link href={"checkout"}
+                        <Link href={"checkout"} callback={()=>checkoutStore.dispatch<CheckoutAction>({type:CheckoutActionType.SetStep, step:0})}
                            className="btn bigshop-btn d-block">K pokladně</Link>
                     </div>
                 </div>

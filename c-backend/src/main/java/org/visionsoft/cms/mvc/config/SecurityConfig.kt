@@ -23,11 +23,11 @@ class WebSecurity: WebSecurityConfigurerAdapter() {
 
     override fun configure(http: HttpSecurity) {
         http
+                .csrf().disable()
                 .authorizeRequests()
 
                 //any other request is not secured
-                .anyRequest()
-                .permitAll()
+                .antMatchers("/**").permitAll()
     }
 
 }

@@ -23,7 +23,7 @@ export class FormInput extends React.Component<FormInputProps> implements FormFi
     render() {
      return <input
          disabled={this.props.disabled}
-         className={"form-control"} type={this.props.type} value={this.state.value||""} name={this.props.name} placeholder={this.props.placeholder}
+         className={"form-control"} type={this.props.type} defaultValue={this.state.value||""} name={this.props.name} placeholder={this.props.placeholder}
         onChange={e=>{
             this.onValueChange(e.target.value);
         }}

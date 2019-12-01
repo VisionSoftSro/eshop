@@ -1,17 +1,25 @@
 import React from "react";
 import Wrapper from "../../../common/component/Wrapper";
-import { Link } from '../../../common/component/Link';
+import {Link} from '../../../common/component/Link';
 import {SwitchCase, SwitchPage} from "../../../common/component/SwitchPage";
 import cs from 'classnames';
-
-interface CheckoutPartProps {
-    next:()=>void
-}
+import {connect} from "react-redux";
+import {reduceStateToPlainObject} from "../../../common/redux/Reducers";
+import {CheckoutAction, CheckoutActionType, CheckoutState} from "../../redux/reducers/cart/CheckoutReducer";
+import {cartStore, checkoutStore} from "../../redux/WebRedux";
+import {Form, FormField, FormInputType} from "../../../common/component/form/Form";
+import {CheckoutDto, PaymentMethod, ShippingMethod} from "../../dto/CheckoutDto";
+import {Price} from "../../dto/GoodsDto";
+import {productImageUrl} from "../../TemplateUtil";
+import {httpEndpoint} from "../../../common/utils/HttpUtils";
+import {jsonToFormData} from "../../../common/utils/Util";
 
 
 class Complete extends React.Component {
 
+    next = () =>{
 
+    };
 
     render() {
         return <div className="checkout_area section_padding_100">
@@ -30,54 +38,87 @@ class Complete extends React.Component {
     }
 }
 
-class Review extends React.Component<CheckoutPartProps> {
+class CheckoutResult {
+    orderNumber:number;
+}
+
+class FormDtoCart {
+    goods:number;
+    pcs:number;
+
+    constructor(goods: number, pcs: number) {
+        this.goods = goods;
+        this.pcs = pcs;
+    }
+}
+class FormDto extends CheckoutDto {
+    goods:Array<FormDtoCart>;
+}
+
+class Review extends React.Component {
+    next = async () =>{
+
+        const checkout = checkoutStore.getState().checkout;
+        const cart = cartStore.getState().cart;
+        const form = new FormDto();
+        form.goods = cart.map(i=>new FormDtoCart(i.goods.id, i.pcs));
+        const json = {...form, ...checkout};
+
+        const result = await httpEndpoint<CheckoutResult>(CheckoutResult, "checkout", false, {
+            body:jsonToFormData(json, (field)=>{
+                //convert object to id for spring and jpa support
+                if(typeof field === 'object' && field.id !== undefined) {
+                    return field.id;
+                }
+                return field;
+            }),
+            method:"POST",
+
+        });
+        console.log(result);
+        //checkoutStore.dispatch<CheckoutAction>({type:CheckoutActionType.Update, step:4})
+    };
     render() {
+        const checkout = checkoutStore.getState().checkout;
+        const cart = cartStore.getState().cart;
+        const cartPrice = cart.map(a=>a.pcs * a.goods.price).reduce((a,b)=>a+b);
+        const shippingPrice = checkout.shippingMethod.price;
         return <div className="checkout_area section_padding_100">
             <div className="container">
                 <div className="row">
                     <div className="col-12">
                         <div className="checkout_details_area clearfix">
-                            <h5 className="mb-30">Review Your Order</h5>
+                            <h5 className="mb-30">{Strings["ReviewOrder"]}</h5>
 
                             <div className="cart-table">
                                 <div className="table-responsive">
                                     <table className="table table-bordered mb-30">
                                         <thead>
                                         <tr>
-                                            <th scope="col">Edit</th>
-                                            <th scope="col">Image</th>
-                                            <th scope="col">Product</th>
-                                            <th scope="col">Unit Price</th>
-                                            <th scope="col">Quantity</th>
-                                            <th scope="col">Total</th>
+                                            <th scope="col">Obrázek</th>
+                                            <th scope="col">Produkt</th>
+                                            <th scope="col">Cena za kus</th>
+                                            <th scope="col">Počet</th>
+                                            <th scope="col">Celkem</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr>
-                                            <th scope="row">
-                                                <a href="#" className="btn edit-btn"><i className="icofont-ui-edit"></i></a>
-                                            </th>
-                                            <td>
-                                                <img src="img/product-img/onsale-1.png" alt="Product"/>
-                                            </td>
-                                            <td>
-                                                <a href="#">Bluetooth Speaker</a>
-                                            </td>
-                                            <td>$9</td>
-                                            <td>
-                                                {/*<div className="quantity">*/}
-                                                {/*    <span className="qty-minus"*/}
-                                                {/*          onClick="var effect = document.getElementById('qty2'); var qty = effect.value; if( !isNaN( qty ) &amp;&amp; qty &gt; 1 ) effect.value--;return false;"><i*/}
-                                                {/*        className="fa fa-minus" aria-hidden="true"></i></span>*/}
-                                                {/*    <input type="number" className="qty-text" id="qty2" step="1" min="1"*/}
-                                                {/*           max="99" name="quantity" value="1">*/}
-                                                {/*        <span className="qty-plus"*/}
-                                                {/*              onClick="var effect = document.getElementById('qty2'); var qty = effect.value; if( !isNaN( qty )) effect.value++;return false;"><i*/}
-                                                {/*            className="fa fa-plus" aria-hidden="true"></i></span>*/}
-                                                {/*</div>*/}
-                                            </td>
-                                            <td>$9</td>
-                                        </tr>
+                                            {cart.map(i=>(
+                                                <tr key={i.goods.id}>
+                                                    <td>
+                                                        <img src={productImageUrl(i.goods.code, 1)} alt="Product"/>
+                                                    </td>
+                                                    <td>
+                                                        {/*<a href="#">Bluetooth Speaker</a>*/}
+                                                        {i.goods.name}
+                                                    </td>
+                                                    <td>{i.goods.getPrice().format()}</td>
+                                                    <td>
+                                                        {i.pcs} ks
+                                                    </td>
+                                                    <td>{new Price(i.goods.price * i.pcs, 'CZK').format()}</td>
+                                                </tr>
+                                            ))}
                                         </tbody>
                                     </table>
                                 </div>
@@ -87,32 +128,28 @@ class Review extends React.Component<CheckoutPartProps> {
 
                     <div className="col-12 col-lg-7 ml-auto">
                         <div className="cart-total-area">
-                            <h5 className="mb-3">Cart Totals</h5>
+                            <h5 className="mb-3">Sumarizace</h5>
                             <div className="table-responsive">
                                 <table className="table mb-0">
                                     <tbody>
                                     <tr>
-                                        <td>Sub Total</td>
-                                        <td>$56.00</td>
+                                        <td>Zboží</td>
+                                        <td>{new Price(cartPrice, 'CZK').format()}</td>
                                     </tr>
                                     <tr>
-                                        <td>Shipping</td>
-                                        <td>$10.00</td>
+                                        <td>Doprava</td>
+                                        <td>{new Price(shippingPrice, 'CZK').format()}</td>
                                     </tr>
                                     <tr>
-                                        <td>VAT (10%)</td>
-                                        <td>$5.60</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Total</td>
-                                        <td>$71.60</td>
+                                        <td>Celkem</td>
+                                        <td>{new Price(shippingPrice + cartPrice, 'CZK').format()}</td>
                                     </tr>
                                     </tbody>
                                 </table>
                             </div>
                             <div className="checkout_pagination d-flex justify-content-end mt-3">
-                                {/*<a href="checkout-4.html" className="btn bigshop-btn mt-2 ml-2 d-none d-sm-inline-block">Go Back</a>*/}
-                                <Link href={this.props.next} className="btn bigshop-btn mt-2 ml-2">Confirm</Link>
+                                <Link href={()=>checkoutStore.dispatch<CheckoutAction>({type:CheckoutActionType.SetStep, step:2})} className="btn bigshop-btn mt-2 ml-2">{Strings["Back"]}</Link>
+                                <Link href={this.next} className="btn bigshop-btn mt-2 ml-2">Dokončit</Link>
                             </div>
                         </div>
                     </div>
@@ -121,268 +158,130 @@ class Review extends React.Component<CheckoutPartProps> {
         </div>
     }
 }
-class Payment extends React.Component<CheckoutPartProps> {
-    render() {
-        return <div className="checkout_area section_padding_100">
-            <div className="container">
-                <div className="row">
-                    <div className="col-12">
-                        <div className="checkout_details_area clearfix">
-                            <div className="payment_method">
-                                <div className="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                                    <div className="panel panel-default">
-                                        <div className="panel-heading" role="tab" id="one">
-                                            <h6 className="panel-title">
-                                                <a className="collapsed" role="button" data-toggle="collapse"
-                                                   data-parent="#accordion" href="#collapse_one" aria-expanded="false"
-                                                   aria-controls="collapse_one"><i
-                                                    className="icofont-mastercard-alt"></i> Pay with Credit Card</a>
-                                            </h6>
-                                        </div>
-                                        <div aria-expanded="false" id="collapse_one"
-                                             className="panel-collapse collapse show" role="tabpanel"
-                                             aria-labelledby="one">
-                                            <div className="panel-body">
-                                                <div className="pay_with_creadit_card">
-                                                    <form action="#" method="post">
-                                                        <div className="row">
-                                                            <div className="col-12 col-md-6 mb-3">
-                                                                <div className="custom-control custom-checkbox">
-                                                                    <input type="checkbox"
-                                                                           className="custom-control-input"
-                                                                           id="customCheck1"/>
-                                                                        <label className="custom-control-label"
-                                                                               htmlFor="customCheck1">Credit or Debit
-                                                                            Card</label>
-                                                                </div>
-                                                            </div>
-                                                            <div className="col-12 col-md-6 mb-3">
-                                                                <div className="accept_payment text-right"></div>
-                                                            </div>
-                                                            <div className="col-12 col-md-6 mb-3">
-                                                                <label htmlFor="cardNumber">Card Number</label>
-                                                                <input type="text" className="form-control"
-                                                                       id="cardNumber" placeholder="" value="" required/>
-                                                                    <small id="card_info_store"
-                                                                           className="form-text text-muted"><i
-                                                                        className="fa fa-lock"
-                                                                        aria-hidden="true"></i> Your payment info is
-                                                                        stored securely. <a href="#">Learn
-                                                                            More</a></small>
-                                                            </div>
-                                                            <div className="col-12 col-md-3 mb-3">
-                                                                <label htmlFor="expiration">Expiration</label>
-                                                                <input type="text" className="form-control"
-                                                                       id="expiration" placeholder="MM / YY" value=""
-                                                                       required/>
-                                                            </div>
-                                                            <div className="col-12 col-md-3 mb-3">
-                                                                <label htmlFor="security_code">Security Code <a href="#"
-                                                                                                                className="btn security_code_popover"
-                                                                                                                data-container="body"
-                                                                                                                data-toggle="popover"
-                                                                                                                data-placement="top"
-                                                                                                                data-content=""
-                                                                                                                data-img="img/bg-img/cvc.jpg">
-                                                                    <i className="fa fa-question-circle"
-                                                                       aria-hidden="true"></i></a></label>
-                                                                <input type="text" className="form-control"
-                                                                       id="security_code" placeholder="" value=""
-                                                                       required/>
-                                                            </div>
-                                                            <div className="col-12 col-md-3 ml-md-auto">
-                                                                <button type="submit"
-                                                                        className="btn btn-success w-100">Submit
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+class Payment extends React.Component {
 
-                                    <div className="panel panel-default">
-                                        <div className="panel-heading" role="tab" id="two">
-                                            <h6 className="panel-title">
-                                                <a className="collapsed" role="button" data-toggle="collapse"
-                                                   data-parent="#accordion" href="#collapse_two" aria-expanded="false"
-                                                   aria-controls="collapse_two"><i
-                                                    className="icofont-paypal-alt"></i> Pay with PayPal</a>
-                                            </h6>
-                                        </div>
-                                        <div aria-expanded="false" id="collapse_two" className="panel-collapse collapse"
-                                             role="tabpanel" aria-labelledby="two">
-                                            <div className="panel-body">
-                                                <div className="pay_with_paypal">
-                                                    <form action="#" method="post">
-                                                        <div className="row">
-                                                            <div className="col-12 col-md-6 mb-3">
-                                                                <label htmlFor="paypalemailaddress">Email
-                                                                    Address</label>
-                                                                <input type="email" className="form-control"
-                                                                       id="paypalemailaddress" placeholder="" value=""
-                                                                       required/>
-                                                                    <small id="paypal_info"
-                                                                           className="form-text text-muted"><i
-                                                                        className="fa fa-lock"
-                                                                        aria-hidden="true"></i> Secure online payments
-                                                                        at the speed of want. <a href="#">Learn More</a></small>
-                                                            </div>
-                                                            <div className="col-12 col-md-6 mb-3">
-                                                                <label htmlFor="paypalpassword">Password</label>
-                                                                <input type="password" className="form-control"
-                                                                       id="paypalpassword" value="" required/>
-                                                                    <small id="paypal_password"
-                                                                           className="form-text text-muted"><a href="#">Forget
-                                                                        Password?</a></small>
-                                                            </div>
-                                                            <div className="col-12 col-md-3 ml-md-auto">
-                                                                <button type="submit"
-                                                                        className="btn btn-success w-100">Submit
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+    next = () =>{
+        if(checkoutStore.getState().checkout.paymentMethod !== null) {
+            checkoutStore.dispatch<CheckoutAction>({type:CheckoutActionType.SetStep, step:3});
+        }
+    };
 
-                                    <div className="panel panel-default">
-                                        <div className="panel-heading" role="tab" id="three">
-                                            <h6 className="panel-title">
-                                                <a className="collapsed" role="button" data-toggle="collapse"
-                                                   data-parent="#accordion" href="#collapse_three" aria-expanded="false"
-                                                   aria-controls="collapse_three"><i
-                                                    className="icofont-bank-transfer-alt"></i> Direct Bank Transfer</a>
-                                            </h6>
-                                        </div>
-                                        <div aria-expanded="false" id="collapse_three"
-                                             className="panel-collapse collapse in" role="tabpanel"
-                                             aria-labelledby="three">
-                                            <div className="panel-body">
-                                                <p>Make your payment directly into our bank account. Please use your
-                                                    Order ID as the payment reference. Your order won’t be shipped until
-                                                    the funds have cleared in our account.</p>
-                                            </div>
-                                        </div>
-                                    </div>
+    paymentMethods:Array<PaymentMethod> = [
+        {id:1, name:"Bankovní převod", description:"Na konci obejdnávky obdržíte instrukce."},
+        {id:2, name:"Na dobírku", description:"Zboží zaplatíte při předání."}
+    ];
 
-                                    <div className="panel panel-default">
-                                        <div className="panel-heading" role="tab" id="four">
-                                            <h6 className="panel-title">
-                                                <a className="collapsed" role="button" data-toggle="collapse"
-                                                   data-parent="#accordion" href="#collapse_four" aria-expanded="false"
-                                                   aria-controls="collapse_four"><i
-                                                    className="icofont-file-document"></i> Cheque Payment
-                                                </a>
-                                            </h6>
-                                        </div>
-                                        <div aria-expanded="false" id="collapse_four"
-                                             className="panel-collapse collapse" role="tabpanel" aria-labelledby="four">
-                                            <div className="panel-body">
-                                                <p>Please send your cheque to Store Name, Store Street, Store Town,
-                                                    Store State / County, Store Postcode.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="panel panel-default">
-                                        <div className="panel-heading" role="tab" id="five">
-                                            <h6 className="panel-title">
-                                                <a className="collapsed" role="button" data-toggle="collapse"
-                                                   data-parent="#accordion" href="#collapse_five" aria-expanded="false"
-                                                   aria-controls="collapse_five"><i
-                                                    className="icofont-cash-on-delivery-alt"></i> Cash on Delivery
-                                                </a>
-                                            </h6>
-                                        </div>
-                                        <div aria-expanded="false" id="collapse_five"
-                                             className="panel-collapse collapse" role="tabpanel" aria-labelledby="five">
-                                            <div className="panel-body">
-                                                <p>Please send your cheque to Store Name, Store Street, Store Town,
-                                                    Store State / County, Store Postcode.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="col-12">
-                        <div className="checkout_pagination d-flex justify-content-end mt-30">
-                            {/*<a href="checkout-2.html" className="btn bigshop-btn mt-2 ml-2">Go Back</a>*/}
-                            <Link href={this.props.next} className="btn bigshop-btn mt-2 ml-2">Continue</Link>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>;
+    updateMethod(paymentMethod:PaymentMethod) {
+        const checkout = checkoutStore.getState().checkout;
+        checkout.paymentMethod = paymentMethod;
+        checkoutStore.dispatch<CheckoutAction>({type:CheckoutActionType.UpdateData, checkout:checkout})
     }
-}
-class Shipping extends React.Component<CheckoutPartProps> {
     render() {
+        const checkout = checkoutStore.getState().checkout;
         return <div className="checkout_area section_padding_100">
             <div className="container">
                 <div className="row">
                     <div className="col-12">
                         <div className="checkout_details_area clearfix">
-                            <h5 className="mb-4">Shipping Method</h5>
+                            <h5 className="mb-4">{Strings["ShippingMethod"]}</h5>
 
                             <div className="shipping_method">
                                 <div className="table-responsive">
                                     <table className="table table-bordered">
                                         <thead>
                                         <tr>
-                                            <th scope="col">Method</th>
-                                            <th scope="col">Delivery Time</th>
-                                            <th scope="col">Price</th>
-                                            <th scope="col">Choose</th>
+                                            <th scope="col">Způsob</th>
+                                            <th scope="col">Popis</th>
+                                            <th scope="col">Vyberte</th>
                                         </tr>
                                         </thead>
                                         <tbody>
+                                        {this.paymentMethods.map((i) => (
+                                            <tr key={i.id}>
+                                                <th scope="row">{i.name}</th>
+                                                <td>{i.description}</td>
+                                                <td>
+                                                    <div className="custom-control custom-radio">
+                                                        <input defaultChecked={checkout.paymentMethod&&checkout.paymentMethod.id === i.id} type="radio" id={`customRadio${i.id}`} name="paymentMethod"
+                                                               className="custom-control-input" onChange={()=>this.updateMethod(i)}/>
+                                                        <label className="custom-control-label" htmlFor={`customRadio${i.id}`}/>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="col-12">
+                        <div className="checkout_pagination mt-3 d-flex justify-content-end clearfix">
+                            <Link href={()=>checkoutStore.dispatch<CheckoutAction>({type:CheckoutActionType.SetStep, step:1})} className="btn bigshop-btn mt-2 ml-2">{Strings["Back"]}</Link>
+                            <Link href={this.next} className="btn bigshop-btn mt-2 ml-2">{Strings["Continue"]}</Link>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+
+class Shipping extends React.Component {
+    next = () =>{
+        if(checkoutStore.getState().checkout.shippingMethod !== null) {
+            checkoutStore.dispatch<CheckoutAction>({type:CheckoutActionType.SetStep, step:2});
+        }
+    };
+
+    shippingMethods:Array<ShippingMethod> = [
+        {id:1, name:"Česká pošta - Balík do ruky", deliveryTime: "1-5 dní", price: 130},
+        {id:2, name:"Česká pošta - Balík na poštu", deliveryTime: "1-5 dní", price: 130}
+    ];
+
+    updateMethod(shippingMethod:ShippingMethod) {
+        const checkout = checkoutStore.getState().checkout;
+        checkout.shippingMethod = shippingMethod;
+        checkoutStore.dispatch<CheckoutAction>({type:CheckoutActionType.UpdateData, checkout:checkout})
+    }
+
+    render() {
+        const checkout = checkoutStore.getState().checkout;
+        return <div className="checkout_area section_padding_100">
+            <div className="container">
+                <div className="row">
+                    <div className="col-12">
+                        <div className="checkout_details_area clearfix">
+                            <h5 className="mb-4">{Strings["ShippingMethod"]}</h5>
+
+                            <div className="shipping_method">
+                                <div className="table-responsive">
+                                    <table className="table table-bordered">
+                                        <thead>
                                         <tr>
-                                            <th scope="row">Courier</th>
-                                            <td>1-2 Business Day</td>
-                                            <td>$9.99</td>
-                                            <td>
-                                                <div className="custom-control custom-radio">
-                                                    <input type="radio" id="customRadio1" name="customRadio"
-                                                           className="custom-control-input"/>
-                                                        <label className="custom-control-label"
-                                                               htmlFor="customRadio1"></label>
-                                                </div>
-                                            </td>
+                                            <th scope="col">Způsob</th>
+                                            <th scope="col">Čas dodání</th>
+                                            <th scope="col">Cena</th>
+                                            <th scope="col">Vyberte</th>
                                         </tr>
-                                        <tr>
-                                            <th scope="row">Flat Rate</th>
-                                            <td>3-4 Day</td>
-                                            <td>$3.00</td>
-                                            <td>
-                                                <div className="custom-control custom-radio">
-                                                    <input type="radio" id="customRadio2" name="customRadio"
-                                                           className="custom-control-input"/>
-                                                        <label className="custom-control-label"
-                                                               htmlFor="customRadio2"></label>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Free Shipping</th>
-                                            <td>1 Week</td>
-                                            <td>Free</td>
-                                            <td>
-                                                <div className="custom-control custom-radio">
-                                                    <input type="radio" id="customRadio3" name="customRadio"
-                                                           className="custom-control-input"/>
-                                                        <label className="custom-control-label"
-                                                               htmlFor="customRadio3"></label>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {this.shippingMethods.map((i) => (
+                                            <tr key={i.id}>
+                                                <th scope="row">{i.name}</th>
+                                                <td>{i.deliveryTime}</td>
+                                                <td>{new Price(i.price, 'CZK').format()}</td>
+                                                <td>
+                                                    <div className="custom-control custom-radio">
+                                                        <input defaultChecked={checkout.shippingMethod&&checkout.shippingMethod.id === i.id} type="radio" id={`customRadio${i.id}`} name="shippingMethod"
+                                                               className="custom-control-input" onChange={()=>this.updateMethod(i)}/>
+                                                        <label className="custom-control-label" htmlFor={`customRadio${i.id}`}/>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
                                         </tbody>
                                     </table>
                                 </div>
@@ -393,7 +292,8 @@ class Shipping extends React.Component<CheckoutPartProps> {
                     <div className="col-12">
                         <div className="checkout_pagination mt-3 d-flex justify-content-end clearfix">
                             {/*<a href="checkout-2.html" className="btn bigshop-btn mt-2 ml-2">Go Back</a>*/}
-                            <Link href={this.props.next} className="btn bigshop-btn mt-2 ml-2">Continue</Link>
+                            <Link href={()=>checkoutStore.dispatch<CheckoutAction>({type:CheckoutActionType.SetStep, step:0})} className="btn bigshop-btn mt-2 ml-2">{Strings["Back"]}</Link>
+                            <Link href={this.next} className="btn bigshop-btn mt-2 ml-2">{Strings["Continue"]}</Link>
                         </div>
                     </div>
                 </div>
@@ -401,169 +301,58 @@ class Shipping extends React.Component<CheckoutPartProps> {
         </div>
     }
 }
-class Billing extends React.Component<CheckoutPartProps> {
+class Billing extends React.Component {
+
+    form:Form<CheckoutDto> = null;
+    next = () =>{
+        if(this.form.validate() || true) {
+            checkoutStore.dispatch<CheckoutAction>({type:CheckoutActionType.Update, step:1, checkout:checkoutStore.getState().checkout});
+        }
+    };
+
+
     render() {
         return <div className="checkout_area section_padding_100">
             <div className="container">
                 <div className="row">
                     <div className="col-12">
                         <div className="checkout_details_area clearfix">
-                            <h5 className="mb-4">Billing Details</h5>
-                            <form action="#" method="post">
+                            <h5 className="mb-4">{Strings["BillDetails"]}</h5>
+                            <Form<CheckoutDto> data={checkoutStore.getState().checkout} simpleLabel inputGroupEnabled={false} ref={o=>this.form = o}>
                                 <div className="row">
                                     <div className="col-md-6 mb-3">
-                                        <label htmlFor="first_name">First Name</label>
-                                        <input type="text" className="form-control" id="first_name"
-                                               placeholder="First Name" value="" required/>
+                                        <FormField type={FormInputType.Text} name={"firstName"} title={Strings["FirstName"]} required />
                                     </div>
                                     <div className="col-md-6 mb-3">
-                                        <label htmlFor="last_name">Last Name</label>
-                                        <input type="text" className="form-control" id="last_name"
-                                               placeholder="Last Name" value="" required/>
+                                        <FormField type={FormInputType.Text} name={"lastName"} title={Strings["LastName"]} required />
                                     </div>
                                     <div className="col-md-6 mb-3">
-                                        <label htmlFor="company">Company Name</label>
-                                        <input type="text" className="form-control" id="company"
-                                               placeholder="Company Name" value=""/>
+                                        <FormField type={FormInputType.Text} name={"emailAddress"} title={Strings["EmailAddress"]} required />
                                     </div>
                                     <div className="col-md-6 mb-3">
-                                        <label htmlFor="email_address">Email Address</label>
-                                        <input type="email" className="form-control" id="email_address"
-                                               placeholder="Email Address" value=""/>
+                                        <FormField type={FormInputType.Text} name={"phoneNumber"} title={Strings["PhoneNumber"]} />
                                     </div>
                                     <div className="col-md-6 mb-3">
-                                        <label htmlFor="phone_number">Phone Number</label>
-                                        <input type="number" className="form-control" id="phone_number" min="0"
-                                               value=""/>
+                                        <FormField type={FormInputType.Text} name={"street"} title={Strings["Street"]} required />
                                     </div>
                                     <div className="col-md-6 mb-3">
-                                        <label htmlFor="country">Country</label>
-                                        <select className="custom-select d-block w-100 form-control" id="country">
-                                            <option value="usa">United States</option>
-                                            <option value="uk">United Kingdom</option>
-                                            <option value="ger">Germany</option>
-                                            <option value="fra">France</option>
-                                            <option value="ind">India</option>
-                                            <option value="aus">Australia</option>
-                                            <option value="bra">Brazil</option>
-                                            <option value="cana">Canada</option>
-                                        </select>
-                                    </div>
-                                    <div className="col-md-12 mb-3">
-                                        <label htmlFor="street_address">Street address</label>
-                                        <input type="text" className="form-control" id="street_address"
-                                               placeholder="Street Address" value=""/>
+                                        <FormField type={FormInputType.Text} name={"streetNo"} title={Strings["StreetNo"]} required />
                                     </div>
                                     <div className="col-md-6 mb-3">
-                                        <label htmlFor="apartment_suite">Apartment/Suite/Unit</label>
-                                        <input type="text" className="form-control" id="apartment_suite"
-                                               placeholder="Apartment, suite, unit etc" value=""/>
+                                        <FormField type={FormInputType.Text} name={"city"} title={Strings["City"]} required />
                                     </div>
                                     <div className="col-md-6 mb-3">
-                                        <label htmlFor="city">Town/City</label>
-                                        <input type="text" className="form-control" id="city" placeholder="Town/City"
-                                               value=""/>
-                                    </div>
-                                    <div className="col-md-6 mb-3">
-                                        <label htmlFor="state">State</label>
-                                        <input type="text" className="form-control" id="state" placeholder="State"
-                                               value=""/>
-                                    </div>
-                                    <div className="col-md-6 mb-3">
-                                        <label htmlFor="postcode">Postcode/Zip</label>
-                                        <input type="text" className="form-control" id="postcode"
-                                               placeholder="Postcode / Zip" value=""/>
-                                    </div>
-                                    <div className="col-md-12">
-                                        <label htmlFor="order-notes">Order Notes</label>
-                                        <textarea className="form-control" id="order-notes" cols={30} rows={10}
-                                                  placeholder="Notes about your order, e.g. special notes for delivery."/>
+                                        <FormField type={FormInputType.Number} name={"postCode"} title={Strings["PostCode"]} required />
                                     </div>
                                 </div>
-                                {/*
-                                <div className="different-address mt-50">
-                                    <div className="ship-different-title mb-3">
-                                        <div className="custom-control custom-checkbox">
-                                            <input type="checkbox" className="custom-control-input" id="customCheck1"/>
-                                                <label className="custom-control-label" htmlFor="customCheck1">Ship to a
-                                                    different address?</label>
-                                        </div>
-                                    </div>
-                                    <div className="row shipping_input_field">
-                                        <div className="col-md-6 mb-3">
-                                            <label htmlFor="first_name">First Name</label>
-                                            <input type="text" className="form-control" id="first-name"
-                                                   placeholder="First Name" value="" required/>
-                                        </div>
-                                        <div className="col-md-6 mb-3">
-                                            <label htmlFor="last_name">Last Name</label>
-                                            <input type="text" className="form-control" id="last-name"
-                                                   placeholder="Last Name" value="" required/>
-                                        </div>
-                                        <div className="col-md-6 mb-3">
-                                            <label htmlFor="company">Company Name</label>
-                                            <input type="text" className="form-control" id="ship-company"
-                                                   placeholder="Company Name" value=""/>
-                                        </div>
-                                        <div className="col-md-6 mb-3">
-                                            <label htmlFor="email_address">Email Address</label>
-                                            <input type="email" className="form-control" id="email-address"
-                                                   placeholder="Email Address" value=""/>
-                                        </div>
-                                        <div className="col-md-6 mb-3">
-                                            <label htmlFor="phone_number">Phone Number</label>
-                                            <input type="number" className="form-control" id="phone-number" min="0"
-                                                   value=""/>
-                                        </div>
-                                        <div className="col-md-6 mb-3">
-                                            <label htmlFor="country">Country</label>
-                                            <select className="custom-select d-block w-100 form-control"
-                                                    id="ship-country">
-                                                <option value="usa">United States</option>
-                                                <option value="uk">United Kingdom</option>
-                                                <option value="ger">Germany</option>
-                                                <option value="fra">France</option>
-                                                <option value="ind">India</option>
-                                                <option value="aus">Australia</option>
-                                                <option value="bra">Brazil</option>
-                                                <option value="cana">Canada</option>
-                                            </select>
-                                        </div>
-                                        <div className="col-md-12 mb-3">
-                                            <label htmlFor="street_address">Street address</label>
-                                            <input type="text" className="form-control" id="street-address"
-                                                   placeholder="Street Address" value=""/>
-                                        </div>
-                                        <div className="col-md-6 mb-3">
-                                            <label htmlFor="apartment_suite">Apartment/Suite/Unit</label>
-                                            <input type="text" className="form-control" id="apartment-suite"
-                                                   placeholder="Apartment, suite, unit etc" value=""/>
-                                        </div>
-                                        <div className="col-md-6 mb-3">
-                                            <label htmlFor="city">Town/City</label>
-                                            <input type="text" className="form-control" id="ship-city"
-                                                   placeholder="Town/City" value=""/>
-                                        </div>
-                                        <div className="col-md-6">
-                                            <label htmlFor="state">State</label>
-                                            <input type="text" className="form-control" id="ship-state"
-                                                   placeholder="State" value=""/>
-                                        </div>
-                                        <div className="col-md-6">
-                                            <label htmlFor="postcode">Postcode/Zip</label>
-                                            <input type="text" className="form-control" id="ship-postcode"
-                                                   placeholder="Postcode / Zip" value=""/>
-                                        </div>
-                                    </div>
-                                </div>*/}
-                            </form>
+                            </Form>
                         </div>
                     </div>
 
                     <div className="col-12">
                         <div className="checkout_pagination d-flex justify-content-end mt-50">
-                            {/*<a href="checkout-1.html" className="btn bigshop-btn mt-2 ml-2">Go Back</a>*/}
-                            <Link href={this.props.next} className="btn bigshop-btn mt-2 ml-2">Continue</Link>
+                            {/*<Link href={this.next} className="btn bigshop-btn mt-2 ml-2">{Strings["Back"]}</Link>*/}
+                            <Link href={this.next} className="btn bigshop-btn mt-2 ml-2">{Strings["Continue"]}</Link>
                         </div>
                     </div>
                 </div>
@@ -576,9 +365,7 @@ interface Step {
     name:string
 }
 
-export class Checkout extends React.Component<any, {index:number}> {
-
-    state = {index:0};
+class Checkout extends React.Component<CheckoutState> {
 
     steps:Array<Step> = [{name:"Billing"}, {name:"Shipping"}, {name:"Payment"}, {name:"Review"}];
 
@@ -586,31 +373,23 @@ export class Checkout extends React.Component<any, {index:number}> {
         window.scrollTo(0, 0);
     }
 
-    next = () => {
-        this.setState({index:this.state.index+1})
-    };
-
-    finishOrder = () => {
-        this.setState({index:this.state.index+1})
-    };
-
     render() {
         return <Wrapper>
             <div className="checkout_steps_area">
-                {this.steps.map((item, index)=><Link className={cs(this.state.index>index&&"complated", this.state.index===index&&"active")} href={()=>{}}><i className="icofont-check-circled"/> {item.name}</Link>)}
+                {this.steps.map((item, index)=><Link key={index} className={cs(this.props.step>index&&"complated", this.props.step===index&&"active")} href={()=>{}}><i className="icofont-check-circled"/> {Strings[item.name]}</Link>)}
             </div>
-            <SwitchPage value={this.state.index} default={0}>
+            <SwitchPage value={this.props.step} default={0}>
                 <SwitchCase value={0}>
-                    <Billing next={this.next}/>
+                    <Billing />
                 </SwitchCase>
                 <SwitchCase value={1}>
-                    <Shipping next={this.next}/>
+                    <Shipping />
                 </SwitchCase>
                 <SwitchCase value={2}>
-                    <Payment next={this.next}/>
+                    <Payment />
                 </SwitchCase>
                 <SwitchCase value={3}>
-                    <Review next={this.finishOrder}/>
+                    <Review />
                 </SwitchCase>
                 <SwitchCase value={4}>
                     <Complete />
@@ -619,3 +398,5 @@ export class Checkout extends React.Component<any, {index:number}> {
         </Wrapper>;
     }
 }
+
+export default connect((state:CheckoutState) => reduceStateToPlainObject(state))(Checkout);

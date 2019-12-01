@@ -29,3 +29,5 @@ ALTER TABLE goods_category ADD CONSTRAINT FK_goods_category_category
 ALTER TABLE goods_category ADD CONSTRAINT FK_goods_category_goods
 	FOREIGN KEY (goods) REFERENCES goods (id)
 ;
+CREATE SEQUENCE c_order_id_seq INCREMENT 1 START 256147
+;

@@ -2,12 +2,29 @@ import {JsonProperty} from "./ObjectMapper";
 import browserHistory from '../utils/History';
 import DataStorage from "../DataStorage";
 import {TokenStore} from "../TokenStore";
-export const jsonToFormData = (json:any, dataConverter:(field:any)=>any = (field)=>field) => {
+export const jsonToFormData = (json:any, dataConverter:(field:any)=>any = (field)=>field, skipNull:boolean=true) => {
     const formData = new FormData();
+    const preConverter = (field:any) => {
+        if(field === null || field === undefined) {
+            return null;
+        }
+        return dataConverter(field);
+    };
     Object.keys(json).forEach(e=>{
         const value = json[e];
-        if(value !== undefined)
-       formData.set(e, dataConverter(value));
+        if(value === null || value === undefined) return;
+        if(Array.isArray(value)) {
+            for(let i = 0; i < value.length; i++) {
+                const aitem = value[i];
+                Object.keys(aitem).forEach(k=>{
+                    let value2 = aitem[k];
+                    if(value2 === null || value2 === undefined) return;
+                    formData.set(`${e}[${i}].${k}`, preConverter(value2));
+                });
+            }
+        } else {
+            formData.set(e, preConverter(value));
+        }
     });
     return formData;
 };

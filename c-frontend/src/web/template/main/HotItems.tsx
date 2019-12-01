@@ -16,9 +16,13 @@ class HotItems extends React.Component<DataState> {
             {this.props.goods.length > 0 &&<OwlCarousel
                 className="welSlideTwo"
                 loop
-                margin={10}
                 nav
-                items={1}
+                responsive={{0:{
+                        items:1
+                    },
+                    1000:{
+                        items:3
+                    }}}
             >
                 {this.props.goods.filter(i=>i.hot).map(item=>(
                     <div key={item.id} className="single_slide home-3 bg-img" style={{backgroundImage:`url(${productImageUrl(item.code, 1)})`}}>

@@ -1,5 +1,5 @@
 import {Action} from "redux";
-import {CartGoods} from "../../../dto/Goods";
+import {CartGoods} from "../../../dto/GoodsDto";
 import {JsonProperty} from "../../../../common/utils/ObjectMapper";
 import {PlainReduceState} from "../../../../common/redux/Reducers";
 

@@ -95,13 +95,25 @@ export class FormField<CustomOptions = any> extends React.Component<FormFieldPro
         this.props.onChanged && this.props.onChanged(this);
     };
 
+    validate():FieldError {
+        const error = new FieldError();
+        error.name = this.props.name;
+        const isNull = this.props.required && (this.value === undefined || this.value === null || this.value === '');
+        if(isNull) {
+            error.message = "FieldIsRequired";
+            error.localize = true;
+            return error;
+        }
+        return null;
+    }
+
     hasError() {
         return this.hiddenProps.fieldErrors.length > 0;
     }
 
     renderError() {
         return this.hasError() && <small><span className={"c-dribbble"}>{this.hiddenProps.fieldErrors.map((t, i) => <span
-            key={i}>{t.message} {this.hiddenProps.fieldErrors.length !== i + 1 && ", "}</span>)}</span></small>
+            key={i}>{t.localize&&Strings[t.message]||t.message} {this.hiddenProps.fieldErrors.length !== i + 1 && ", "}</span>)}</span></small>
     }
 
     getLabelText() {
@@ -285,6 +297,7 @@ export class FormButton<T> extends React.Component<FormButtonProps<T>, { loading
 class FieldError {
     name:string;
     message:string;
+    localize:boolean;
 }
 class ValidationError {
     code:number;
@@ -307,7 +320,7 @@ export enum FormStatus {
 export interface FormProps<Data> extends HiddenFormProps {
     style?: CSSProperties;
     method?: string;
-    isEndpoint: boolean,
+    isEndpoint?: boolean,
     showLoading?: boolean;
     url?: string;
     data: Data
@@ -341,6 +354,19 @@ export class Form<Data> extends React.Component<FormProps<Data>, FormState> {
     data: Data = this.props.data;
     processing: boolean = false;
 
+
+    validate():boolean {
+        let errors = new ValidationError();
+        for(let i in this.fields) {
+            const field = this.fields[i];
+            const fieldErrors = field.validate();
+            if(fieldErrors !== null) {
+                errors.errors.push(fieldErrors);
+            }
+        }
+        this.setState({errors:errors});
+        return errors.errors.length === 0;
+    }
 
     componentWillReceiveProps(nextProps: Readonly<FormProps<Data>>, nextContext: any): void {
         this.data = nextProps.data;
@@ -453,6 +479,8 @@ export class Form<Data> extends React.Component<FormProps<Data>, FormState> {
 
     mapChildren(children: ReactNode): ReactNode {
         this.hasFile = false;
+        this.fields = [];
+        this.buttons = [];
         return React.Children.map(children, child => {
             if (!React.isValidElement(child)) {
                 return child;

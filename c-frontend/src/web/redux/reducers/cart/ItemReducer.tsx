@@ -1,5 +1,5 @@
 import {Action} from "redux";
-import {CartGoods, Goods} from "../../../dto/Goods";
+import {CartGoods, GoodsDto} from "../../../dto/Goods";
 
 export enum ItemActionType {
     Show="item/detail",
@@ -8,7 +8,7 @@ export enum ItemActionType {
 }
 
 export interface ItemState {
-    item?:Goods;
+    item?:GoodsDto;
     pcs?:number;
 }
 

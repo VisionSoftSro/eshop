@@ -6,7 +6,7 @@ export class Category {
     id:string
 }
 
-export class Goods {
+export class GoodsDto {
     id:number;
     code:string;
     name:string;
@@ -26,11 +26,11 @@ export class Goods {
 
 export class CartGoods {
 
-    @JsonProperty({clazz:Goods})
-    goods:Goods;
+    @JsonProperty({clazz:GoodsDto})
+    goods:GoodsDto;
     pcs:number;
 
-    constructor(goods?: Goods, pcs?: number) {
+    constructor(goods?: GoodsDto, pcs?: number) {
         this.goods = goods;
         this.pcs = pcs;
     }

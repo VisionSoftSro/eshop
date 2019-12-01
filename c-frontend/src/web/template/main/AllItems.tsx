@@ -1,6 +1,6 @@
 import * as React from "react";
 import {DataState} from "../../redux/reducers/cart/DataReducer";
-import {CartGoods, Goods} from "../../dto/Goods";
+import {CartGoods, GoodsDto} from "../../dto/GoodsDto";
 import {cartStore, selectedItemStore} from "../../redux/WebRedux";
 import {CartAction, CartActionType} from "../../redux/reducers/cart/CartReducer";
 import {productImageUrl} from "../../TemplateUtil";
@@ -11,7 +11,7 @@ import {ItemAction, ItemActionType} from "../../redux/reducers/cart/ItemReducer"
 import {Loader} from "../../../common/component/Loader";
 import Wrapper from "../../../common/component/Wrapper";
 
-class Item extends React.Component<{item:Goods}> {
+class Item extends React.Component<{item:GoodsDto}> {
 
     addToCart = () => {
         cartStore.dispatch<CartAction>({ type: CartActionType.AddCart, item:new CartGoods(this.props.item, 1)});

@@ -3,15 +3,13 @@ import {AssetCache} from "../AssetCache";
 import {Link} from "../../common/component/Link";
 import CartPopup from "./CartPopup";
 import {cartStore, dataStore} from "../redux/WebRedux";
-import Root from "./Root";
 import {connect, Provider} from "react-redux";
 import {changeLocale} from "../redux/reducers/LocaleActions";
-import {httpEndpoint, httpEndpointArray} from "../../common/utils/HttpUtils";
-import {Category, Goods} from "../dto/Goods";
+import {httpEndpointArray} from "../../common/utils/HttpUtils";
+import {Category} from "../dto/GoodsDto";
 import {DataAction, DataActionType} from "../redux/reducers/cart/DataReducer";
 import {reduceStateToPlainObject} from "../../common/redux/Reducers";
 import {DataState} from "../redux/reducers/cart/DataReducer";
-import {StickyContainer, Sticky} from 'react-sticky';
 
 class Header extends React.Component<DataState> {
 
@@ -26,6 +24,8 @@ class Header extends React.Component<DataState> {
     }
 
     setCategory(category:Category) {
+        // @ts-ignore
+        $('.classy-menu').removeClass("menu-on");
         dataStore.dispatch<DataAction>({type:DataActionType.SetCategory, currentCategory:category});
 
     }
@@ -63,13 +63,6 @@ class Header extends React.Component<DataState> {
 
                     </div>
                 </div>
-                    <Sticky>
-                        {({style})=>(
-                            <div style={style}>
-
-                            </div>
-                        )}
-                    </Sticky>
             </header>
         );
         // return (

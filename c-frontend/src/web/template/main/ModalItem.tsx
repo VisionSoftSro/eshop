@@ -5,7 +5,7 @@ import {reduceStateToPlainObject} from "../../../common/redux/Reducers";
 import {Modal, ModalBody} from "react-bootstrap";
 import {cartStore, selectedItemStore} from "../../redux/WebRedux";
 import {CartAction, CartActionType} from "../../redux/reducers/cart/CartReducer";
-import {CartGoods} from "../../dto/Goods";
+import {CartGoods} from "../../dto/GoodsDto";
 import {voidFormSubmit} from "../../../common/component/form/Form";
 import {clamp} from "../../../common/utils/Util";
 import {productImageUrl} from "../../TemplateUtil";

@@ -4,8 +4,11 @@ import org.springframework.web.servlet.DispatcherServlet
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext
 import org.springframework.web.servlet.config.annotation.EnableWebMvc
 import org.springframework.boot.web.servlet.ServletRegistrationBean
-import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.*
+import org.springframework.web.multipart.commons.CommonsMultipartResolver
+import org.springframework.context.annotation.Bean
+
+
 
 
 @Configuration
@@ -25,6 +28,11 @@ class MvcConfig {
         val servletRegistrationBean = ServletRegistrationBean(servlet(), "/api/*")
         servletRegistrationBean.setName("api-v1")
         return servletRegistrationBean
+    }
+    @Bean
+    fun multiPartResolver(): CommonsMultipartResolver {
+
+        return CommonsMultipartResolver()
     }
 }
 

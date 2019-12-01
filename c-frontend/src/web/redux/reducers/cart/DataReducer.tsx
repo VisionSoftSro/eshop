@@ -1,5 +1,5 @@
 import {Action} from "redux";
-import {CartGoods, Category, Goods} from "../../../dto/Goods";
+import {CartGoods, Category, GoodsDto} from "../../../dto/GoodsDto";
 import {JsonProperty} from "../../../../common/utils/ObjectMapper";
 import {PlainReduceState} from "../../../../common/redux/Reducers";
 
@@ -10,7 +10,7 @@ export enum DataActionType {
 }
 
 export interface DataState {
-    goods?:Array<Goods>;
+    goods?:Array<GoodsDto>;
     categories?:Array<Category>;
     currentCategory?:Category;
 }
