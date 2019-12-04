@@ -31,7 +31,7 @@ export class GoodsPage extends React.Component {
                         )}/>
                         <Route path={"/"} render={()=>(
                             <Wrapper>
-                                <HotItems />
+                                {/*<HotItems />*/}
                                 <AllItems />
                             </Wrapper>
                         )}/>

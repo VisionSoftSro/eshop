@@ -305,7 +305,7 @@ class Billing extends React.Component {
 
     form:Form<CheckoutDto> = null;
     next = () =>{
-        if(this.form.validate() || true) {
+        if(this.form.validate()) {
             checkoutStore.dispatch<CheckoutAction>({type:CheckoutActionType.Update, step:1, checkout:checkoutStore.getState().checkout});
         }
     };
