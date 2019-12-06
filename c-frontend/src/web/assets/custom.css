@@ -1,0 +1,10 @@
+body {
+    background-image: url(img/bg-img/main.jpg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+section>div, .checkout_area {
+    background-color: white;
+}
