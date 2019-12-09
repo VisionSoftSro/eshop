@@ -24,4 +24,5 @@ jobs:
           ssh-keyscan oslavyadarky.cz >> ~/.ssh/known_hosts
           ssh-add - <<< "${DEPLOY_KEY}"
           scp c-boot/target/eshop.jar eshop@oslavyadarky.cz:/home/eshop
+          ssh eshop@oslavyadarky.cz 'sudo systemctl daemon-reload'
           ssh eshop@oslavyadarky.cz 'sudo systemctl restart eshop'
