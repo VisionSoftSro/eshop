@@ -26,7 +26,6 @@ class Root extends React.Component<LocaleState> {
     render() {
         return <Provider store={dataStore}>
             <Header />
-            test
             <GoodsPage />
         </Provider>;
     }
