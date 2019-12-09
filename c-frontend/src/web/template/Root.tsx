@@ -10,6 +10,7 @@ import Header from "./Header";
 
 import {init} from "./Bigshop";
 import {GoodsPage} from "./Goods";
+import {Footer} from "./Footer";
 
 
 class Root extends React.Component<LocaleState> {
@@ -27,6 +28,7 @@ class Root extends React.Component<LocaleState> {
         return <Provider store={dataStore}>
             <Header />
             <GoodsPage />
+            <Footer/>
         </Provider>;
     }
 }
