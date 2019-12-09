@@ -14,7 +14,7 @@ jobs:
         with:
           java-version: 1.8
       - name: Build with Maven
-        run: mvn -B install --file pom.xml
+        run: mvn package -Pwith-web
       - name: Deploy on server
         env:
           DEPLOY_KEY: ${{ secrets.VS_DEPLOY_KEY }}
