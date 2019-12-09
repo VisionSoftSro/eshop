@@ -2,9 +2,8 @@ name: oslavyadarky.cz CI
 
 on:
   push:
-    branches-ignore:
-      - "*"
-      - !master
+    branches:
+      - master
     tags:
       - v1.*
 jobs:
