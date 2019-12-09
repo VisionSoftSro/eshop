@@ -1,0 +1,2 @@
+name: action-maven
+uses: comchangs/action-maven@v0.4-beta
