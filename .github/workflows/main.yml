@@ -4,8 +4,9 @@ on:
   push:
     branches:
       - master
-    tags:
-      - v1.*
+  release:
+      - created
+
 jobs:
   build:
 
