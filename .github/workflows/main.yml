@@ -1,6 +1,9 @@
 name: oslavyadarky.cz CI
 
-on: [push]
+on:
+  pull-request:
+    branches:
+      - master
 
 jobs:
   build:
