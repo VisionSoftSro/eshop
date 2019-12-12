@@ -11,8 +11,9 @@ import ModalItem from "./main/ModalItem";
 import {Router, BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
 import history from '../../common/utils/History';
 import Checkout from "./main/Checkout";
+import {StorageForm} from "./main/Storage";
 
-export class GoodsPage extends React.Component {
+export class RouteMapping extends React.Component {
 
     async componentDidMount() {
         const result = await httpEndpointArray<GoodsDto>(GoodsDto, "goods");
@@ -24,6 +25,7 @@ export class GoodsPage extends React.Component {
             <Wrapper>
                 <Router history={history}>
                     <Switch>
+                        <Route path={"/storage-form"} component={StorageForm} />
                         <Route path={"/checkout"} render={()=>(
                             <Provider store={checkoutStore}>
                                 <Checkout/>

@@ -9,7 +9,7 @@ import DataStorage from "../../common/DataStorage";
 import Header from "./Header";
 
 import {init} from "./Bigshop";
-import {GoodsPage} from "./Goods";
+import {RouteMapping} from "./RouteMapping";
 import {Footer} from "./Footer";
 import {httpEndpointArray} from "../../common/utils/HttpUtils";
 import {PaymentMethodDto, ShippingMethodDto} from "../dto/Methods";
@@ -38,7 +38,7 @@ class Root extends React.Component<LocaleState> {
     render() {
         return <Provider store={dataStore}>
             <Header />
-            <GoodsPage />
+            <RouteMapping />
             <Footer/>
         </Provider>;
     }
