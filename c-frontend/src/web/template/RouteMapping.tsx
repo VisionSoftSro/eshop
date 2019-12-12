@@ -27,7 +27,7 @@ export class RouteMapping extends React.Component {
                     <Switch>
                         <Route path={"/storage-form"} component={StorageForm} />
                         <Route path={"/checkout"} render={()=>(
-                            <Provider store={checkoutStore}>
+                            <Provider store={cartStore}>
                                 <Checkout/>
                             </Provider>
                         )}/>

@@ -37,7 +37,8 @@ create table c_order (
 
 create table c_order_goods (
   c_order bigint not null,
-  goods bigint not null
+  goods bigint not null,
+  pcs integer not null
 );
 ALTER TABLE c_order_goods ADD CONSTRAINT PK_c_order_goods
 	PRIMARY KEY (c_order, goods)
@@ -55,7 +56,8 @@ CREATE SEQUENCE c_order_id_seq INCREMENT 1 START 256147
 create table payment_method (
   id bigint DEFAULT nextval(('c_payment_method_seq'::text)::regclass) NOT NULL primary key,
   code text not null,
-  localized_name text not null
+  localized_name text not null,
+  published boolean not null default true
 );
 
 CREATE SEQUENCE c_payment_method_seq INCREMENT 1 START 1
@@ -66,7 +68,8 @@ create table shipping_method (
   code text not null,
   shipping_time text not null,
   price decimal not null,
-  localized_name text not null
+  localized_name text not null,
+  published boolean not null default true
 );
 
 CREATE SEQUENCE c_shipping_method_seq INCREMENT 1 START 1

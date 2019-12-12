@@ -9,6 +9,7 @@ import {CartGoods} from "../../dto/GoodsDto";
 import {voidFormSubmit} from "../../../common/component/form/Form";
 import {clamp} from "../../../common/utils/Util";
 import {productImageUrl} from "../../TemplateUtil";
+import Wrapper from "../../../common/component/Wrapper";
 
 class ModalItem extends React.Component<ItemState> {
 
@@ -61,13 +62,13 @@ class ModalItem extends React.Component<ItemState> {
                                         <div className="col-12 col-lg-7">
                                             <div className="quickview_pro_des">
                                                 <h4 className="title">{this.props.item.name}</h4>
-                                                <div className="top_seller_product_rating mb-15">
-                                                    <i className="fa fa-star" aria-hidden="true"/>
-                                                    <i className="fa fa-star" aria-hidden="true"/>
-                                                    <i className="fa fa-star" aria-hidden="true"/>
-                                                    <i className="fa fa-star" aria-hidden="true"/>
-                                                    <i className="fa fa-star" aria-hidden="true"/>
-                                                </div>
+                                                {/*<div className="top_seller_product_rating mb-15">*/}
+                                                    {/*<i className="fa fa-star" aria-hidden="true"/>*/}
+                                                    {/*<i className="fa fa-star" aria-hidden="true"/>*/}
+                                                    {/*<i className="fa fa-star" aria-hidden="true"/>*/}
+                                                    {/*<i className="fa fa-star" aria-hidden="true"/>*/}
+                                                    {/*<i className="fa fa-star" aria-hidden="true"/>*/}
+                                                {/*</div>*/}
                                                 <h5 className="price">{this.props.item.getPrice().format}</h5>
                                                 <p dangerouslySetInnerHTML={{__html:this.props.item.description}} />
                                                 <p><strong>{Strings["InStock"]}:</strong> {this.props.item.stock} ks</p>
@@ -78,17 +79,20 @@ class ModalItem extends React.Component<ItemState> {
                                                 {
                                                     this.props.item.stock > 0 &&
                                                     (
-                                                        <div className="quantity">
-                                                            <span className="qty-minus" onClick={this.minus}><i className="fa fa-minus" aria-hidden="true"/></span>
-                                                            <input type="number" value={this.props.pcs} onChange={this.onInputChanged}/>
-                                                            <span className="qty-plus" onClick={this.plus}><i className="fa fa-plus" aria-hidden="true"/></span>
-                                                        </div>
+                                                        <Wrapper>
+                                                            <div className="quantity">
+                                                                <span className="qty-minus" onClick={this.minus}><i className="fa fa-minus" aria-hidden="true"/></span>
+                                                                <input type="number" value={this.props.pcs} onChange={this.onInputChanged}/>
+                                                                <span className="qty-plus" onClick={this.plus}><i className="fa fa-plus" aria-hidden="true"/></span>
+                                                            </div>
+                                                            <button type="submit" name="addtocart" value="5" className="cart-submit" onClick={this.addToCart}>
+                                                                {Strings["AddToCart"]}
+                                                            </button>
+                                                        </Wrapper>
                                                     ) ||
                                                         <strong>{Strings["OutOfStock"]}</strong>
                                                 }
-                                                <button type="submit" name="addtocart" value="5" className="cart-submit" onClick={this.addToCart}>
-                                                    {Strings["AddToCart"]}
-                                                </button>
+
                                                 {/*<div className="modal_pro_wishlist">*/}
                                                 {/*    <a href="wishlist.html"><i className="icofont-heart"/></a>*/}
                                                 {/*</div>*/}

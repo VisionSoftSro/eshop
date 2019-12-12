@@ -36,15 +36,16 @@ fun <T> transaction(propagation: Propagation = Propagation.REQUIRED, isolation: 
         result = a(entityManager)
         txm.commit(status)
     } catch (e:Exception) {
-        val te = e.javaClass
-        if(rollBackFor != null) {
-            for(i in rollBackFor) {
-                if(i.isAssignableFrom(te)) {
-                    txm.rollback(status)
-                    throw e
-                }
-            }
-        }
+//        val te = e.javaClass
+//        if(rollBackFor != null) {
+//            for(i in rollBackFor) {
+//                if(i.isAssignableFrom(te)) {
+//                    txm.rollback(status)
+//                    throw e
+//                }
+//            }
+//        }
+        throw e
     }
     return result
 }

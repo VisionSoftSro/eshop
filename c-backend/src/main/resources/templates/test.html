@@ -36,7 +36,7 @@
                                          alt="Oslavy a dárky" style="display: block;width: 200px;" />
                                 </td>
                                 <td height="50" width="50%" valign="top" align="right" style="color:#18295f;font-size:18px;padding-left:5px">
-                                    Objednávka: 123
+                                    Objednávka: 256147
                                 </td>
                             </tr><tr>
                             </tr></tbody></table>
@@ -109,7 +109,7 @@
                                 <td colspan="2" style="border-bottom:solid 1px #ccc;text-align:left">
                                     <h2 style="margin:0;color:#1d2d64;font-size:18px;font-weight:normal">
                                         Způsob platby<br>
-                                        Bankovním převodem
+                                        Dobírkou
                                     </h2>
                                 </td>
                                 <td style="border-bottom:solid 1px #ccc;color:#f36192;font-weight:bold;font-size:20px">Zdarma</td>
@@ -159,7 +159,7 @@
                                     telefon
                                 </td>
                                 <td style="border-bottom:solid 1px #ccc;text-align:left">
-                                    123
+                                    1
                                 </td>
                             </tr>
                             <tr style="background-color:#fff">
@@ -167,14 +167,14 @@
                                     adresa
                                 </td>
                                 <td style="border-bottom:solid 1px #ccc;text-align:left">
-                                    a 123, a132, 13
+                                    a 2, a, 2
                                 </td>
                             </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
-                <a href="http://localhost:3000/storage-form#order_id=123">Link na odbaveni</a>
+                <a th:href="@{'http://localhost:3000/storage-form#order_id=' + ${orderId}}">Link na odbaveni</a>
             </div>
 
             &copy; <span>2019</span> <a href="http://localhost:3000">oslavyadarky.cz</a>

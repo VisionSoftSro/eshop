@@ -5,7 +5,8 @@ import {PlainReduceState} from "../../../../common/redux/Reducers";
 
 export enum CartActionType {
     AddCart="cart/add",
-    RemoveCart="cart/remove"
+    RemoveCart="cart/remove",
+    ClearCart="cart/clear",
 }
 
 export class CartState {
@@ -18,7 +19,7 @@ export class CartState {
 }
 
 export interface CartAction extends Action<CartActionType> {
-    item:CartGoods
+    item?:CartGoods
 }
 
 export const cartReducer = (state:CartState = new CartState(), action:CartAction):CartState => {
@@ -33,6 +34,8 @@ export const cartReducer = (state:CartState = new CartState(), action:CartAction
         return new CartState([...state.cart]);
     } else if(CartActionType.RemoveCart === action.type) {
         return new CartState(state.cart.filter(item=>item.goods.id != action.item.goods.id));
+    } else if(CartActionType.ClearCart === action.type) {
+        return new CartState();
     }
     return state;
 };

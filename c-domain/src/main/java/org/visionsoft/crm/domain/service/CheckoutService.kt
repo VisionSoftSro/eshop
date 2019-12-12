@@ -5,9 +5,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import org.visionsoft.common.mail.MailClient
 import org.visionsoft.common.transaction.transaction
-import org.visionsoft.crm.domain.scheme.Goods
-import org.visionsoft.crm.domain.scheme.PaymentMethod
-import org.visionsoft.crm.domain.scheme.ShippingMethod
+import org.visionsoft.crm.domain.scheme.*
 import java.math.BigDecimal
 
 
@@ -45,14 +43,27 @@ class CheckoutService {
      * Make order. Return goods what are out of stock else
      */
     fun makeOrder(checkout: Checkout) = transaction {em->
+
+        val order = Order()
+        order.goods = checkout.goods.map { OrderContent().apply { goods = it.goods; pcs = it.pcs; this.order = order } }
+        order.email = checkout.emailAddress
+        em.persist(order)
+
+        checkout.goods.forEach {
+            em.merge(it.goods)?.let {goods ->
+                goods.stock -= it.pcs!!
+            }
+        }
+        order
+    }?.let {
         val map = mutableMapOf(
-                "orderId" to 123,
+                "orderId" to it.id!!,
                 "checkout" to checkout,
                 "totalPrice" to (checkout.goods.sumByDouble { it.goods!!.price.multiply(BigDecimal(it.pcs!!)).toDouble()} + checkout.shippingMethod!!.price.toDouble())
         )
-        mailClient.send("herisn23@gmail.com", "general", "customerOrderConfirmTemplate", map, checkout.emailAddress!!)
-
-        mailClient.send("herisn23@gmail.com", "general", "storageOrderConfirmTemplate", map, storageEmail)
+        mailClient.send("Vaše objednávka", "general", "customerOrderConfirmTemplate", map, checkout.emailAddress!!)
+        mailClient.send("Nová objednávka", "general", "storageOrderConfirmTemplate", map, storageEmail)
+        it
     }
 
 }

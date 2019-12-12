@@ -13,7 +13,7 @@ import org.visionsoft.crm.domain.service.CheckoutService
 
 
 
-data class CheckoutResult(var success:Boolean, var outOfStock:List<Goods>?)
+data class CheckoutResult(var success:Boolean, var outOfStock:List<Goods>?, var orderNumber:Long?=null)
 
 @RestController
 @RequestMapping("checkout")
@@ -31,10 +31,12 @@ class CheckoutController {
                 outOfStock.add(it.goods!!)
             }
         }
-        if(outOfStock.isEmpty()) {
-            checkoutService.makeOrder(checkout)
+        val success = checkout.goods.isNotEmpty() && outOfStock.isEmpty()
+        var id:Long? = null
+        if(success) {
+            id = checkoutService.makeOrder(checkout)?.id
         }
 
-        return CheckoutResult(outOfStock.isEmpty(), outOfStock)
+        return CheckoutResult(success, outOfStock, id)
     }
 }
