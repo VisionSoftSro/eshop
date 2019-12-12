@@ -26,13 +26,15 @@ class CheckoutController {
     @PostMapping
     fun acceptOrder(checkout:Checkout): CheckoutResult {
         val outOfStock = mutableListOf<Goods>()
-
         checkout.goods.forEach {
             if(it.goods!!.stock < it.pcs!!) {
                 outOfStock.add(it.goods!!)
             }
         }
-        checkoutService.makeOrder(checkout)
+        if(outOfStock.isEmpty()) {
+            checkoutService.makeOrder(checkout)
+        }
+
         return CheckoutResult(outOfStock.isEmpty(), outOfStock)
     }
 }

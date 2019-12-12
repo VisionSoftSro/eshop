@@ -3,16 +3,18 @@ import Wrapper from "../../../common/component/Wrapper";
 import {Link} from '../../../common/component/Link';
 import {SwitchCase, SwitchPage} from "../../../common/component/SwitchPage";
 import cs from 'classnames';
-import {connect} from "react-redux";
+import {connect, Provider} from "react-redux";
 import {reduceStateToPlainObject} from "../../../common/redux/Reducers";
 import {CheckoutAction, CheckoutActionType, CheckoutState} from "../../redux/reducers/cart/CheckoutReducer";
-import {cartStore, checkoutStore} from "../../redux/WebRedux";
+import {cartStore, checkoutStore, dataStore, methodsStore} from "../../redux/WebRedux";
 import {Form, FormField, FormInputType} from "../../../common/component/form/Form";
-import {CheckoutDto, PaymentMethod, ShippingMethod} from "../../dto/CheckoutDto";
+import {CheckoutDto} from "../../dto/CheckoutDto";
 import {Price} from "../../dto/GoodsDto";
 import {productImageUrl} from "../../TemplateUtil";
 import {httpEndpoint} from "../../../common/utils/HttpUtils";
 import {jsonToFormData} from "../../../common/utils/Util";
+import {PaymentMethodDto, ShippingMethodDto} from "../../dto/Methods";
+import {MethodsState} from "../../redux/reducers/cart/MethodsReducer";
 
 
 class Complete extends React.Component {
@@ -158,7 +160,7 @@ class Review extends React.Component {
         </div>
     }
 }
-class Payment extends React.Component {
+class Payment extends React.Component<MethodsState> {
 
     next = () =>{
         if(checkoutStore.getState().checkout.paymentMethod !== null) {
@@ -166,12 +168,9 @@ class Payment extends React.Component {
         }
     };
 
-    paymentMethods:Array<PaymentMethod> = [
-        {id:1, name:"Bankovní převod", description:"Na konci obejdnávky obdržíte instrukce."},
-        {id:2, name:"Na dobírku", description:"Zboží zaplatíte při předání."}
-    ];
 
-    updateMethod(paymentMethod:PaymentMethod) {
+
+    updateMethod(paymentMethod:PaymentMethodDto) {
         const checkout = checkoutStore.getState().checkout;
         checkout.paymentMethod = paymentMethod;
         checkoutStore.dispatch<CheckoutAction>({type:CheckoutActionType.UpdateData, checkout:checkout})
@@ -196,10 +195,10 @@ class Payment extends React.Component {
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        {this.paymentMethods.map((i) => (
+                                        {this.props.payment.map((i) => (
                                             <tr key={i.id}>
-                                                <th scope="row">{i.name}</th>
-                                                <td>{i.description}</td>
+                                                <th scope="row">{Strings[`PaymentsTexts.${i.code}.name`]}</th>
+                                                <td>{Strings[`PaymentsTexts.${i.code}.description`]}</td>
                                                 <td>
                                                     <div className="custom-control custom-radio">
                                                         <input defaultChecked={checkout.paymentMethod&&checkout.paymentMethod.id === i.id} type="radio" id={`customRadio${i.id}`} name="paymentMethod"
@@ -227,21 +226,19 @@ class Payment extends React.Component {
         </div>
     }
 }
+const PaymentRedux = connect((state:MethodsState) => reduceStateToPlainObject(state))(Payment);
 
 
-class Shipping extends React.Component {
+class Shipping extends React.Component<MethodsState> {
     next = () =>{
         if(checkoutStore.getState().checkout.shippingMethod !== null) {
             checkoutStore.dispatch<CheckoutAction>({type:CheckoutActionType.SetStep, step:2});
         }
     };
 
-    shippingMethods:Array<ShippingMethod> = [
-        {id:1, name:"Česká pošta - Balík do ruky", deliveryTime: "1-5 dní", price: 130},
-        {id:2, name:"Česká pošta - Balík na poštu", deliveryTime: "1-5 dní", price: 130}
-    ];
 
-    updateMethod(shippingMethod:ShippingMethod) {
+
+    updateMethod(shippingMethod:ShippingMethodDto) {
         const checkout = checkoutStore.getState().checkout;
         checkout.shippingMethod = shippingMethod;
         checkoutStore.dispatch<CheckoutAction>({type:CheckoutActionType.UpdateData, checkout:checkout})
@@ -268,10 +265,10 @@ class Shipping extends React.Component {
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        {this.shippingMethods.map((i) => (
+                                        {this.props.shipping.map((i) => (
                                             <tr key={i.id}>
-                                                <th scope="row">{i.name}</th>
-                                                <td>{i.deliveryTime}</td>
+                                                <th scope="row">{Strings[`ShippingTexts.${i.code}.name`]}</th>
+                                                <td>{i.shippingTime} dní</td>
                                                 <td>{new Price(i.price, 'CZK').format()}</td>
                                                 <td>
                                                     <div className="custom-control custom-radio">
@@ -301,6 +298,9 @@ class Shipping extends React.Component {
         </div>
     }
 }
+const ShippingRedux = connect((state:MethodsState) => reduceStateToPlainObject(state))(Shipping);
+
+
 class Billing extends React.Component {
 
     form:Form<CheckoutDto> = null;
@@ -383,10 +383,14 @@ class Checkout extends React.Component<CheckoutState> {
                     <Billing />
                 </SwitchCase>
                 <SwitchCase value={1}>
-                    <Shipping />
+                    <Provider store={methodsStore}>
+                        <ShippingRedux />
+                    </Provider>
                 </SwitchCase>
                 <SwitchCase value={2}>
-                    <Payment />
+                    <Provider store={methodsStore}>
+                        <PaymentRedux />
+                    </Provider>
                 </SwitchCase>
                 <SwitchCase value={3}>
                     <Review />

@@ -1,5 +1,6 @@
 package org.visionsoft.common.mail
 
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.mail.javamail.JavaMailSender
@@ -10,6 +11,7 @@ import org.springframework.mail.javamail.MimeMessagePreparator
 import org.springframework.stereotype.Component
 import org.thymeleaf.TemplateEngine
 import org.thymeleaf.context.Context
+import java.util.logging.Logger
 
 
 @Component
@@ -30,6 +32,9 @@ class MailClient @Autowired constructor(var mailSender: JavaMailSender, var mail
     @Value("\${mail.from}")
     lateinit var mailFrom:String
 
+    @Value("\${mail.info}")
+    lateinit var infoEmail:String
+
     @Value("\${mail.domain}")
     lateinit var domain:String
 
@@ -46,10 +51,12 @@ class MailClient @Autowired constructor(var mailSender: JavaMailSender, var mail
                 params["domain"] = domain
                 bodyTemplate?.let {
                     params["bodyTemplate"] = bodyTemplate
+                    params["mailInfo"] = infoEmail
                 }
                 messageHelper.setText(mailBuilder.build(params, mainTemplate))
             }
         } catch (e: MailException) {
+            LoggerFactory.getLogger(javaClass).error("", e)
             // runtime exception; compiler will not force you to handle it
         }
 

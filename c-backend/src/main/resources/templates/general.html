@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style>
+        table.c  {
+            border-collapse: collapse;
+        }
+        table.c , .c th, .c td {
+            border: 1px solid black;
+        }
+        table.c td {
+            padding: 5px;
+        }
+        table.c thead {
+            background-color: antiquewhite;
+        }
+    </style>
+</head>
+<body>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#fff" style="background:#fff;margin-left:auto;margin-right:auto">
+    <tbody>
+    <tr>
+        <td valign="top">
+
+
+            <table border="0" cellspacing="0" cellpadding="0" bgcolor="#fff" style="width:100%;max-width:800px;border-left:10px solid #fff;border-right:10px solid #fff;margin:0 auto">
+
+                <tbody>
+                <tr>
+                    <td valign="top">
+                        <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="white">
+                            <tbody><tr>
+                                <td height="50" width="50%" valign="top" align="left" style="padding-right:5px">
+                                    <img th:src="@{${domain} + '/static/img/core-img/logo_gift.png'}"
+                                         alt="Oslavy a dárky" style="display: block;width: 200px;" />
+                                </td>
+                                <td height="50" width="50%" valign="top" align="right" style="color:#18295f;font-size:18px;padding-left:5px" th:inline="text">
+                                    Objednávka: [[${orderId}]]
+                                </td>
+                            </tr><tr>
+                            </tr></tbody></table>
+                    </td>
+                </tr>
+                </tbody>
+
+            </table>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr style="background-color:#963cf3;border:none;height:5px">
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="800">
+    <tbody>
+    <tr>
+        <td style="color:#1d2d64;text-align:left;font-size:16px">
+            <div th:replace="${bodyTemplate} :: content"></div>
+
+            &copy; <span th:text="${#dates.year(#dates.createNow())}"></span> <a th:href="${domain}">oslavyadarky.cz</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
