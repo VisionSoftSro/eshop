@@ -34,7 +34,25 @@ export default {
         ShippingMethod:"Způsob přepravy",
         Payment:"Platba",
         Review:"Rekapitulace",
-        ReviewOrder:"Obsah vaší objednávky"
+        ReviewOrder:"Obsah vaší objednávky",
+        PaymentsTexts: {
+            'cod': {
+                name:"Na dobírku",
+                description:"Zboží zaplatíte při předání."
+            },
+            'bank_transfer': {
+                name:"Bankovní převod",
+                description:"Na konci obejdnávky obdržíte instrukce."
+            }
+        },
+        ShippingTexts: {
+            'czech_post_hand_delivery': {
+                name:"Česká pošta - Balík do ruky"
+            },
+            'czech_post_branch_delivery': {
+                name:"Česká pošta - Balík na poštu"
+            }
+        }
     },
     en: {
         Offers:"For you"

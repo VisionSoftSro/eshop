@@ -9,6 +9,7 @@ import {loadState, saveState} from "../../common/redux/ReduxStoreStorage";
 import {itemReducer} from "./reducers/cart/ItemReducer";
 import {dataReducer} from "./reducers/cart/DataReducer";
 import {checkoutReducer} from "./reducers/cart/CheckoutReducer";
+import {methodsReducer} from "./reducers/cart/MethodsReducer";
 
 interface WebReducerMembers<CART=any> {
 
@@ -36,6 +37,7 @@ export const selectedItemStore = createStore(itemReducer);
 export const dataStore = createStore(dataReducer);
 export const checkoutStore = createStore(checkoutReducer);
 
+export const methodsStore = createStore(methodsReducer);
 
 
 export const mainStore = createStore(combineReducers({...defaultReducers, ...reducers}), applyMiddleware(thunk));

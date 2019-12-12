@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+
+
+<div style="padding:0;margin:0" th:fragment="content">
+    <div align="center" style="text-align:center;font-family:arial;padding:0;margin:0">
+        <table align="center" width="800" cellpadding="0" cellspacing="0" border="0" style="border:solid 1px #ccc">
+
+            <tbody>
+            <th:block th:each="item : ${checkout.goods}">
+                <tr style="background-color:#fff">
+                    <td style="padding:20px;text-align:left;border-bottom:solid 1px #ccc" width="110">
+                        <img th:src="@{${domain} + '/static/product-img/'+${item.goods.id}+'/1.jpg'}"
+                             style="border:solid 1px #ccc;border-radius:5px;max-width:80px;max-height:80px">
+                    </td>
+                    <td style="border-bottom:solid 1px #ccc;text-align:left">
+                        <h2 style="margin:0;color:#1d2d64" th:inline="text">
+                            [[${item.goods.name}]]
+                        </h2>
+                        <p style="margin:0;color:#999;text-transform:uppercase">
+                        </p>
+                    </td>
+                    <td style="border-bottom:solid 1px #ccc;color:#666;text-align:center" th:inline="text">
+                        [[${item.pcs}]] Ks
+                    </td>
+                    <td style="border-bottom:solid 1px #ccc;color:#f36192;font-weight:bold;font-size:20px;text-align:right;padding-right:20px;white-space:nowrap"
+                        th:inline="text">[[${item.goods.price}]] Kč
+                    </td>
+                </tr>
+            </th:block>
+
+                <tr style="height: 75px">
+                    <td style="padding:20px;text-align:left;border-bottom:solid 1px #ccc" width="110">
+                        <!--<img-->
+                            <!--alt="Způsob dopravy" title="Způsob dopravy" style="border:solid 1px #ccc;border-radius:5px"-->
+                            <!--class="CToWUd">-->
+                    </td>
+                    <td style="border-bottom:solid 1px #ccc;text-align:left">
+                        <h2 style="margin:0;color:#1d2d64;font-size:18px;font-weight:normal" th:inline="text">
+                            Způsob dopravy<br>
+                            [[${checkout.shippingMethod.localizedName}]]<br>
+                        </h2>
+                    </td>
+                    <td style="border-bottom:solid 1px #ccc;text-align:left;padding:30px" valign="bottom">
+                    </td>
+                    <td style="border-bottom:solid 1px #ccc;color:#f36192;font-weight:bold;font-size:20px">[[${checkout.shippingMethod.price}]] Kč</td>
+                    <td>
+                    </td>
+                </tr>
+                <tr style="height: 75px">
+                    <td style="padding:20px;text-align:left;border-bottom:solid 1px #ccc" width="110">
+                        <!--<img-->
+                            <!--alt="Způsob platby" title="Způsob platby" style="border:solid 1px #ccc;border-radius:5px"-->
+                            <!--class="CToWUd">-->
+                    </td>
+                    <td colspan="2" style="border-bottom:solid 1px #ccc;text-align:left">
+                        <h2 style="margin:0;color:#1d2d64;font-size:18px;font-weight:normal">
+                            Způsob platby<br>
+                            [[${checkout.paymentMethod.localizedName}]]
+                        </h2>
+                    </td>
+                    <td style="border-bottom:solid 1px #ccc;color:#f36192;font-weight:bold;font-size:20px">Zdarma</td>
+                    <td>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align:left;border-bottom:solid 1px #ccc;padding:20px">
+                    </td>
+                    <td colspan="2" style="text-align:right;border-bottom:solid 1px #ccc;padding:20px"><h3
+                            style="color:#f36192;font-weight:bold;font-size:20px;margin:0px;white-space:nowrap"
+                            th:inline="text">Celkem: [[${totalPrice}]] Kč</h3></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

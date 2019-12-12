@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+
+    <div th:fragment="content">
+
+        <p>Vážený zákazníku,</p>
+
+        <p>Vaše objednávka byla úspěšně přijata. Objednávce ze začneme věnovat co nejdříve a o dalším průběhu &nbsp;Vás budeme informovat.</p>
+
+        <p>Informace o Vaší objednávce:<br>
+        <p></p>
+
+        <div th:replace="items :: content"></div>
+
+        <p></p>
+
+        <p>Děkujeme za Váš nákup.</p>
+
+        <p>S přáním pěkného dne,</p>
+
+        <p>Zákaznický servis Oslavy a dárky</p>
+
+        <p>email: <a href="mailto:zasilky@cityrealex.com" target="_blank" th:inline="text">[[${mailInfo}]]</a></p>
+
+        <!--<p>tel: <a href="tel:+420%20737%20221%20221" target="_blank">+420 737 221 221</a></p>-->
+    </div>
+
+</body>
+</html>

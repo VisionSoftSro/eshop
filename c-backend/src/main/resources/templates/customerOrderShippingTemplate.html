@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+
+    <div th:fragment="content">
+
+        <table align="center" border="0" cellpadding="0" cellspacing="0" width="800">
+            <tbody>
+            <tr>
+                <td style="color:#1d2d64;text-align:left;font-size:16px">
+                    <p>Vážený zákazníku,</p>
+
+                    <p>Vaši zásilku jsme právě expedovali a je na cestě k Vám.</p>
+
+                    <p>Až bude balík načten do systému přepravce, budete jej moci podrobně sledovat přes níže uvedený odkaz. Dopravce zadává údaje do systému obvykle ve večerních hodinách.</p>
+
+                    <p>Informace o Vaší objednávce:</p>
+
+                    <p>------------------------------<wbr>------------------------------</p>
+
+                    <p th:inline="text">Číslo objednávky: [[${orderId}]]</p>
+
+                    <p th:inline="text">Číslo balíku: [[${trackingNumber}]] </p>
+
+                    <p>Link pro sledování: <a target="_blank" th:href="${trackingUrl}" th:inline="text">[[${trackingUrl}]]</a></p>
+
+                    <p>------------------------------<wbr>------------------------------</p>
+
+
+                    <p>S přáním pěkného dne,</p>
+
+                    <p>Zákaznický servis Oslavy a dárky</p>
+
+                    <p>email: <a href="mailto:zasilky@cityrealex.com" target="_blank" th:inline="text">[[${mailInfo}]]</a></p>
+
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+
+        Dobrý den, <br />
+        vaše objednávka byla vyexpedována. <br /><br />
+        <span th:if="${trackingNumber != null}">Zásilku můžete sledovat <a th:href="@{trackingNumber}">zde</a></span>
+
+
+        Vaše zboží: <br /><br />
+        <div th:insert="items :: content"></div><br /><br />
+    </div>
+
+</body>
+</html>

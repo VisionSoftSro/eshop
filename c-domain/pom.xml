@@ -38,13 +38,6 @@
                 <directory>src/main/resources</directory>
             </resource>
         </resources>
-<!--        <plugins>-->
-<!--            <plugin>-->
-<!--                <groupId>org.flywaydb</groupId>-->
-<!--                <artifactId>flyway-maven-plugin</artifactId>-->
-<!--                &lt;!&ndash; 	<version>5.2.4</version> &ndash;&gt;-->
-<!--            </plugin>-->
-<!--        </plugins>-->
     </build>
 
 </project>

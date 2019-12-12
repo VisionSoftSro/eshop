@@ -1,3 +1,5 @@
+import {PaymentMethodDto, ShippingMethodDto} from "./Methods";
+
 export class CheckoutDto {
 
     firstName:string = null;
@@ -8,18 +10,18 @@ export class CheckoutDto {
     streetNo:number = null;
     city:string = null;
     postCode:number = null;
-    shippingMethod:ShippingMethod = null;
-    paymentMethod:PaymentMethod = null;
+    shippingMethod:ShippingMethodDto = null;
+    paymentMethod:PaymentMethodDto = null;
 }
-export class ShippingMethod {
-    id:number;
-    name:string;
-    price:number;
-    deliveryTime:string;
-}
-
-export class PaymentMethod {
-    id:number;
-    name:string;
-    description:string;
-}
+// export class ShippingMethod {
+//     id:number;
+//     name:string;
+//     price:number;
+//     deliveryTime:string;
+// }
+//
+// export class PaymentMethod {
+//     id:number;
+//     name:string;
+//     description:string;
+// }
