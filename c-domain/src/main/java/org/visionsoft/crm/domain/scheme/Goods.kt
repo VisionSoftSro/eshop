@@ -1,5 +1,8 @@
 package org.visionsoft.crm.domain.scheme
 
+import com.fasterxml.jackson.annotation.JsonBackReference
+import com.fasterxml.jackson.annotation.JsonManagedReference
+import java.io.Serializable
 import java.math.BigDecimal
 import javax.persistence.*
 import javax.validation.constraints.NotNull
@@ -30,6 +33,39 @@ class Category {
     @Id
     var id:String? = null
 }
+
+
+
+class OrderContentId: Serializable  {
+    var goods:Goods? = null
+    var order:Order? = null
+}
+
+@Entity
+@Table(name="c_order_goods")
+@IdClass(OrderContentId::class)
+class OrderContent {
+
+    @Id
+    @ManyToOne
+    @JoinColumn(name="goods")
+    var goods:Goods? = null
+
+    @Id
+    @ManyToOne
+    @JoinColumn(name="c_order")
+    @JsonBackReference
+    var order:Order? = null
+
+    var pcs:Int? = null
+
+}
+
+enum class OrderStatus {
+    New, Confirm, Cancel
+}
+
+
 @Entity
 @Table(name="c_order")
 class Order {
@@ -40,9 +76,12 @@ class Order {
     @NotNull
     var email:String? = null
 
-    @ManyToMany
-    @JoinTable(name = "c_order_goods", joinColumns = [(JoinColumn(name = "c_order"))], inverseJoinColumns = [(JoinColumn(name = "goods"))])
-    var categories:MutableList<Goods> = mutableListOf()
+    @Enumerated(EnumType.STRING)
+    var status:OrderStatus? = null
+
+    @OneToMany(mappedBy = "order", cascade = [CascadeType.PERSIST])
+    @JsonManagedReference
+    var goods:List<OrderContent> = listOf()
 
 }
 

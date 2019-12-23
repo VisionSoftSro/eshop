@@ -15,6 +15,7 @@ import {JsonProperty, ObjectMapper} from "../../utils/ObjectMapper";
 import {FormTextarea} from "./FormTextarea";
 import {FormCheckbox} from "./FormCheckbox";
 import {CustomFieldComponent, FormFieldInterface} from "./FormFieldInterface";
+import _ from 'lodash';
 
 
 /********************
@@ -319,8 +320,8 @@ export enum FormStatus {
 
 export interface FormProps<Data> extends HiddenFormProps {
     style?: CSSProperties;
-    method?: string;
-    isEndpoint?: boolean,
+    requestInit?:RequestInit;
+    isEndpoint?: boolean;
     showLoading?: boolean;
     url?: string;
     data: Data
@@ -345,7 +346,7 @@ export class Form<Data> extends React.Component<FormProps<Data>, FormState> {
     state = new FormState();
 
     static defaultProps = {
-        method: "post",
+        requestInit:{method:"POST"},
         simpleLabel: false,
         inputGroupEnabled: true,
         isEndpoint: false
@@ -431,15 +432,15 @@ export class Form<Data> extends React.Component<FormProps<Data>, FormState> {
 
     async sendForm(event: FormButtonClickEvent): Promise<FormHttpResponse<Data>> {
         const url = event.modifyUrl && event.modifyUrl(this.props.url) || this.props.url;
-        const init = {method: "POST", body: jsonToFormData(this.data, (field)=>{
+        const init = _.merge(this.props.requestInit, {body: jsonToFormData(this.data, (field)=>{
                 //convert object to id for spring and jpa support
                 if(typeof field === 'object' && field.id !== undefined) {
                     return field.id;
                 }
                 return field;
-            })};
+            }), headers:{"type":event.type}});
         // @ts-ignore
-        const result = await httpEndpoint<Data>(this.data.constructor, url, {...init, ...event.requestInit});
+        const result = await httpEndpoint<Data>(this.data.constructor, url, true, {...init, ...(event.requestInit||{})});
         const response = new FormHttpResponse<Data>();
         response.status = FormStatus.Success;
         response.response = result.response;
@@ -528,7 +529,7 @@ export class Form<Data> extends React.Component<FormProps<Data>, FormState> {
 
     render() {
         console.log("render form");
-        return <form className="need-validation" method={this.props.method}
+        return <form className="need-validation" method={this.props.requestInit.method}
                      onSubmit={voidFormSubmit}
                      action={this.props.url} ref={o => this.instance = o}
                      onSubmitCapture={voidFormSubmit} style={{position: "relative", ...this.props.style}}>

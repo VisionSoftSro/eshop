@@ -61,7 +61,7 @@ class Item extends React.Component<{item:GoodsDto}> {
 }
 class AllItems extends React.Component<DataState> {
     render() {
-        return <section className="best-selling-products-area mb-70" >
+        return <section className="best-selling-products-area" >
             <div className="container" style={{paddingTop:20}}>
                 {this.props.currentCategory &&
                 <Wrapper>

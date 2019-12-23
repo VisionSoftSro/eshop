@@ -56,10 +56,14 @@ class CartPopup extends React.Component<CartState> {
                             </li>
                         </ul>
                     </div>
-                    <div className="cart-box">
-                        <Link href={"checkout"} callback={()=>checkoutStore.dispatch<CheckoutAction>({type:CheckoutActionType.SetStep, step:0})}
-                           className="btn bigshop-btn d-block">K pokladně</Link>
-                    </div>
+                    {
+                        this.props.cart.length>0&&(
+                            <div className="cart-box">
+                                <Link href={"checkout"} callback={()=>checkoutStore.dispatch<CheckoutAction>({type:CheckoutActionType.SetStep, step:0})}
+                                      className="btn bigshop-btn d-block">K pokladně</Link>
+                            </div>
+                        )
+                    }
                 </div>
             </div>
         );
