@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import org.visionsoft.common.mail.MailClient
 import org.visionsoft.common.transaction.transaction
+
 import org.visionsoft.crm.domain.scheme.*
+
 import java.math.BigDecimal
 
 
@@ -27,8 +29,6 @@ class Checkout: SimpleCheckout() {
     var postCode:Int? = null
     var shippingMethod:ShippingMethod? = null
     var paymentMethod:PaymentMethod? = null
-
-
 }
 
 @Component
@@ -45,7 +45,6 @@ class CheckoutService {
      * Make order. Return goods what are out of stock else
      */
     fun makeOrder(checkout: Checkout) = transaction {em->
-
         val order = Order()
         order.status = OrderStatus.New
         order.goods = checkout.goods.map { OrderContent().apply { goods = it.goods; pcs = it.pcs; this.order = order } }

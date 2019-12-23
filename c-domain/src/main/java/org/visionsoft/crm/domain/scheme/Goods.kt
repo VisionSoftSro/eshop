@@ -35,6 +35,7 @@ class Category {
 }
 
 
+
 class OrderContentId: Serializable  {
     var goods:Goods? = null
     var order:Order? = null
@@ -64,6 +65,7 @@ enum class OrderStatus {
     New, Confirm, Cancel
 }
 
+
 @Entity
 @Table(name="c_order")
 class Order {
@@ -80,6 +82,7 @@ class Order {
     @OneToMany(mappedBy = "order", cascade = [CascadeType.PERSIST])
     @JsonManagedReference
     var goods:List<OrderContent> = listOf()
+
 }
 
 

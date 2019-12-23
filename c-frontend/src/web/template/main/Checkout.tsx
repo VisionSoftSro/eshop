@@ -10,6 +10,7 @@ import {cartStore, checkoutStore, dataStore, methodsStore} from "../../redux/Web
 import {Form, FormField, FormInputType} from "../../../common/component/form/Form";
 import {CheckoutDto} from "../../dto/CheckoutDto";
 import {Category, GoodsDto, Price} from "../../dto/GoodsDto";
+
 import {productImageUrl} from "../../TemplateUtil";
 import {httpEndpoint} from "../../../common/utils/HttpUtils";
 import {jsonToFormData} from "../../../common/utils/Util";
@@ -18,6 +19,7 @@ import {MethodsState} from "../../redux/reducers/cart/MethodsReducer";
 import {JsonProperty} from "../../../common/utils/ObjectMapper";
 import {CartAction, CartActionType, CartState} from "../../redux/reducers/cart/CartReducer";
 import {Modal, ModalBody} from "react-bootstrap";
+
 
 
 class Complete extends React.Component {
@@ -215,8 +217,8 @@ class Payment extends React.Component<MethodsState> {
         }
     };
 
-
     updateMethod(paymentMethod: PaymentMethodDto) {
+
         const checkout = checkoutStore.getState().checkout;
         checkout.paymentMethod = paymentMethod;
         checkoutStore.dispatch<CheckoutAction>({type: CheckoutActionType.UpdateData, checkout: checkout})
@@ -280,11 +282,13 @@ class Payment extends React.Component<MethodsState> {
         </div>
     }
 }
+const PaymentRedux = connect((state:MethodsState) => reduceStateToPlainObject(state))(Payment);
 
 const PaymentRedux = connect((state: MethodsState) => reduceStateToPlainObject(state))(Payment);
 
 
 class Shipping extends React.Component<MethodsState> {
+
     next = () => {
         if (checkoutStore.getState().checkout.shippingMethod !== null) {
             checkoutStore.dispatch<CheckoutAction>({type: CheckoutActionType.SetStep, step: 2});
@@ -359,7 +363,6 @@ class Shipping extends React.Component<MethodsState> {
         </div>
     }
 }
-
 const ShippingRedux = connect((state: MethodsState) => reduceStateToPlainObject(state))(Shipping);
 
 
@@ -505,6 +508,7 @@ class CheckoutPage extends React.Component<CartState> {
                 </div>
             </div>
         </div>;
+
     }
 }
 

@@ -12,9 +12,11 @@
                     <p>Vážený zákazníku,</p>
 
                     <p>Vaši zásilku jsme právě expedovali a je na cestě k Vám.</p>
+
                     <span th:if="${trackingUrl != null}">
                         <p>Až bude balík načten do systému přepravce, budete jej moci podrobně sledovat přes níže uvedený odkaz. Dopravce zadává údaje do systému obvykle ve večerních hodinách.</p>
                     </span>
+
 
 
                     <p>Informace o Vaší objednávce:</p>
@@ -23,9 +25,11 @@
 
                     <p th:inline="text">Číslo objednávky: [[${orderId}]]</p>
 
+
                     <span th:if="${trackingUrl != null}">
                         <p>Link pro sledování: <a target="_blank" th:href="${trackingUrl}" th:inline="text">[[${trackingUrl}]]</a></p>
                     </span>
+
                     <p>------------------------------<wbr>------------------------------</p>
 
 
@@ -35,10 +39,12 @@
 
                     <p>email: <a th:href="@{'mailto:'+${mailInfo}}" target="_blank" th:inline="text">[[${mailInfo}]]</a></p>
 
+
                 </td>
             </tr>
             </tbody>
         </table>
+
     </div>
 
 </body>

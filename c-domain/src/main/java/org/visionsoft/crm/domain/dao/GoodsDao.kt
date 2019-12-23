@@ -15,6 +15,7 @@ interface GoodsDao: JpaRepository<Goods, Long> {
     fun findByCategories(categories:List<Category>):List<Goods>
 
 }
+
 @Repository
 interface CategoryDao: JpaRepository<Category, String>
 
