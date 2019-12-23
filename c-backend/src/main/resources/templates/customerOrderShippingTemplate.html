@@ -12,8 +12,10 @@
                     <p>Vážený zákazníku,</p>
 
                     <p>Vaši zásilku jsme právě expedovali a je na cestě k Vám.</p>
+                    <span th:if="${trackingUrl != null}">
+                        <p>Až bude balík načten do systému přepravce, budete jej moci podrobně sledovat přes níže uvedený odkaz. Dopravce zadává údaje do systému obvykle ve večerních hodinách.</p>
+                    </span>
 
-                    <p>Až bude balík načten do systému přepravce, budete jej moci podrobně sledovat přes níže uvedený odkaz. Dopravce zadává údaje do systému obvykle ve večerních hodinách.</p>
 
                     <p>Informace o Vaší objednávce:</p>
 
@@ -21,10 +23,9 @@
 
                     <p th:inline="text">Číslo objednávky: [[${orderId}]]</p>
 
-                    <p th:inline="text">Číslo balíku: [[${trackingNumber}]] </p>
-
-                    <p>Link pro sledování: <a target="_blank" th:href="${trackingUrl}" th:inline="text">[[${trackingUrl}]]</a></p>
-
+                    <span th:if="${trackingUrl != null}">
+                        <p>Link pro sledování: <a target="_blank" th:href="${trackingUrl}" th:inline="text">[[${trackingUrl}]]</a></p>
+                    </span>
                     <p>------------------------------<wbr>------------------------------</p>
 
 
@@ -32,21 +33,12 @@
 
                     <p>Zákaznický servis Oslavy a dárky</p>
 
-                    <p>email: <a href="mailto:zasilky@cityrealex.com" target="_blank" th:inline="text">[[${mailInfo}]]</a></p>
+                    <p>email: <a th:href="@{'mailto:'+${mailInfo}}" target="_blank" th:inline="text">[[${mailInfo}]]</a></p>
 
                 </td>
             </tr>
             </tbody>
         </table>
-
-
-        Dobrý den, <br />
-        vaše objednávka byla vyexpedována. <br /><br />
-        <span th:if="${trackingNumber != null}">Zásilku můžete sledovat <a th:href="@{trackingNumber}">zde</a></span>
-
-
-        Vaše zboží: <br /><br />
-        <div th:insert="items :: content"></div><br /><br />
     </div>
 
 </body>

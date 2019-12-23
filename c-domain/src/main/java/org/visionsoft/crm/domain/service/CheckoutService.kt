@@ -13,8 +13,10 @@ class CartGoods {
     var goods: Goods? = null
     var pcs:Int? = null
 }
-
-class Checkout {
+open class SimpleCheckout {
+    var goods:MutableList<CartGoods> = mutableListOf()
+}
+class Checkout: SimpleCheckout() {
     var firstName:String? = null
     var lastName:String? = null
     var emailAddress:String? = null
@@ -26,7 +28,7 @@ class Checkout {
     var shippingMethod:ShippingMethod? = null
     var paymentMethod:PaymentMethod? = null
 
-    var goods:MutableList<CartGoods> = mutableListOf()
+
 }
 
 @Component
@@ -45,6 +47,7 @@ class CheckoutService {
     fun makeOrder(checkout: Checkout) = transaction {em->
 
         val order = Order()
+        order.status = OrderStatus.New
         order.goods = checkout.goods.map { OrderContent().apply { goods = it.goods; pcs = it.pcs; this.order = order } }
         order.email = checkout.emailAddress
         em.persist(order)
@@ -64,6 +67,30 @@ class CheckoutService {
         mailClient.send("Vaše objednávka", "general", "customerOrderConfirmTemplate", map, checkout.emailAddress!!)
         mailClient.send("Nová objednávka", "general", "storageOrderConfirmTemplate", map, storageEmail)
         it
+    }
+
+    fun confirm(order:Order, trackingUrl:String?) = transaction {
+        val orderMerged = it.merge(order)
+        orderMerged.status = OrderStatus.Confirm
+    }?.let {
+        val map = mutableMapOf(
+                "orderId" to order.id!!,
+                "checkout" to SimpleCheckout().apply {
+                    goods = order.goods.map { CartGoods().apply { pcs = it.pcs; goods = it.goods } }.toMutableList()
+                }
+        )
+        if(trackingUrl != null) {
+            map["trackingUrl"] = trackingUrl
+        }
+        mailClient.send("Objednávka byla expedována", "general", "customerOrderShippingTemplate", map, order.email!!)
+    }
+
+    fun cancel(order:Order, sendEmail:Boolean) = transaction {em->
+        val orderMerged = em.merge(order)
+        orderMerged.status = OrderStatus.Cancel
+        orderMerged.goods.forEach {
+            it.goods!!.stock += it.pcs!!
+        }
     }
 
 }

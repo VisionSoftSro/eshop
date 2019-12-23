@@ -22,7 +22,7 @@
 
         <p>Zákaznický servis Oslavy a dárky</p>
 
-        <p>email: <a href="mailto:zasilky@cityrealex.com" target="_blank" th:inline="text">[[${mailInfo}]]</a></p>
+        <p>email: <a th:href="@{'mailto:'+${mailInfo}}" target="_blank" th:inline="text">[[${mailInfo}]]</a></p>
 
         <!--<p>tel: <a href="tel:+420%20737%20221%20221" target="_blank">+420 737 221 221</a></p>-->
     </div>

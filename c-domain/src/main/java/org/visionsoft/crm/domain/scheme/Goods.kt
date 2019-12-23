@@ -1,5 +1,7 @@
 package org.visionsoft.crm.domain.scheme
 
+import com.fasterxml.jackson.annotation.JsonBackReference
+import com.fasterxml.jackson.annotation.JsonManagedReference
 import java.io.Serializable
 import java.math.BigDecimal
 import javax.persistence.*
@@ -51,10 +53,15 @@ class OrderContent {
     @Id
     @ManyToOne
     @JoinColumn(name="c_order")
+    @JsonBackReference
     var order:Order? = null
 
     var pcs:Int? = null
 
+}
+
+enum class OrderStatus {
+    New, Confirm, Cancel
 }
 
 @Entity
@@ -67,7 +74,11 @@ class Order {
     @NotNull
     var email:String? = null
 
+    @Enumerated(EnumType.STRING)
+    var status:OrderStatus? = null
+
     @OneToMany(mappedBy = "order", cascade = [CascadeType.PERSIST])
+    @JsonManagedReference
     var goods:List<OrderContent> = listOf()
 }
 
