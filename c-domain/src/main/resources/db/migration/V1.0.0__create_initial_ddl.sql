@@ -56,6 +56,7 @@ CREATE SEQUENCE c_order_id_seq INCREMENT 1 START 256147
 
 create table payment_method (
   id bigint DEFAULT nextval(('c_payment_method_seq'::text)::regclass) NOT NULL primary key,
+  price decimal default 0,
   code text not null,
   localized_name text not null,
   published boolean not null default true

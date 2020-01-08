@@ -20,13 +20,12 @@ import {JsonProperty} from "../../../common/utils/ObjectMapper";
 import {CartAction, CartActionType, CartState} from "../../redux/reducers/cart/CartReducer";
 import {Modal, ModalBody} from "react-bootstrap";
 
-
-
 class Complete extends React.Component {
 
     complete() {
 
     }
+
     render() {
         return <div className="checkout_area section_padding_100">
             <div className="container">
@@ -104,6 +103,7 @@ class Review extends React.Component<any, { result?: CheckoutResult }> {
         const cart = cartStore.getState().cart;
         const cartPrice = cart.map(a => a.pcs * a.goods.price).reduce((a, b) => a + b);
         const shippingPrice = checkout.shippingMethod.price;
+        const paymentPrice = checkout.paymentMethod.price || 0;
         return <div className="checkout_area section_padding_100">
             <div className="container">
                 <div className="row">
@@ -187,9 +187,17 @@ class Review extends React.Component<any, { result?: CheckoutResult }> {
                                         <td>Doprava</td>
                                         <td>{new Price(shippingPrice, 'CZK').format()}</td>
                                     </tr>
+                                    {
+                                        paymentPrice>0&&(
+                                            <tr>
+                                                <td>{Strings[`PaymentsTexts.${checkout.paymentMethod.code}.name`]}</td>
+                                                <td>{new Price(paymentPrice, 'CZK').format()}</td>
+                                            </tr>
+                                        )
+                                    }
                                     <tr>
-                                        <td>Celkem</td>
-                                        <td>{new Price(shippingPrice + cartPrice, 'CZK').format()}</td>
+                                        <td style={{fontSize:"large"}}>Celkem</td>
+                                        <td style={{fontSize:"large"}}> {new Price(shippingPrice + cartPrice + paymentPrice, 'CZK').format()}</td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -218,7 +226,6 @@ class Payment extends React.Component<MethodsState> {
     };
 
     updateMethod(paymentMethod: PaymentMethodDto) {
-
         const checkout = checkoutStore.getState().checkout;
         checkout.paymentMethod = paymentMethod;
         checkoutStore.dispatch<CheckoutAction>({type: CheckoutActionType.UpdateData, checkout: checkout})
@@ -231,7 +238,7 @@ class Payment extends React.Component<MethodsState> {
                 <div className="row">
                     <div className="col-12">
                         <div className="checkout_details_area clearfix">
-                            <h5 className="mb-4">{Strings["ShippingMethod"]}</h5>
+                            <h5 className="mb-4">{Strings["PaymentMethod"]}</h5>
 
                             <div className="shipping_method">
                                 <div className="table-responsive">
@@ -246,7 +253,7 @@ class Payment extends React.Component<MethodsState> {
                                         <tbody>
                                         {this.props.payment.map((i) => (
                                             <tr key={i.id}>
-                                                <th scope="row">{Strings[`PaymentsTexts.${i.code}.name`]}</th>
+                                                <th scope="row">{Strings[`PaymentsTexts.${i.code}.name`]}{i.price&&`(${new Price(i.price, 'CZK').format()})`}</th>
                                                 <td>{Strings[`PaymentsTexts.${i.code}.description`]}</td>
                                                 <td>
                                                     <div className="custom-control custom-radio">

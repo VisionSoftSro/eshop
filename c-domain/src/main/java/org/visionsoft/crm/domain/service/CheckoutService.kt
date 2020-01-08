@@ -57,15 +57,15 @@ class CheckoutService {
             }
         }
         order
-    }?.let {
+    }?.let {order->
         val map = mutableMapOf(
-                "orderId" to it.id!!,
+                "orderId" to order.id!!,
                 "checkout" to checkout,
-                "totalPrice" to (checkout.goods.sumByDouble { it.goods!!.price.multiply(BigDecimal(it.pcs!!)).toDouble()} + checkout.shippingMethod!!.price.toDouble())
+                "totalPrice" to (checkout.goods.sumByDouble { it.goods!!.price.multiply(BigDecimal(it.pcs!!)).toDouble()} + checkout.shippingMethod!!.price.toDouble() + checkout.paymentMethod!!.price.toDouble())
         )
         mailClient.send("Vaše objednávka", "general", "customerOrderConfirmTemplate", map, checkout.emailAddress!!)
         mailClient.send("Nová objednávka", "general", "storageOrderConfirmTemplate", map, storageEmail)
-        it
+        order
     }
 
     fun confirm(order:Order, trackingUrl:String?) = transaction {

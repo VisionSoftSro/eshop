@@ -12,7 +12,7 @@
             <th:block th:each="item : ${checkout.goods}">
                 <tr style="background-color:#fff">
                     <td style="padding:20px;text-align:left;border-bottom:solid 1px #ccc" width="110">
-                        <img th:src="@{${domain} + '/static/product-img/'+${item.goods.id}+'/1.jpg'}"
+                        <img th:src="@{${domain} + '/static/product-img/'+${item.goods.code}+'/1.jpg'}"
                              style="border:solid 1px #ccc;border-radius:5px;max-width:80px;max-height:80px">
                     </td>
                     <td style="border-bottom:solid 1px #ccc;text-align:left">
@@ -56,12 +56,11 @@
                             <!--class="CToWUd">-->
                     </td>
                     <td colspan="2" style="border-bottom:solid 1px #ccc;text-align:left">
-                        <h2 style="margin:0;color:#1d2d64;font-size:18px;font-weight:normal">
-                            Způsob platby<br>
+                        <h2 style="margin:0;color:#1d2d64;font-size:18px;font-weight:normal">Způsob platby<br>
                             [[${checkout.paymentMethod.localizedName}]]
                         </h2>
                     </td>
-                    <td style="border-bottom:solid 1px #ccc;color:#f36192;font-weight:bold;font-size:20px">Zdarma</td>
+                    <td style="border-bottom:solid 1px #ccc;color:#f36192;font-weight:bold;font-size:20px"><span th:if="${checkout.paymentMethod.price>0}">[[${checkout.paymentMethod.price}]] kč</span><span th:unless="${checkout.paymentMethod.price>0}">Zdarma</span></td>
                     <td>
                     </td>
                 </tr>

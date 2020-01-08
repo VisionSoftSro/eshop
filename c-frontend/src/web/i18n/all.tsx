@@ -15,8 +15,8 @@ export default {
         Price:"Cena",
         Continue:"Pokračovat",
         Categories: {
-            parties:"Oslavy",
-            gifts:"Dárky"
+            party:"Oslavy",
+            gift:"Dárky"
         },
         FirstName:"Jméno",
         LastName:"Příjmení",
@@ -33,24 +33,25 @@ export default {
         Shipping:"Přeprava",
         ShippingMethod:"Způsob přepravy",
         Payment:"Platba",
+        PaymentMethod:"Způsob platba",
         Review:"Rekapitulace",
         ReviewOrder:"Obsah vaší objednávky",
         PaymentsTexts: {
             'cod': {
                 name:"Na dobírku",
-                description:"Zboží zaplatíte při předání."
+                description:"Zboží zaplatíte při předání"
             },
             'bank_transfer': {
                 name:"Bankovní převod",
-                description:"Na konci obejdnávky obdržíte instrukce."
+                description:"Po dokončení obejdnávky obdržíte platební instrukce"
             }
         },
         ShippingTexts: {
-            'czech_post_hand_delivery': {
-                name:"Česká pošta - Balík do ruky"
+            'czech_post': {
+                name:"Česká pošta"
             },
-            'czech_post_branch_delivery': {
-                name:"Česká pošta - Balík na poštu"
+            'zasilkovna': {
+                name:"Zásilkovna"
             }
         }
     },
