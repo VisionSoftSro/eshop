@@ -10,7 +10,7 @@ import {Category} from "../dto/GoodsDto";
 import {DataAction, DataActionType} from "../redux/reducers/cart/DataReducer";
 import {reduceStateToPlainObject} from "../../common/redux/Reducers";
 import {DataState} from "../redux/reducers/cart/DataReducer";
-
+import cs from 'classnames';
 class Header extends React.Component<DataState> {
 
     changeLocale = (locale: string) => {
@@ -31,8 +31,25 @@ class Header extends React.Component<DataState> {
     }
 
     render() {
+
         return (
             <header className="header_area">
+                <div className="top-header-area">
+                    <div className="container h-100 main-font">
+                        <div className="row h-100 align-items-center">
+                            <div className="col-6">
+                                <div className="welcome-note">
+                                    <span className="text" style={{fontSize:"large"}}>Dekorace pro dětské dárky oslavy a dárrky pro děti. Vše na jednom místě.</span>
+                                </div>
+                            </div>
+                            <div className="col-6">
+                                <div className="welcome-note text-right">
+                                    <span className="text font-medium" style={{fontSize:"large"}}>Expedujeme do 24 hodin!</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div className="bigshop-main-menu" id={"sticker"}>
                     <div className="container">
                         <div className="classy-nav-container breakpoint-off">
@@ -47,8 +64,18 @@ class Header extends React.Component<DataState> {
                                             className="bottom"/></div>
                                     </div>
                                     <div className="classynav">
-                                        <ul>
-                                            {this.props.categories.map(i=><li key={i.id}><Link href={"/"} callback={()=>this.setCategory(i)} className={this.props.currentCategory === i && "active" || ""}>{Strings[`Categories.${i.id}`]}</Link></li>)}
+                                        <ul className={"main-font"}>
+                                            {this.props.categories.map(i=>(
+                                                <li key={i.id}>
+                                                    <Link href={"/"} callback={()=>this.setCategory(i)} className={cs("menu-font", this.props.currentCategory === i && "active" || "")}>
+                                                        {
+                                                            // @ts-ignore
+                                                            <img width={50} src={AssetCache.Image.Menu[i.id]} alt={i.id} />
+                                                        }
+                                                        {Strings[`Categories.${i.id}`]}
+                                                    </Link>
+                                                </li>
+                                            ))}
                                         </ul>
                                     </div>
                                 </div>
