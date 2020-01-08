@@ -11,19 +11,29 @@ import java.util.zip.ZipInputStream
 import java.math.BigDecimal
 import java.text.MessageFormat
 import javax.xml.crypto.Data
+import java.io.FileOutputStream
+import jdk.nashorn.internal.objects.NativeRegExp.source
+import org.apache.commons.io.FileUtils
+import java.io.FileInputStream
 
-val mapping = mapOf("gift" to "Dárky", "parties" to "Oslavy")
+
+
+val mapping = mapOf("gift" to ("Dárky" to 2), "party" to ("Oslavy" to 3))
 val exportPath = "/Users/tremll/devel/eshop-export/"
 fun main() {
     mapping.forEach {
-        DataExporter("/Users/tremll/Google Drive/${it.value}/", it.key).export()
+        DataExporter("/Users/tremll/Google Drive/${it.value.first}/", it.key, it.value.second).export()
     }
 }
 
-class DataExporter(val path: String, val category: String) {
+class DataExporter(val path: String, val category: String, val version:Int) {
     val sqlBuffer = StringBuffer()
+    val exportDir = File("$exportPath/$category")
     var index = 0
     fun export() {
+        if(exportDir.exists()) exportDir.deleteRecursively()
+        if(!exportDir.exists()) exportDir.mkdirs()
+
         val root = File(path)
         if (root.isDirectory) {
             root.list()?.forEach { d ->
@@ -38,24 +48,28 @@ class DataExporter(val path: String, val category: String) {
         save()
     }
 
-    fun save() {
-        println(sqlBuffer)
+    private fun save() {
+        FileWriter("$exportDir/V1.0.${version}__data_$category.sql").use {
+            it.write(sqlBuffer.toString())
+        }
     }
 }
 
 data class SqlTemplateData(val code: String, val name: String, val description: String, val hot: Boolean, val images: Int, val stock: Int, val price: BigDecimal) {
     fun toSql() = "insert into goods (code, name, description, hot, images, stock, price) values ('${code}', '${name}', '${description}', ${hot}, ${images}, ${stock}, ${price});"
 }
-class ProductProcessor(val index: Int, val category: String, val productFolder: File) {
+class ProductProcessor(index: Int, val category: String, val productFolder: File) {
     val sqlBuffer = StringBuffer()
-    val images:Int = 0
+    private val code = "${category}-${index}"
+    private var images:Int = 0
+
+
     fun process() {
         processImages()
         processSql()
     }
 
-    fun processSql() {
-
+    private fun processSql() {
         productFolder.list()?.firstOrNull { it == "Text.txt" }?.let {
             val file = File("${productFolder.absolutePath}/${it}")
             if(it == "Text.txt") {
@@ -72,23 +86,34 @@ class ProductProcessor(val index: Int, val category: String, val productFolder: 
 
     }
 
-    fun parseData(text:String):SqlTemplateData? {
+    private fun parseData(text:String):SqlTemplateData? {
         val rows = text.split("\n")
         val firstRow = rows[0]
         return parsePriceAndStock(firstRow)?.let {
             val descriptionRows = rows.subList(2, rows.size)
             val name = productFolder.name
-            SqlTemplateData("${category}-${index}", name, formatDescription(descriptionRows), false, images, it.first, it.second)
+            SqlTemplateData(code, name, formatDescription(descriptionRows), false, images, it.first, it.second)
         }
     }
 
-    fun formatDescription(rows:List<String>):String {
+    private fun processImages() {
+        val exportProductDirectory = File("$exportPath/$category/$code")
+        if(!exportProductDirectory.exists()) exportProductDirectory.mkdir()
+        productFolder.list()?.forEach {
+            if(it.endsWith("jpg")) {
+                images++
+                FileUtils.copyFile(File("${productFolder.absolutePath}/$it"), File("${exportProductDirectory.absolutePath}/$images.jpg"))
+            }
+        }
+
+    }
+
+    private fun formatDescription(rows:List<String>):String {
         return rows.map { it.replace("\r", "") }.joinToString("") { if (it == "") {"<br/><br/>"} else {"${it}<br/>"} }
     }
 
-    fun parsePriceAndStock(row:String):Pair<Int, BigDecimal>? {
+    private fun parsePriceAndStock(row:String):Pair<Int, BigDecimal>? {
         if(!StringUtils.isEmpty(row)) {
-            println("${productFolder} -> ")
             val cols = row.split("-")
             var startIndex = 1
             if(cols.size == 6) {
@@ -100,11 +125,8 @@ class ProductProcessor(val index: Int, val category: String, val productFolder: 
             val stock = stockCol.trim().let { it.substring(0, it.indexOf("k")).trim().toInt() }
             return stock to price
         }
-
         return null
     }
 
-    fun processImages() {
 
-    }
 }
