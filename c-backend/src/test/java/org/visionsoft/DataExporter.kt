@@ -92,7 +92,7 @@ class ProductProcessor(index: Int, val category: String, val productFolder: File
         return parsePriceAndStock(firstRow)?.let {
             val descriptionRows = rows.subList(2, rows.size)
             val name = productFolder.name
-            SqlTemplateData(code, name, formatDescription(descriptionRows), false, images, it.first, it.second)
+            SqlTemplateData(code, it.first, formatDescription(descriptionRows), false, images, it.second, it.third)
         }
     }
 
@@ -109,21 +109,23 @@ class ProductProcessor(index: Int, val category: String, val productFolder: File
     }
 
     private fun formatDescription(rows:List<String>):String {
-        return rows.map { it.replace("\r", "") }.joinToString("") { if (it == "") {"<br/><br/>"} else {"${it}<br/>"} }
+        return rows.map { it.replace("\r", "") }.joinToString("") { "<br/>${it}" }
     }
 
-    private fun parsePriceAndStock(row:String):Pair<Int, BigDecimal>? {
+    private fun parsePriceAndStock(row:String):Triple<String, Int, BigDecimal>? {
         if(!StringUtils.isEmpty(row)) {
             val cols = row.split("-")
             var startIndex = 1
+            var name = cols[0]
             if(cols.size == 6) {
                 startIndex = 2
+                name = "$name - ${cols[1]}"
             }
             val priceCol = cols[startIndex]
             val price = priceCol.trim().let { it.substring(0, it.indexOf("k")).trim().toBigDecimal() }
             val stockCol = cols[startIndex+3]
             val stock = stockCol.trim().let { it.substring(0, it.indexOf("k")).trim().toInt() }
-            return stock to price
+            return Triple(name, stock, price)
         }
         return null
     }

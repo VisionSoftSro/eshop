@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css?family=Lobster&display=swap" rel="stylesheet');
 body {
     background-image: url(img/presents-1913987_1920.jpg);
     background-repeat: no-repeat;
@@ -7,4 +8,18 @@ body {
 
 section>div, .checkout_area {
     background-color: white;
+}
+.top-header-area {
+    background-color: #303030;
+    /*color: white;*/
+}
+.main-font * {
+    font-family: 'Lobster', cursive !important;
+}
+.font-medium {
+    font-size: medium;
+}
+.menu-font {
+    font-size: medium!important;
+    font-weight: bolder;
 }
