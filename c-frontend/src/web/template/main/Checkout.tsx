@@ -282,10 +282,7 @@ class Payment extends React.Component<MethodsState> {
         </div>
     }
 }
-const PaymentRedux = connect((state:MethodsState) => reduceStateToPlainObject(state))(Payment);
-
 const PaymentRedux = connect((state: MethodsState) => reduceStateToPlainObject(state))(Payment);
-
 
 class Shipping extends React.Component<MethodsState> {
 
