@@ -15,6 +15,8 @@ class PaymentMethod {
     var code:String? = null
 
     var localizedName:String? = null
+
+    var price:BigDecimal = BigDecimal.ZERO
 }
 
 

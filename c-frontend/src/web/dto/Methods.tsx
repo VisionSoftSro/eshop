@@ -8,4 +8,5 @@ export class ShippingMethodDto {
 export class PaymentMethodDto {
     id:number;
     code:string;
+    price:number;
 }

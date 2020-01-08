@@ -19,9 +19,9 @@ class MethodsController {
     lateinit var shippingMethodDao: ShippingMethodDao
 
     @GetMapping("payments")
-    fun payments() = paymentMethodDao.findAll()
+    fun payments() = paymentMethodDao.findPublished()
 
     @GetMapping("shippings")
-    fun shippings() = shippingMethodDao.findAll()
+    fun shippings() = shippingMethodDao.findPublished()
 
 }
