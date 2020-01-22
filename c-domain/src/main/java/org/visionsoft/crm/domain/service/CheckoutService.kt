@@ -22,7 +22,7 @@ class Checkout: SimpleCheckout() {
     var firstName:String? = null
     var lastName:String? = null
     var emailAddress:String? = null
-    var phoneNumber:Long? = null
+    var phoneNumber:String? = null
     var street:String? = null
     var streetNo:String? = null
     var city:String? = null

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {ChangeEvent} from "react";
 import Wrapper from "../../../common/component/Wrapper";
 import {Link} from '../../../common/component/Link';
 import {SwitchCase, SwitchPage} from "../../../common/component/SwitchPage";
@@ -9,7 +9,7 @@ import {CheckoutAction, CheckoutActionType, CheckoutState} from "../../redux/red
 import {cartStore, checkoutStore, dataStore, methodsStore} from "../../redux/WebRedux";
 import {Form, FormField, FormInputType} from "../../../common/component/form/Form";
 import {CheckoutDto} from "../../dto/CheckoutDto";
-import {Category, GoodsDto, Price} from "../../dto/GoodsDto";
+import {CartGoods, Category, GoodsDto, Price} from "../../dto/GoodsDto";
 
 import {productImageUrl} from "../../TemplateUtil";
 import {httpEndpoint} from "../../../common/utils/HttpUtils";
@@ -19,6 +19,9 @@ import {MethodsState} from "../../redux/reducers/cart/MethodsReducer";
 import {JsonProperty} from "../../../common/utils/ObjectMapper";
 import {CartAction, CartActionType, CartState} from "../../redux/reducers/cart/CartReducer";
 import {Modal, ModalBody} from "react-bootstrap";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import * as faIcon from "@fortawesome/free-solid-svg-icons";
+import ModalHeader from "react-bootstrap/ModalHeader";
 
 class Complete extends React.Component {
 
@@ -67,9 +70,9 @@ class FormDto extends CheckoutDto {
     goods: Array<FormDtoCart>;
 }
 
-class Review extends React.Component<any, { result?: CheckoutResult }> {
+class Review extends React.Component<any, { result?: CheckoutResult, error?:boolean }> {
 
-    state: { result?: CheckoutResult } = {result: null};
+    state: { result?: CheckoutResult, error?:boolean } = {result: null, error:false};
 
     next = async () => {
         const checkout = checkoutStore.getState().checkout;
@@ -90,11 +93,13 @@ class Review extends React.Component<any, { result?: CheckoutResult }> {
 
         });
         let data = result.data;
-        if (data.success) {
+        if(!data) {
+            this.setState({error: true});
+        } else if (data.success) {
             checkoutStore.dispatch<CheckoutAction>({type: CheckoutActionType.Finish, orderNumber:data.orderNumber});
             cartStore.dispatch<CartAction>({type: CartActionType.ClearCart});
         } else {
-            this.setState({result: data})
+            this.setState({result: data});
         }
     };
 
@@ -111,25 +116,49 @@ class Review extends React.Component<any, { result?: CheckoutResult }> {
                         <div className="checkout_details_area clearfix">
                             <h5 className="mb-30">{Strings["ReviewOrder"]}</h5>
                             <div className="cart-table">
-                                {this.state.result && this.state.result.outOfStock.length > 0 && (
-                                    <Modal show={true} onHide={() => this.setState({result: null})}>
+                                {this.state.error&&(
+                                    <Modal show={true} onHide={() => this.setState({error: false})}>
+                                        <ModalHeader closeButton>
+                                            Je nám líto :(
+                                        </ModalHeader>
                                         <ModalBody>
-                                            <h2>Je nám líto :(</h2>
+                                            <p>Bohužel nastala chyba na straně serveru. Zkuste to prosím později. Pokud problém přetrvává obraťte se prosím na podporu.</p>
+                                        </ModalBody>
+                                    </Modal>
+                                )}
+                                {this.state.result && this.state.result.outOfStock.length > 0 && (
+                                    <Modal show={true} onHide={() => this.setState({result: null})} size={"lg"}>
+                                        <ModalHeader closeButton>
+                                            Je nám líto :(
+                                        </ModalHeader>
+                                        <ModalBody>
                                             <p>Bohužel následující zboží již na skladě nemáme. Upravte prosím objednávku
                                                 dle dostupnosti skladu.</p>
                                             <table className="table table-bordered">
+                                                <thead>
+                                                <tr>
+                                                    <td>Náhled</td>
+                                                    <td>Název produktu</td>
+                                                    <td>Na skladě</td>
+                                                    <td>Nový počet</td>
+                                                </tr>
+                                                </thead>
                                                 <tbody>
-                                                {this.state.result.outOfStock.map(i => (
-                                                    <tr key={i.id}>
+                                                {cart.filter(i=>this.state.result.outOfStock.map(a=>a.id).includes(i.goods.id)).map(e=>({cart:e, outOfStock:this.state.result.outOfStock.filter(a=>a.id===e.goods.id)[0]})).map(i => (
+                                                    <tr key={i.cart.goods.id}>
                                                         <td>
-                                                            <img width={50} src={productImageUrl(i.code, 1)}
-                                                                 alt="Product"/>
+                                                            <img width={50} src={productImageUrl(i.cart.goods.code, 1)} alt="Product"/>
                                                         </td>
                                                         <td>
-                                                            {i.name}
+                                                            {i.cart.goods.name}
                                                         </td>
                                                         <td>
-                                                            Na skladě zbýva: {i.stock} ks
+                                                            {i.outOfStock.stock} ks
+                                                        </td>
+                                                        <td>
+                                                            <input type="number" value={i.cart.pcs} onChange={(event:ChangeEvent<HTMLInputElement>)=> {
+                                                                cartStore.dispatch<CartAction>({type: CartActionType.ChangeCart, item:i.cart, changePcs:parseInt(event.target.value)});
+                                                            }}/>
                                                         </td>
                                                     </tr>
                                                 ))}
@@ -142,8 +171,9 @@ class Review extends React.Component<any, { result?: CheckoutResult }> {
                                     <table className="table table-bordered mb-30">
                                         <thead>
                                         <tr>
-                                            <th scope="col">Obrázek</th>
-                                            <th scope="col">Produkt</th>
+                                            <th scope="col"/>
+                                            <th scope="col">Náhled</th>
+                                            <th scope="col">Název produktu</th>
                                             <th scope="col">Cena za kus</th>
                                             <th scope="col">Počet</th>
                                             <th scope="col">Celkem</th>
@@ -153,6 +183,9 @@ class Review extends React.Component<any, { result?: CheckoutResult }> {
                                         {cart.map(i => (
                                             <tr key={i.goods.id}>
                                                 <td>
+                                                    <Link href={()=>cartStore.dispatch<CartAction>({type: CartActionType.RemoveCart, item:i})}><FontAwesomeIcon icon={faIcon.faTimes} style={{color:"red"}} /></Link>
+                                                </td>
+                                                <td>
                                                     <img src={productImageUrl(i.goods.code, 1)} alt="Product"/>
                                                 </td>
                                                 <td>
@@ -161,7 +194,9 @@ class Review extends React.Component<any, { result?: CheckoutResult }> {
                                                 </td>
                                                 <td>{i.goods.getPrice().format()}</td>
                                                 <td>
-                                                    {i.pcs} ks
+                                                    <input type="number" value={i.pcs} onChange={(event:ChangeEvent<HTMLInputElement>)=> {
+                                                        cartStore.dispatch<CartAction>({type: CartActionType.ChangeCart, item:i, changePcs:parseInt(event.target.value)});
+                                                    }}/>
                                                 </td>
                                                 <td>{new Price(i.goods.price * i.pcs, 'CZK').format()}</td>
                                             </tr>
@@ -175,7 +210,7 @@ class Review extends React.Component<any, { result?: CheckoutResult }> {
 
                     <div className="col-12 col-lg-7 ml-auto">
                         <div className="cart-total-area">
-                            <h5 className="mb-3">Sumarizace</h5>
+                            <h5 className="mb-3">Obsah nákupního košíku</h5>
                             <div className="table-responsive">
                                 <table className="table mb-0">
                                     <tbody>
@@ -216,6 +251,7 @@ class Review extends React.Component<any, { result?: CheckoutResult }> {
         </div>
     }
 }
+const CartReviewRedux = connect((state:CartState)=>reduceStateToPlainObject(state))(Review);
 
 class Payment extends React.Component<MethodsState> {
 
@@ -244,16 +280,16 @@ class Payment extends React.Component<MethodsState> {
                                 <div className="table-responsive">
                                     <table className="table table-bordered">
                                         <thead>
-                                        <tr>
-                                            <th scope="col">Způsob</th>
-                                            <th scope="col">Popis</th>
-                                            <th scope="col">Vyberte</th>
-                                        </tr>
+                                            <tr>
+                                                <th scope="col">Způsob</th>
+                                                <th scope="col">Popis</th>
+                                                <th scope="col">Vyberte</th>
+                                            </tr>
                                         </thead>
                                         <tbody>
                                         {this.props.payment.map((i) => (
                                             <tr key={i.id}>
-                                                <th scope="row">{Strings[`PaymentsTexts.${i.code}.name`]}{i.price&&`(${new Price(i.price, 'CZK').format()})`}</th>
+                                                <th scope="row">{Strings[`PaymentsTexts.${i.code}.name`]}{i.price&&` ( ${new Price(i.price, 'CZK').format()} )`}</th>
                                                 <td>{Strings[`PaymentsTexts.${i.code}.description`]}</td>
                                                 <td>
                                                     <div className="custom-control custom-radio">
@@ -321,7 +357,6 @@ class Shipping extends React.Component<MethodsState> {
                                         <thead>
                                         <tr>
                                             <th scope="col">Způsob</th>
-                                            <th scope="col">Čas dodání</th>
                                             <th scope="col">Cena</th>
                                             <th scope="col">Vyberte</th>
                                         </tr>
@@ -330,7 +365,6 @@ class Shipping extends React.Component<MethodsState> {
                                         {this.props.shipping.map((i) => (
                                             <tr key={i.id}>
                                                 <th scope="row">{Strings[`ShippingTexts.${i.code}.name`]}</th>
-                                                <td>{i.shippingTime} dní</td>
                                                 <td>{new Price(i.price, 'CZK').format()}</td>
                                                 <td>
                                                     <div className="custom-control custom-radio">
@@ -457,11 +491,11 @@ class Checkout extends React.Component<CheckoutState> {
         return !this.props.finished&&(
             <Wrapper>
                 <div className="checkout_steps_area">
-                    {this.steps.map((item, index) => <Link key={index}
-                                                           className={cs(this.props.step > index && "complated", this.props.step === index && "active")}
-                                                           href={() => {
-                                                           }}><i className="icofont-check-circled"/> {Strings[item.name]}
-                    </Link>)}
+                    {this.steps.map((item, index) => (
+                        <Link key={index} className={cs(this.props.step > index && "complated", this.props.step === index && "active")} href={() => { }}>
+                            <i className="icofont-check-circled"/> {Strings[item.name]}
+                        </Link>
+                    ))}
                 </div>
                 <SwitchPage value={this.props.step} default={0}>
                     <SwitchCase value={0}>
@@ -478,7 +512,9 @@ class Checkout extends React.Component<CheckoutState> {
                         </Provider>
                     </SwitchCase>
                     <SwitchCase value={3}>
-                        <Review/>
+                        <Provider store={cartStore}>
+                            <CartReviewRedux/>
+                        </Provider>
                     </SwitchCase>
                 </SwitchPage>
             </Wrapper>
@@ -499,19 +535,23 @@ class CheckoutPage extends React.Component<CartState> {
             return <Complete />
         }
         if (this.props.cart.length > 0) {
-            return <Provider store={checkoutStore}>
-                <CheckoutRedux/>
-            </Provider>
+            return (
+                    <Provider store={checkoutStore}>
+                           <CheckoutRedux/>
+                    </Provider>
+            );
         }
-        return <div className="checkout_area section_padding_100">
-            <div className="container">
-                <div className="row">
-                    <div className="col-12">
-                        Košík je prázdný.
+        return (
+            <div className="checkout_area section_padding_100">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-12">
+                            Košík je prázdný.
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>;
+        );
 
     }
 }

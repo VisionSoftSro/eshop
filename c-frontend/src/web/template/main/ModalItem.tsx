@@ -10,6 +10,7 @@ import {voidFormSubmit} from "../../../common/component/form/Form";
 import {clamp} from "../../../common/utils/Util";
 import {productImageUrl} from "../../TemplateUtil";
 import Wrapper from "../../../common/component/Wrapper";
+import ModalHeader from "react-bootstrap/ModalHeader";
 
 class ModalItem extends React.Component<ItemState> {
 
@@ -42,6 +43,9 @@ class ModalItem extends React.Component<ItemState> {
     render() {
         return (
             <Modal show={this.props.item !== null} onHide={this.hide}>
+                <ModalHeader closeButton>
+                    {this.props.item&&this.props.item.name}
+                </ModalHeader>
                 <ModalBody>
                     {
                         this.props.item && (
@@ -61,7 +65,6 @@ class ModalItem extends React.Component<ItemState> {
                                         </div>
                                         <div className="col-12 col-lg-7">
                                             <div className="quickview_pro_des">
-                                                <h4 className="title">{this.props.item.name}</h4>
                                                 {/*<div className="top_seller_product_rating mb-15">*/}
                                                     {/*<i className="fa fa-star" aria-hidden="true"/>*/}
                                                     {/*<i className="fa fa-star" aria-hidden="true"/>*/}
@@ -69,7 +72,6 @@ class ModalItem extends React.Component<ItemState> {
                                                     {/*<i className="fa fa-star" aria-hidden="true"/>*/}
                                                     {/*<i className="fa fa-star" aria-hidden="true"/>*/}
                                                 {/*</div>*/}
-                                                <h5 className="price">{this.props.item.getPrice().format}</h5>
                                                 <p dangerouslySetInnerHTML={{__html:this.props.item.description}} />
                                                 <p><strong>{Strings["InStock"]}:</strong> {this.props.item.stock} ks</p>
                                                 <p><strong>{Strings["Price"]}:</strong> {this.props.item.getPrice().format()}</p>

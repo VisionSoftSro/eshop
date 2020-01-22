@@ -26,15 +26,15 @@ export default {
         StreetNo:"Číslo popisné",
         City:"Město",
         PostCode:"Poštovní směrovací číslo",
-        BillDetails:"Dodací informace",
+        BillDetails:"Dodací údaje",
         FieldIsRequired:"Pole je povinné",
         Back:"Zpět",
         Billing:"Dodání",
         Shipping:"Přeprava",
-        ShippingMethod:"Způsob přepravy",
+        ShippingMethod:"Způsob dopravy",
         Payment:"Platba",
         PaymentMethod:"Způsob platba",
-        Review:"Rekapitulace",
+        Review:"Dokončení objednávky",
         ReviewOrder:"Obsah vaší objednávky",
         PaymentsTexts: {
             'cod': {

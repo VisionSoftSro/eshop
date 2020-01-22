@@ -11,6 +11,8 @@ import {DataAction, DataActionType} from "../redux/reducers/cart/DataReducer";
 import {reduceStateToPlainObject} from "../../common/redux/Reducers";
 import {DataState} from "../redux/reducers/cart/DataReducer";
 import cs from 'classnames';
+import * as faIcon from "@fortawesome/free-solid-svg-icons";
+
 class Header extends React.Component<DataState> {
 
     changeLocale = (locale: string) => {
@@ -37,12 +39,12 @@ class Header extends React.Component<DataState> {
                 <div className="top-header-area">
                     <div className="container h-100 main-font">
                         <div className="row h-100 align-items-center">
-                            <div className="col-6">
+                            <div className="col-8">
                                 <div className="welcome-note">
-                                    <span className="text" style={{fontSize:"large"}}>Dekorace pro dětské dárky oslavy a dárrky pro děti. Vše na jednom místě.</span>
+                                    <span className="text" style={{fontSize:"large"}}>Dekorace pro dětské dárky oslavy a dárky pro děti. Vše na jednom místě.</span>
                                 </div>
                             </div>
-                            <div className="col-6">
+                            <div className="col-4">
                                 <div className="welcome-note text-right">
                                     <span className="text font-medium" style={{fontSize:"large"}}>Expedujeme do 24 hodin!</span>
                                 </div>
