@@ -629,7 +629,8 @@ module.exports = function(webpackEnv) {
         }),
         new CopyPlugin([
           { from: 'src/web/assets/product-img', to: 'static/product-img' },
-          { from: 'src/web/assets/img', to: 'static/img' }
+          { from: 'src/web/assets/img', to: 'static/img' },
+          { from: 'src/web/assets/pdf', to: 'static/pdf' }
         ]),
         new webpack.ProvidePlugin({
           $: 'jquery',

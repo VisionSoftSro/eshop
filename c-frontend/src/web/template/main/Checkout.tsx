@@ -22,6 +22,7 @@ import {Modal, ModalBody} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import * as faIcon from "@fortawesome/free-solid-svg-icons";
 import ModalHeader from "react-bootstrap/ModalHeader";
+import {Quantity} from "../Quantity";
 
 class Complete extends React.Component {
 
@@ -69,10 +70,10 @@ class FormDtoCart {
 class FormDto extends CheckoutDto {
     goods: Array<FormDtoCart>;
 }
+type ReviewState = { result?: CheckoutResult, error?:boolean, canFinish?:boolean}
+class Review extends React.Component<any, ReviewState> {
 
-class Review extends React.Component<any, { result?: CheckoutResult, error?:boolean }> {
-
-    state: { result?: CheckoutResult, error?:boolean } = {result: null, error:false};
+    state: ReviewState = {result: null, error:false, canFinish:false};
 
     next = async () => {
         const checkout = checkoutStore.getState().checkout;
@@ -134,50 +135,52 @@ class Review extends React.Component<any, { result?: CheckoutResult, error?:bool
                                         <ModalBody>
                                             <p>Bohužel následující zboží již na skladě nemáme. Upravte prosím objednávku
                                                 dle dostupnosti skladu.</p>
-                                            <table className="table table-bordered">
-                                                <thead>
-                                                <tr>
-                                                    <td>Náhled</td>
-                                                    <td>Název produktu</td>
-                                                    <td>Na skladě</td>
-                                                    <td>Nový počet</td>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                {cart.filter(i=>this.state.result.outOfStock.map(a=>a.id).includes(i.goods.id)).map(e=>({cart:e, outOfStock:this.state.result.outOfStock.filter(a=>a.id===e.goods.id)[0]})).map(i => (
-                                                    <tr key={i.cart.goods.id}>
-                                                        <td>
-                                                            <img width={50} src={productImageUrl(i.cart.goods.code, 1)} alt="Product"/>
-                                                        </td>
-                                                        <td>
-                                                            {i.cart.goods.name}
-                                                        </td>
-                                                        <td>
-                                                            {i.outOfStock.stock} ks
-                                                        </td>
-                                                        <td>
-                                                            <input type="number" value={i.cart.pcs} onChange={(event:ChangeEvent<HTMLInputElement>)=> {
-                                                                cartStore.dispatch<CartAction>({type: CartActionType.ChangeCart, item:i.cart, changePcs:parseInt(event.target.value)});
-                                                            }}/>
-                                                        </td>
+                                            <div className="table-responsive">
+                                                <table className="table table-bordered mb-30">
+                                                    <thead>
+                                                    <tr>
+                                                        <td>Náhled</td>
+                                                        <td>Název produktu</td>
+                                                        <td>Na skladě</td>
+                                                        <td>Nový počet</td>
                                                     </tr>
-                                                ))}
-                                                </tbody>
-                                            </table>
+                                                    </thead>
+                                                    <tbody>
+                                                    {cart.filter(i=>this.state.result.outOfStock.map(a=>a.id).includes(i.goods.id)).map(e=>({cart:e, outOfStock:this.state.result.outOfStock.filter(a=>a.id===e.goods.id)[0]})).map(i => (
+                                                        <tr key={i.cart.goods.id}>
+                                                            <td>
+                                                                <img width={50} src={productImageUrl(i.cart.goods.code, 1)} alt="Product"/>
+                                                            </td>
+                                                            <td>
+                                                                {i.cart.goods.name}
+                                                            </td>
+                                                            <td>
+                                                                {i.outOfStock.stock} ks
+                                                            </td>
+                                                            <td>
+                                                                <Quantity pcs={i.cart.pcs} setQuantity={value=>{
+                                                                    cartStore.dispatch<CartAction>({type: CartActionType.ChangeCart, item:i.cart, changePcs:value});
+                                                                }}/>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </ModalBody>
                                     </Modal>
                                 )}
                                 <div className="table-responsive">
                                     <table className="table table-bordered mb-30">
                                         <thead>
-                                        <tr>
-                                            <th scope="col"/>
-                                            <th scope="col">Náhled</th>
-                                            <th scope="col">Název produktu</th>
-                                            <th scope="col">Cena za kus</th>
-                                            <th scope="col">Počet</th>
-                                            <th scope="col">Celkem</th>
-                                        </tr>
+                                            <tr>
+                                                <th scope="col"/>
+                                                <th scope="col">Náhled</th>
+                                                <th scope="col">Název produktu</th>
+                                                <th scope="col">Cena za kus</th>
+                                                <th scope="col" style={{width:30}}>Počet</th>
+                                                <th scope="col">Celkem</th>
+                                            </tr>
                                         </thead>
                                         <tbody>
                                         {cart.map(i => (
@@ -194,8 +197,8 @@ class Review extends React.Component<any, { result?: CheckoutResult, error?:bool
                                                 </td>
                                                 <td>{i.goods.getPrice().format()}</td>
                                                 <td>
-                                                    <input type="number" value={i.pcs} onChange={(event:ChangeEvent<HTMLInputElement>)=> {
-                                                        cartStore.dispatch<CartAction>({type: CartActionType.ChangeCart, item:i, changePcs:parseInt(event.target.value)});
+                                                    <Quantity pcs={i.pcs} setQuantity={value=>{
+                                                        cartStore.dispatch<CartAction>({type: CartActionType.ChangeCart, item:i, changePcs:value});
                                                     }}/>
                                                 </td>
                                                 <td>{new Price(i.goods.price * i.pcs, 'CZK').format()}</td>
@@ -237,12 +240,21 @@ class Review extends React.Component<any, { result?: CheckoutResult, error?:bool
                                     </tbody>
                                 </table>
                             </div>
+                            <div className="cart-total-area">
+                                <div className="form-check">
+                                    <div className="custom-control custom-checkbox mb-3 pl-1">
+                                        <input type="checkbox" className="custom-control-input" id="customChe" onChange={e=>this.setState({canFinish:e.target.checked})}/>
+                                            <label className="custom-control-label" htmlFor="customChe">Souhlasím s <Link history={false} target={"_blank"} href={"/static/pdf/VOP.a.OOU.-.final.pdf"}>ochranou osobních údajů a obchodními podmínkami</Link></label>
+                                    </div>
+                                </div>
+
+                            </div>
                             <div className="checkout_pagination d-flex justify-content-end mt-3">
                                 <Link href={() => checkoutStore.dispatch<CheckoutAction>({
                                     type: CheckoutActionType.SetStep,
                                     step: 2
                                 })} className="btn bigshop-btn mt-2 ml-2">{Strings["Back"]}</Link>
-                                <Link href={this.next} className="btn bigshop-btn mt-2 ml-2">Dokončit</Link>
+                                <Link href={()=>this.state.canFinish&&this.next()} className={cs("btn bigshop-btn mt-2 ml-2", !this.state.canFinish&&"disabled")}>Dokončit</Link>
                             </div>
                         </div>
                     </div>
@@ -253,7 +265,12 @@ class Review extends React.Component<any, { result?: CheckoutResult, error?:bool
 }
 const CartReviewRedux = connect((state:CartState)=>reduceStateToPlainObject(state))(Review);
 
-class Payment extends React.Component<MethodsState> {
+type ContinueState = {canContinue:boolean};
+
+class Payment extends React.Component<MethodsState, ContinueState> {
+
+    state:ContinueState = {canContinue:checkoutStore.getState().checkout.paymentMethod !== null};
+
 
     next = () => {
         if (checkoutStore.getState().checkout.paymentMethod !== null) {
@@ -264,7 +281,8 @@ class Payment extends React.Component<MethodsState> {
     updateMethod(paymentMethod: PaymentMethodDto) {
         const checkout = checkoutStore.getState().checkout;
         checkout.paymentMethod = paymentMethod;
-        checkoutStore.dispatch<CheckoutAction>({type: CheckoutActionType.UpdateData, checkout: checkout})
+        checkoutStore.dispatch<CheckoutAction>({type: CheckoutActionType.UpdateData, checkout: checkout});
+        this.setState({canContinue:true})
     }
 
     render() {
@@ -317,7 +335,7 @@ class Payment extends React.Component<MethodsState> {
                                 type: CheckoutActionType.SetStep,
                                 step: 1
                             })} className="btn bigshop-btn mt-2 ml-2">{Strings["Back"]}</Link>
-                            <Link href={this.next} className="btn bigshop-btn mt-2 ml-2">{Strings["Continue"]}</Link>
+                            <Link href={()=>this.state.canContinue&&this.next()} className={cs("btn bigshop-btn mt-2 ml-2", !this.state.canContinue&&"disabled")}>{Strings["Continue"]}</Link>
                         </div>
                     </div>
                 </div>
@@ -327,8 +345,8 @@ class Payment extends React.Component<MethodsState> {
 }
 const PaymentRedux = connect((state: MethodsState) => reduceStateToPlainObject(state))(Payment);
 
-class Shipping extends React.Component<MethodsState> {
-
+class Shipping extends React.Component<MethodsState, ContinueState> {
+    state:ContinueState = {canContinue:checkoutStore.getState().checkout.shippingMethod !== null};
     next = () => {
         if (checkoutStore.getState().checkout.shippingMethod !== null) {
             checkoutStore.dispatch<CheckoutAction>({type: CheckoutActionType.SetStep, step: 2});
@@ -340,6 +358,7 @@ class Shipping extends React.Component<MethodsState> {
         const checkout = checkoutStore.getState().checkout;
         checkout.shippingMethod = shippingMethod;
         checkoutStore.dispatch<CheckoutAction>({type: CheckoutActionType.UpdateData, checkout: checkout})
+        this.setState({canContinue:true})
     }
 
     render() {
@@ -393,7 +412,7 @@ class Shipping extends React.Component<MethodsState> {
                                 type: CheckoutActionType.SetStep,
                                 step: 0
                             })} className="btn bigshop-btn mt-2 ml-2">{Strings["Back"]}</Link>
-                            <Link href={this.next} className="btn bigshop-btn mt-2 ml-2">{Strings["Continue"]}</Link>
+                            <Link href={()=>this.state.canContinue&&this.next()} className={cs("btn bigshop-btn mt-2 ml-2", !this.state.canContinue&&"disabled")}>{Strings["Continue"]}</Link>
                         </div>
                     </div>
                 </div>
@@ -404,8 +423,8 @@ class Shipping extends React.Component<MethodsState> {
 const ShippingRedux = connect((state: MethodsState) => reduceStateToPlainObject(state))(Shipping);
 
 
-class Billing extends React.Component {
-
+class Billing extends React.Component<{}, ContinueState> {
+    state:ContinueState = {canContinue:false};
     form: Form<CheckoutDto> = null;
     next = () => {
         if (this.form.validate()) {
@@ -417,6 +436,10 @@ class Billing extends React.Component {
         }
     };
 
+    componentDidMount(): void {
+        this.setState({canContinue: this.form.validate()})
+    }
+
 
     render() {
         return <div className="checkout_area section_padding_100">
@@ -426,7 +449,7 @@ class Billing extends React.Component {
                         <div className="checkout_details_area clearfix">
                             <h5 className="mb-4">{Strings["BillDetails"]}</h5>
                             <Form<CheckoutDto> data={checkoutStore.getState().checkout} simpleLabel
-                                               inputGroupEnabled={false} ref={o => this.form = o}>
+                                               inputGroupEnabled={false} ref={o => this.form = o} onChange={(form)=>this.setState({canContinue: form.validate()})}>
                                 <div className="row">
                                     <div className="col-md-6 mb-3">
                                         <FormField type={FormInputType.Text} name={"firstName"}
@@ -468,7 +491,7 @@ class Billing extends React.Component {
                     <div className="col-12">
                         <div className="checkout_pagination d-flex justify-content-end mt-50">
                             {/*<Link href={this.next} className="btn bigshop-btn mt-2 ml-2">{Strings["Back"]}</Link>*/}
-                            <Link href={this.next} className="btn bigshop-btn mt-2 ml-2">{Strings["Continue"]}</Link>
+                            <Link href={()=>this.state.canContinue&&this.next()} className={cs("btn bigshop-btn mt-2 ml-2", !this.state.canContinue&&"disabled")}>{Strings["Continue"]}</Link>
                         </div>
                     </div>
                 </div>

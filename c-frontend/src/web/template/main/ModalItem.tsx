@@ -11,17 +11,10 @@ import {clamp} from "../../../common/utils/Util";
 import {productImageUrl} from "../../TemplateUtil";
 import Wrapper from "../../../common/component/Wrapper";
 import ModalHeader from "react-bootstrap/ModalHeader";
+import {Quantity} from "../Quantity";
 
 class ModalItem extends React.Component<ItemState> {
 
-
-    plus = () => {
-        this.setQuantity(this.props.pcs+1);
-    };
-
-    minus = () => {
-        this.setQuantity(this.props.pcs-1);
-    };
 
     setQuantity = (pcs:number) => {
         selectedItemStore.dispatch<ItemAction>({type: ItemActionType.ChangeQuantity, pcs:clamp(pcs, 1, this.props.item.stock)});
@@ -36,9 +29,6 @@ class ModalItem extends React.Component<ItemState> {
         this.hide();
     };
 
-    onInputChanged = (event:ChangeEvent<HTMLInputElement>) => {
-        this.setQuantity(parseInt(event.target.value));
-    };
 
     render() {
         return (
@@ -82,11 +72,7 @@ class ModalItem extends React.Component<ItemState> {
                                                     this.props.item.stock > 0 &&
                                                     (
                                                         <Wrapper>
-                                                            <div className="quantity">
-                                                                <span className="qty-minus" onClick={this.minus}><i className="fa fa-minus" aria-hidden="true"/></span>
-                                                                <input type="number" value={this.props.pcs} onChange={this.onInputChanged}/>
-                                                                <span className="qty-plus" onClick={this.plus}><i className="fa fa-plus" aria-hidden="true"/></span>
-                                                            </div>
+                                                            <Quantity pcs={this.props.pcs} setQuantity={this.setQuantity}/>
                                                             <button type="submit" name="addtocart" value="5" className="cart-submit" onClick={this.addToCart}>
                                                                 {Strings["AddToCart"]}
                                                             </button>
