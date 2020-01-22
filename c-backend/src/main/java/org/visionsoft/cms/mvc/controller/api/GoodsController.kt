@@ -1,13 +1,16 @@
 package org.visionsoft.cms.mvc.controller.api
 
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.*
+import org.springframework.web.client.HttpStatusCodeException
+import org.springframework.web.server.ResponseStatusException
+import org.visionsoft.common.controller.WebError
+import org.visionsoft.common.controller.WebServiceErrorController
 import org.visionsoft.crm.domain.dao.CategoryDao
 import org.visionsoft.crm.domain.dao.GoodsDao
 import org.visionsoft.crm.domain.scheme.Category
+import org.visionsoft.crm.domain.scheme.Goods
 
 @RestController
 @RequestMapping("goods")
@@ -19,6 +22,11 @@ class GoodsController {
 
     @GetMapping
     fun all() = goodsDao.findAll()
+
+    @GetMapping("/detail/{id}")
+    fun item(@PathVariable id:Long) = goodsDao.findById(id).orElseThrow { ResponseStatusException(
+            HttpStatus.NOT_FOUND, "entity not found"
+    ) }
 
     @GetMapping("/category")
     fun byCategory(@RequestParam category: List<Category>) = goodsDao.findByCategories(category)

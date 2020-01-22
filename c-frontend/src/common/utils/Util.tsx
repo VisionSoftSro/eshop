@@ -55,3 +55,12 @@ export const formatPrice = (value:number, currency:string) => {
 };
 
 export function clamp(v:number, min:number, max:number) { return v < min ? min : v > max ? max : v; }
+
+export function getHashValue(key:string) {
+    const matches = location.hash.match(new RegExp(key+'=([^&]*)'));
+    return matches ? matches[1] : null;
+}
+
+export function toSeoString(str:string) {
+    return str.toLowerCase().trim().replace(/\s+/g, "-").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}

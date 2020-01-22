@@ -20,7 +20,7 @@ class Goods {
     var stock:Int = 0
     var price:BigDecimal = BigDecimal.ZERO
     var hot:Boolean = false
-
+    var images:Int = 0
     @ManyToMany
     @JoinTable(name = "goods_category", joinColumns = [(JoinColumn(name = "goods"))], inverseJoinColumns = [(JoinColumn(name = "category"))])
     var categories:MutableList<Category> = mutableListOf()

@@ -1,5 +1,6 @@
 import * as React from "react";
 import {Loading} from "./Loading";
+import {ReactElement} from "react";
 
 export const booleanComparator = (value: boolean) => value;
 
@@ -9,6 +10,7 @@ interface LoaderProps {
     comparator?: (value?: any) => boolean
     value?: any;
     fullscreen?: boolean;
+    children?:ReactElement|((loading:any)=>ReactElement)
 }
 
 export class Loader extends React.Component<LoaderProps> {
@@ -19,13 +21,15 @@ export class Loader extends React.Component<LoaderProps> {
     };
 
     render() {
-        if (this.props.comparator(this.props.value)) {
-            if(typeof this.props.children === 'function') {
-                return this.props.children();
-            }
-            return this.props.children;
+        const Loader = <Loading show fullscreen={this.props.fullscreen} color={"#000"}/>;
+        const showLoader = !this.props.comparator(this.props.value);
+        if(typeof this.props.children === 'function') {
+            return this.props.children(showLoader&&Loader||null);
+        }
+        if (showLoader) {
+            return Loader;
         } else {
-            return <Loading show fullscreen={this.props.fullscreen} color={"#000"}/>;
+            return this.props.children;
         }
     }
 }

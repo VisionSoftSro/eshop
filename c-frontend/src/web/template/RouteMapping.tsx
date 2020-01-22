@@ -5,13 +5,13 @@ import {cartStore, checkoutStore, dataStore, selectedItemStore} from "../redux/W
 import Wrapper from "../../common/component/Wrapper";
 import {DataAction, DataActionType} from "../redux/reducers/cart/DataReducer";
 import {connect, Provider} from "react-redux";
-import AllItems from "./main/AllItems";
-import HotItems from "./main/HotItems";
+import ItemList from "./main/ItemList";
 import ModalItem from "./main/ModalItem";
 import {Router, BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
 import history from '../../common/utils/History';
 import Checkout from "./main/Checkout";
 import {StorageForm} from "./main/Storage";
+import {ItemDetail} from "./main/ItemDetail";
 
 export class RouteMapping extends React.Component {
 
@@ -21,22 +21,24 @@ export class RouteMapping extends React.Component {
     }
 
     render() {
+        const categories = dataStore.getState().categories;
         return (
             <Wrapper>
                 <Router history={history}>
                     <Switch>
                         <Route path={"/storage-form"} component={StorageForm} />
-                        <Route path={"/checkout"} render={()=>(
+                        <Route path={"/kosik"} render={()=>(
                             <Provider store={cartStore}>
                                 <Checkout/>
                             </Provider>
                         )}/>
-                        <Route path={"/"} render={()=>(
-                            <Wrapper>
-                                {/*<HotItems />*/}
-                                <AllItems />
-                            </Wrapper>
-                        )}/>
+                        {categories.map(category=>(
+                            <Route key={`/${category.id}-item`} path={`/${category.getSeoName()}/*`} component={ItemDetail}/>
+                        ))}
+                        {categories.map(category=>(
+                            <Route key={`/${category.id}-category`} path={`/${category.getSeoName()}`} component={ItemList}/>
+                        ))}
+                        <Route path={`/`} component={ItemList}/>
                         <Redirect to={"/"} />
                     </Switch>
                 </Router>

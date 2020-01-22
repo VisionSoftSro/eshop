@@ -12,6 +12,7 @@ import {reduceStateToPlainObject} from "../../common/redux/Reducers";
 import {DataState} from "../redux/reducers/cart/DataReducer";
 import cs from 'classnames';
 import * as faIcon from "@fortawesome/free-solid-svg-icons";
+import {setCategory} from "./Root";
 
 class Header extends React.Component<DataState> {
 
@@ -19,18 +20,7 @@ class Header extends React.Component<DataState> {
         changeLocale(locale)
     };
 
-    async componentDidMount() {
-        const result = await httpEndpointArray<Category>(Category, "categories");
-        dataStore.dispatch<DataAction>({type:DataActionType.SetCategories, categories:result.data});
-        this.setCategory(result.data[0]);
-    }
 
-    setCategory(category:Category) {
-        // @ts-ignore
-        $('.classy-menu').removeClass("menu-on");
-        dataStore.dispatch<DataAction>({type:DataActionType.SetCategory, currentCategory:category});
-
-    }
 
     render() {
 
@@ -69,12 +59,12 @@ class Header extends React.Component<DataState> {
                                         <ul className={"main-font"}>
                                             {this.props.categories.map(i=>(
                                                 <li key={i.id}>
-                                                    <Link href={"/"} callback={()=>this.setCategory(i)} className={cs("menu-font", this.props.currentCategory === i && "active" || "")}>
+                                                    <Link ignoreHash href={`/${i.getSeoName()}#cid=${i.id}`} callback={()=>setCategory(i)} className={cs("menu-font", this.props.currentCategory === i && "active" || "")}>
                                                         {
                                                             // @ts-ignore
                                                             <img width={50} src={AssetCache.Image.Menu[i.id]} alt={i.id} />
                                                         }
-                                                        {Strings[`Categories.${i.id}`]}
+                                                        {i.getName()}
                                                     </Link>
                                                 </li>
                                             ))}
