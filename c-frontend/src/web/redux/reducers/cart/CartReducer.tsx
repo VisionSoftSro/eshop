@@ -7,6 +7,7 @@ export enum CartActionType {
     AddCart="cart/add",
     RemoveCart="cart/remove",
     ClearCart="cart/clear",
+    ChangeCart="cart/change",
 }
 
 export class CartState {
@@ -20,6 +21,7 @@ export class CartState {
 
 export interface CartAction extends Action<CartActionType> {
     item?:CartGoods
+    changePcs?:number;
 }
 
 export const cartReducer = (state:CartState = new CartState(), action:CartAction):CartState => {
@@ -32,6 +34,13 @@ export const cartReducer = (state:CartState = new CartState(), action:CartAction
             content.push(action.item);
         }
         return new CartState([...state.cart]);
+    } else if(CartActionType.ChangeCart === action.type) {
+        const content = state.cart;
+        const existItem = content.filter(item=>item.goods.id === action.item.goods.id);
+        if(existItem.length > 0){
+            existItem[0].pcs = action.changePcs;
+            return new CartState([...state.cart]);
+        }
     } else if(CartActionType.RemoveCart === action.type) {
         return new CartState(state.cart.filter(item=>item.goods.id != action.item.goods.id));
     } else if(CartActionType.ClearCart === action.type) {
