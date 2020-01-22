@@ -52,7 +52,7 @@ class Item extends React.Component<{item:GoodsDto}> {
                         </div>
 
                         <a href="#">{this.props.item.name}</a>
-                        <h6 className="product-price">{this.props.item.getPrice().format()}</h6>
+                        <h6 className="product-price" style={{fontWeight:"bold"}}>{this.props.item.getPrice().format()}</h6>
                     </div>
                 </div>
             </div>

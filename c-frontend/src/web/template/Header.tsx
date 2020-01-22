@@ -35,7 +35,7 @@ class Header extends React.Component<DataState> {
     render() {
 
         return (
-            <header className="header_area">
+            <header className="header_area" style={{fontFamily:"mtcorsva"}}>
                 <div className="top-header-area">
                     <div className="container h-100 main-font">
                         <div className="row h-100 align-items-center">
@@ -46,7 +46,7 @@ class Header extends React.Component<DataState> {
                             </div>
                             <div className="col-4">
                                 <div className="welcome-note text-right">
-                                    <span className="text font-medium" style={{fontSize:"large"}}>Expedujeme do 24 hodin!</span>
+                                    <img width={30} src={AssetCache.Image.Medvidek}/><span className="text font-medium" style={{fontSize:"large"}}>Expedujeme do 24 hodin!</span>
                                 </div>
                             </div>
                         </div>

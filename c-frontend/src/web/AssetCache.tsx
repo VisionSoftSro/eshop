@@ -1,6 +1,7 @@
 export const AssetCache = {
   Image: {
     Logo:require('./assets/img/core-img/logo_gift.png'),
+    Medvidek: require('./assets/img/medvidek.png'),
     Menu: {
       'party':require('./assets/img/balloons.png'),
       'gift':require('./assets/img/gift.png'),
