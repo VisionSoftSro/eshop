@@ -1,4 +1,12 @@
 @import url('https://fonts.googleapis.com/css?family=Lobster&display=swap" rel="stylesheet');
+@font-face {
+    font-family: "mtcorsva";
+    src: url("font/mtcorsva/LithosPro-Regular.otf") format("opentype");
+}
+@font-face {
+    font-family: "mtcorsva-black";
+    src: url("font/mtcorsva/LithosPro-Black.otf") format("opentype");
+}
 body {
     background-image: url(img/presents-1913987_1920.jpg);
     background-repeat: no-repeat;
@@ -14,7 +22,7 @@ section>div, .checkout_area {
     /*color: white;*/
 }
 .main-font * {
-    font-family: 'Lobster', cursive !important;
+    font-family: 'mtcorsva', cursive !important;
 }
 .font-medium {
     font-size: medium;
