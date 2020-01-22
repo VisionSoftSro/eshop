@@ -12,6 +12,7 @@ import {productImageUrl} from "../../TemplateUtil";
 import Wrapper from "../../../common/component/Wrapper";
 import ModalHeader from "react-bootstrap/ModalHeader";
 import {Quantity} from "../Quantity";
+import {announceAddedToCart} from "../Root";
 
 class ModalItem extends React.Component<ItemState> {
 
@@ -25,7 +26,9 @@ class ModalItem extends React.Component<ItemState> {
     };
 
     addToCart = () => {
-        cartStore.dispatch<CartAction>({ type: CartActionType.AddCart, item:new CartGoods(this.props.item, this.props.pcs)});
+        const cg = new CartGoods(this.props.item, this.props.pcs);
+        announceAddedToCart(cg);
+        cartStore.dispatch<CartAction>({ type: CartActionType.AddCart, item:cg});
         this.hide();
     };
 

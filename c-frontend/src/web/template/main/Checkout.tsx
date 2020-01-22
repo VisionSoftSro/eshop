@@ -23,6 +23,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import * as faIcon from "@fortawesome/free-solid-svg-icons";
 import ModalHeader from "react-bootstrap/ModalHeader";
 import {Quantity} from "../Quantity";
+import {booleanComparator, Loader} from "../../../common/component/Loader";
 
 class Complete extends React.Component {
 
@@ -70,12 +71,13 @@ class FormDtoCart {
 class FormDto extends CheckoutDto {
     goods: Array<FormDtoCart>;
 }
-type ReviewState = { result?: CheckoutResult, error?:boolean, canFinish?:boolean}
+type ReviewState = { result?: CheckoutResult, error?:boolean, canFinish?:boolean, loading?:boolean}
 class Review extends React.Component<any, ReviewState> {
 
-    state: ReviewState = {result: null, error:false, canFinish:false};
+    state: ReviewState = {result: null, error:false, canFinish:false, loading:false};
 
     next = async () => {
+        this.setState({loading:true});
         const checkout = checkoutStore.getState().checkout;
         const cart = cartStore.getState().cart;
         const form = new FormDto();
@@ -95,12 +97,12 @@ class Review extends React.Component<any, ReviewState> {
         });
         let data = result.data;
         if(!data) {
-            this.setState({error: true});
+            this.setState({error: true, loading:false});
         } else if (data.success) {
             checkoutStore.dispatch<CheckoutAction>({type: CheckoutActionType.Finish, orderNumber:data.orderNumber});
             cartStore.dispatch<CartAction>({type: CartActionType.ClearCart});
         } else {
-            this.setState({result: data});
+            this.setState({result: data, loading:false});
         }
     };
 
@@ -110,157 +112,172 @@ class Review extends React.Component<any, ReviewState> {
         const cartPrice = cart.map(a => a.pcs * a.goods.price).reduce((a, b) => a + b);
         const shippingPrice = checkout.shippingMethod.price;
         const paymentPrice = checkout.paymentMethod.price || 0;
-        return <div className="checkout_area section_padding_100">
-            <div className="container">
-                <div className="row">
-                    <div className="col-12">
-                        <div className="checkout_details_area clearfix">
-                            <h5 className="mb-30">{Strings["ReviewOrder"]}</h5>
-                            <div className="cart-table">
-                                {this.state.error&&(
-                                    <Modal show={true} onHide={() => this.setState({error: false})}>
-                                        <ModalHeader closeButton>
-                                            Je nám líto :(
-                                        </ModalHeader>
-                                        <ModalBody>
-                                            <p>Bohužel nastala chyba na straně serveru. Zkuste to prosím později. Pokud problém přetrvává obraťte se prosím na podporu.</p>
-                                        </ModalBody>
-                                    </Modal>
-                                )}
-                                {this.state.result && this.state.result.outOfStock.length > 0 && (
-                                    <Modal show={true} onHide={() => this.setState({result: null})} size={"lg"}>
-                                        <ModalHeader closeButton>
-                                            Je nám líto :(
-                                        </ModalHeader>
-                                        <ModalBody>
-                                            <p>Bohužel následující zboží již na skladě nemáme. Upravte prosím objednávku
-                                                dle dostupnosti skladu.</p>
-                                            <div className="table-responsive">
-                                                <table className="table table-bordered mb-30">
-                                                    <thead>
-                                                    <tr>
-                                                        <td>Náhled</td>
-                                                        <td>Název produktu</td>
-                                                        <td>Na skladě</td>
-                                                        <td>Nový počet</td>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    {cart.filter(i=>this.state.result.outOfStock.map(a=>a.id).includes(i.goods.id)).map(e=>({cart:e, outOfStock:this.state.result.outOfStock.filter(a=>a.id===e.goods.id)[0]})).map(i => (
-                                                        <tr key={i.cart.goods.id}>
-                                                            <td>
-                                                                <img width={50} src={productImageUrl(i.cart.goods.code, 1)} alt="Product"/>
-                                                            </td>
-                                                            <td>
-                                                                {i.cart.goods.name}
-                                                            </td>
-                                                            <td>
-                                                                {i.outOfStock.stock} ks
-                                                            </td>
-                                                            <td>
-                                                                <Quantity pcs={i.cart.pcs} setQuantity={value=>{
-                                                                    cartStore.dispatch<CartAction>({type: CartActionType.ChangeCart, item:i.cart, changePcs:value});
-                                                                }}/>
-                                                            </td>
+        return (
+            <Loader comparator={booleanComparator} value={!this.state.loading}>
+                {(loader)=>(
+                    loader&&(
+                        <div className="checkout_area section_padding_100" style={{textAlign:"center"}}>
+                            <div className="container">
+                                {loader}
+                                <h3 style={{marginTop:10}}>Vydržte. Pracuje se na tom.</h3>
+                            </div>
+                        </div>
+                    )||(
+                        <div className="checkout_area section_padding_100">
+                            <div className="container">
+                                <div className="row">
+                                    <div className="col-12">
+                                        <div className="checkout_details_area clearfix">
+                                            <h5 className="mb-30">{Strings["ReviewOrder"]}</h5>
+                                            <div className="cart-table">
+                                                {this.state.error&&(
+                                                    <Modal show={true} onHide={() => this.setState({error: false})}>
+                                                        <ModalHeader closeButton>
+                                                            Je nám líto :(
+                                                        </ModalHeader>
+                                                        <ModalBody>
+                                                            <p>Bohužel nastala chyba na straně serveru. Zkuste to prosím později. Pokud problém přetrvává obraťte se prosím na podporu.</p>
+                                                        </ModalBody>
+                                                    </Modal>
+                                                )}
+                                                {this.state.result && this.state.result.outOfStock.length > 0 && (
+                                                    <Modal show={true} onHide={() => this.setState({result: null})} size={"lg"}>
+                                                        <ModalHeader closeButton>
+                                                            Je nám líto :(
+                                                        </ModalHeader>
+                                                        <ModalBody>
+                                                            <p>Bohužel následující zboží již na skladě nemáme. Upravte prosím objednávku
+                                                                dle dostupnosti skladu.</p>
+                                                            <div className="table-responsive">
+                                                                <table className="table table-bordered mb-30">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <td>Náhled</td>
+                                                                        <td>Název produktu</td>
+                                                                        <td>Na skladě</td>
+                                                                        <td>Nový počet</td>
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    {cart.filter(i=>this.state.result.outOfStock.map(a=>a.id).includes(i.goods.id)).map(e=>({cart:e, outOfStock:this.state.result.outOfStock.filter(a=>a.id===e.goods.id)[0]})).map(i => (
+                                                                        <tr key={i.cart.goods.id}>
+                                                                            <td>
+                                                                                <img width={50} src={productImageUrl(i.cart.goods.code, 1)} alt="Product"/>
+                                                                            </td>
+                                                                            <td>
+                                                                                {i.cart.goods.name}
+                                                                            </td>
+                                                                            <td>
+                                                                                {i.outOfStock.stock} ks
+                                                                            </td>
+                                                                            <td>
+                                                                                <Quantity max={i.outOfStock.stock} pcs={i.cart.pcs} setQuantity={value=>{
+                                                                                    cartStore.dispatch<CartAction>({type: CartActionType.ChangeCart, item:i.cart, changePcs:value});
+                                                                                }}/>
+                                                                            </td>
+                                                                        </tr>
+                                                                    ))}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </ModalBody>
+                                                    </Modal>
+                                                )}
+                                                <div className="table-responsive">
+                                                    <table className="table table-bordered mb-30">
+                                                        <thead>
+                                                        <tr>
+                                                            <th scope="col"/>
+                                                            <th scope="col">Náhled</th>
+                                                            <th scope="col">Název produktu</th>
+                                                            <th scope="col">Cena za kus</th>
+                                                            <th scope="col" style={{width:30}}>Počet</th>
+                                                            <th scope="col">Celkem</th>
                                                         </tr>
-                                                    ))}
+                                                        </thead>
+                                                        <tbody>
+                                                        {cart.map(i => (
+                                                            <tr key={i.goods.id}>
+                                                                <td>
+                                                                    <Link href={()=>cartStore.dispatch<CartAction>({type: CartActionType.RemoveCart, item:i})}><FontAwesomeIcon icon={faIcon.faTimes} style={{color:"red"}} /></Link>
+                                                                </td>
+                                                                <td>
+                                                                    <img src={productImageUrl(i.goods.code, 1)} alt="Product"/>
+                                                                </td>
+                                                                <td>
+                                                                    {/*<a href="#">Bluetooth Speaker</a>*/}
+                                                                    {i.goods.name}
+                                                                </td>
+                                                                <td>{i.goods.getPrice().format()}</td>
+                                                                <td>
+                                                                    <Quantity max={i.goods.stock} pcs={i.pcs} setQuantity={value=>{
+                                                                        cartStore.dispatch<CartAction>({type: CartActionType.ChangeCart, item:i, changePcs:value});
+                                                                    }}/>
+                                                                </td>
+                                                                <td>{new Price(i.goods.price * i.pcs, 'CZK').format()}</td>
+                                                            </tr>
+                                                        ))}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="col-12 col-lg-7 ml-auto">
+                                        <div className="cart-total-area">
+                                            <h5 className="mb-3">Obsah nákupního košíku</h5>
+                                            <div className="table-responsive">
+                                                <table className="table mb-0">
+                                                    <tbody>
+                                                    <tr>
+                                                        <td>Zboží</td>
+                                                        <td>{new Price(cartPrice, 'CZK').format()}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Doprava</td>
+                                                        <td>{new Price(shippingPrice, 'CZK').format()}</td>
+                                                    </tr>
+                                                    {
+                                                        paymentPrice>0&&(
+                                                            <tr>
+                                                                <td>{Strings[`PaymentsTexts.${checkout.paymentMethod.code}.name`]}</td>
+                                                                <td>{new Price(paymentPrice, 'CZK').format()}</td>
+                                                            </tr>
+                                                        )
+                                                    }
+                                                    <tr>
+                                                        <td style={{fontSize:"large"}}>Celkem</td>
+                                                        <td style={{fontSize:"large"}}> {new Price(shippingPrice + cartPrice + paymentPrice, 'CZK').format()}</td>
+                                                    </tr>
                                                     </tbody>
                                                 </table>
                                             </div>
-                                        </ModalBody>
-                                    </Modal>
-                                )}
-                                <div className="table-responsive">
-                                    <table className="table table-bordered mb-30">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col"/>
-                                                <th scope="col">Náhled</th>
-                                                <th scope="col">Název produktu</th>
-                                                <th scope="col">Cena za kus</th>
-                                                <th scope="col" style={{width:30}}>Počet</th>
-                                                <th scope="col">Celkem</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        {cart.map(i => (
-                                            <tr key={i.goods.id}>
-                                                <td>
-                                                    <Link href={()=>cartStore.dispatch<CartAction>({type: CartActionType.RemoveCart, item:i})}><FontAwesomeIcon icon={faIcon.faTimes} style={{color:"red"}} /></Link>
-                                                </td>
-                                                <td>
-                                                    <img src={productImageUrl(i.goods.code, 1)} alt="Product"/>
-                                                </td>
-                                                <td>
-                                                    {/*<a href="#">Bluetooth Speaker</a>*/}
-                                                    {i.goods.name}
-                                                </td>
-                                                <td>{i.goods.getPrice().format()}</td>
-                                                <td>
-                                                    <Quantity pcs={i.pcs} setQuantity={value=>{
-                                                        cartStore.dispatch<CartAction>({type: CartActionType.ChangeCart, item:i, changePcs:value});
-                                                    }}/>
-                                                </td>
-                                                <td>{new Price(i.goods.price * i.pcs, 'CZK').format()}</td>
-                                            </tr>
-                                        ))}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                                            <div className="cart-total-area">
+                                                <div className="form-check">
+                                                    <div className="custom-control custom-checkbox mb-3 pl-1">
+                                                        <input type="checkbox" className="custom-control-input" id="customChe" onChange={e=>this.setState({canFinish:e.target.checked})}/>
+                                                        <label className="custom-control-label" htmlFor="customChe">Souhlasím s <Link history={false} target={"_blank"} href={"/static/pdf/VOP.a.OOU.-.final.pdf"}>ochranou osobních údajů a obchodními podmínkami</Link></label>
+                                                    </div>
+                                                </div>
 
-                    <div className="col-12 col-lg-7 ml-auto">
-                        <div className="cart-total-area">
-                            <h5 className="mb-3">Obsah nákupního košíku</h5>
-                            <div className="table-responsive">
-                                <table className="table mb-0">
-                                    <tbody>
-                                    <tr>
-                                        <td>Zboží</td>
-                                        <td>{new Price(cartPrice, 'CZK').format()}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Doprava</td>
-                                        <td>{new Price(shippingPrice, 'CZK').format()}</td>
-                                    </tr>
-                                    {
-                                        paymentPrice>0&&(
-                                            <tr>
-                                                <td>{Strings[`PaymentsTexts.${checkout.paymentMethod.code}.name`]}</td>
-                                                <td>{new Price(paymentPrice, 'CZK').format()}</td>
-                                            </tr>
-                                        )
-                                    }
-                                    <tr>
-                                        <td style={{fontSize:"large"}}>Celkem</td>
-                                        <td style={{fontSize:"large"}}> {new Price(shippingPrice + cartPrice + paymentPrice, 'CZK').format()}</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div className="cart-total-area">
-                                <div className="form-check">
-                                    <div className="custom-control custom-checkbox mb-3 pl-1">
-                                        <input type="checkbox" className="custom-control-input" id="customChe" onChange={e=>this.setState({canFinish:e.target.checked})}/>
-                                            <label className="custom-control-label" htmlFor="customChe">Souhlasím s <Link history={false} target={"_blank"} href={"/static/pdf/VOP.a.OOU.-.final.pdf"}>ochranou osobních údajů a obchodními podmínkami</Link></label>
+                                            </div>
+                                            <div className="checkout_pagination d-flex justify-content-end mt-3">
+                                                <Link href={() => checkoutStore.dispatch<CheckoutAction>({
+                                                    type: CheckoutActionType.SetStep,
+                                                    step: 2
+                                                })} className="btn bigshop-btn mt-2 ml-2">{Strings["Back"]}</Link>
+                                                <Link href={()=>this.state.canFinish&&this.next()} className={cs("btn bigshop-btn mt-2 ml-2", !this.state.canFinish&&"disabled")}>Dokončit</Link>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-
-                            </div>
-                            <div className="checkout_pagination d-flex justify-content-end mt-3">
-                                <Link href={() => checkoutStore.dispatch<CheckoutAction>({
-                                    type: CheckoutActionType.SetStep,
-                                    step: 2
-                                })} className="btn bigshop-btn mt-2 ml-2">{Strings["Back"]}</Link>
-                                <Link href={()=>this.state.canFinish&&this.next()} className={cs("btn bigshop-btn mt-2 ml-2", !this.state.canFinish&&"disabled")}>Dokončit</Link>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                    )
+                )}
+            </Loader>
+        );
     }
 }
 const CartReviewRedux = connect((state:CartState)=>reduceStateToPlainObject(state))(Review);

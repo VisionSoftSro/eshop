@@ -21,6 +21,7 @@ interface LinkProps extends React.HTMLAttributes<"a"> {
     displayHref?:String
     target?:string
     smooth?:SmoothScrollProps|boolean
+    ignoreHash?:boolean
 }
 
 export class Link extends React.Component<LinkProps> {
@@ -29,10 +30,11 @@ export class Link extends React.Component<LinkProps> {
         external:false,
         history:true,
         smooth:false,
+        ignoreHash:false,
         callback:()=>{}
     };
     render() {
-        const {href, smooth, external, callback, history, funcArgs, displayHref, ...props2} = this.props;
+        const {ignoreHash, href, smooth, external, callback, history, funcArgs, displayHref, ...props2} = this.props;
 
         const props:{[key:string]:any} = {...props2};
         if(typeof href === 'function') {
@@ -52,13 +54,15 @@ export class Link extends React.Component<LinkProps> {
                         }, ...(smooth as {})});
                 };
                 //return <AnchorLink className={this.props.className} to={href} spy smooth duration={500}>{this.props.children}</AnchorLink>;
-            } else if(history && !href.includes("#")) {
-                props["onClick"] = (e:any) => {
-                    e.preventDefault();
-                    callback(); /*window.brHistory.push(href2);*/
-                    // @ts-ignore
-                    browserHistory.push(href2);
-                };
+            } else if(history) {
+                if(!href.includes("#") || ignoreHash) {
+                    props["onClick"] = (e:any) => {
+                        e.preventDefault();
+                        callback(); /*window.brHistory.push(href2);*/
+                        // @ts-ignore
+                        browserHistory.push(href2);
+                    };
+                }
                 props["href"] = href2;
             } else {
                 props["href"] = href2;

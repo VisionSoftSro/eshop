@@ -5,7 +5,8 @@ export default {
         Projects:"Naše projekty",
         Contact:"Kontakt",
         AddToCart:"Přidat do košíku",
-        QuickView:"Prohlédnout",
+        QuickView:"Náhled",
+        Detail:"Zobrazit zboží",
         TotalPrice:"Celkem",
         CartIsEmpty:"Košík je prázdný",
         OutOfStock: "Není skladem",
@@ -53,7 +54,8 @@ export default {
             'zasilkovna': {
                 name:"Zásilkovna"
             }
-        }
+        },
+        ItemAddedToCart:"Zboží přidáno do košíku"
     },
     en: {
         Offers:"For you"

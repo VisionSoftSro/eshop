@@ -1,9 +1,16 @@
-import {formatPrice} from "../../common/utils/Util";
+import {formatPrice, toSeoString} from "../../common/utils/Util";
 import {JsonProperty} from "../../common/utils/ObjectMapper";
 
 
 export class Category {
-    id:string
+    id:string;
+
+    getName() {
+        return Strings[`Categories.${this.id}`];
+    }
+    getSeoName() {
+        return toSeoString(this.getName());
+    }
 }
 
 export class GoodsDto {
@@ -13,6 +20,7 @@ export class GoodsDto {
     description:string;
     stock:number;
     price:number;
+    images:number;
     hot:boolean;
 
     @JsonProperty({strict:{isArray:true}, clazz:Category})
@@ -20,6 +28,18 @@ export class GoodsDto {
 
     getPrice():Price {
         return new Price(this.price, 'CZK');
+    }
+
+    getCategory() {
+        return this.categories[0];
+    }
+
+    getSeoName() {
+        return toSeoString(this.name);
+    }
+
+    getUrl() {
+        return `/${this.getCategory().getSeoName()}/${this.getSeoName()}#pid=${this.id}`;
     }
 
 }

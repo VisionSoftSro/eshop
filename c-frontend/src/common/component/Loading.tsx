@@ -23,7 +23,7 @@ export class Loading extends React.Component<LoadingProps> {
         if (!this.state.show) {
             return null;
         }
-        return <div className={cs(this.props.fullscreen?"loading-fullscreen":"loading-local")}>
+        return <div className={cs(this.props.fullscreen?"loading-fullscreen":"loading-local")} style={{textAlign:"center"}}>
             <span style={{...this.props.style, ...{color:this.props.color}}}>
                 <LoadingIcon />
             </span>

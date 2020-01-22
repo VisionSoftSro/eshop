@@ -24,7 +24,7 @@ class AccessedForm extends React.Component<{id?:number, passcode:string}, Access
 
 
     async componentDidMount() {
-        this.refreshList()
+        return this.refreshList()
     }
 
     refreshList = async() => {

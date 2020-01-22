@@ -1,7 +1,7 @@
 import * as React from "react";
-import {DataState} from "../../redux/reducers/cart/DataReducer";
-import {CartGoods, GoodsDto} from "../../dto/GoodsDto";
-import {cartStore, selectedItemStore} from "../../redux/WebRedux";
+import {DataAction, DataActionType, DataState} from "../../redux/reducers/cart/DataReducer";
+import {CartGoods, Category, GoodsDto} from "../../dto/GoodsDto";
+import {cartStore, dataStore, selectedItemStore} from "../../redux/WebRedux";
 import {CartAction, CartActionType} from "../../redux/reducers/cart/CartReducer";
 import {productImageUrl} from "../../TemplateUtil";
 import {Link} from "../../../common/component/Link";
@@ -10,11 +10,15 @@ import {reduceStateToPlainObject} from "../../../common/redux/Reducers";
 import {ItemAction, ItemActionType} from "../../redux/reducers/cart/ItemReducer";
 import {Loader} from "../../../common/component/Loader";
 import Wrapper from "../../../common/component/Wrapper";
+import {getHashValue} from "../../../common/utils/Util";
+import {announceAddedToCart} from "../Root";
 
 class Item extends React.Component<{item:GoodsDto}> {
 
     addToCart = () => {
-        cartStore.dispatch<CartAction>({ type: CartActionType.AddCart, item:new CartGoods(this.props.item, 1)});
+        const cg = new CartGoods(this.props.item, 1);
+        announceAddedToCart(cg);
+        cartStore.dispatch<CartAction>({ type: CartActionType.AddCart, item:cg});
     };
 
     showDetail = () => {
@@ -51,7 +55,7 @@ class Item extends React.Component<{item:GoodsDto}> {
                             </Link>
                         </div>
 
-                        <a href="#">{this.props.item.name}</a>
+                        <Link ignoreHash href={`${this.props.item.getUrl()}`}>{this.props.item.name}</Link>
                         <h6 className="product-price" style={{fontWeight:"bold"}}>{this.props.item.getPrice().format()}</h6>
                     </div>
                 </div>
@@ -59,30 +63,51 @@ class Item extends React.Component<{item:GoodsDto}> {
         );
     }
 }
-class AllItems extends React.Component<DataState> {
+
+function getCatetory():Category {
+    const cid = getHashValue("cid");
+    const categories = dataStore.getState().categories;
+    let category = categories[0];
+    if(cid) {
+        const hashCategory = categories.filter(i=>i.id === cid);
+        if(hashCategory.length > 0) {
+            category = hashCategory[0];
+        }
+    }
+    return category;
+}
+
+class ItemList extends React.Component<DataState> {
+    componentDidMount(): void {
+        const category = getCatetory();
+        dataStore.dispatch<DataAction>({type:DataActionType.SetCategory, currentCategory:category});
+    }
+
     render() {
-        return <section className="best-selling-products-area" >
-            <div className="container" style={{paddingTop:20}}>
-                {this.props.currentCategory &&
-                <Wrapper>
-                    <div className="row">
-                        <div className="col-12">
-                            <h5>{Strings["Goods"]}</h5>
-                            <ol className="breadcrumb">
-                                <li className="breadcrumb-item">{Strings["Category"]}</li>
-                                <li className="breadcrumb-item active">{Strings[`Categories.${this.props.currentCategory.id}`]}</li>
-                            </ol>
+        return (
+            <section className="best-selling-products-area" >
+                <div className="container" style={{paddingTop:20}}>
+                    {this.props.currentCategory &&
+                    <Wrapper>
+                        <div className="row">
+                            <div className="col-12">
+                                <h5>{Strings["Goods"]}</h5>
+                                <ol className="breadcrumb">
+                                    <li className="breadcrumb-item">{Strings["Category"]}</li>
+                                    <li className="breadcrumb-item active">{Strings[`Categories.${this.props.currentCategory.id}`]}</li>
+                                </ol>
+                            </div>
                         </div>
-                    </div>
-                    <div className="row justify-content-center">
-                        {
-                            this.props.goods.filter(i=>i.categories.map(ii=>ii.id).includes(this.props.currentCategory.id)).map(item=><Item key={item.id} item={item} />)
-                        }
-                    </div>
-                </Wrapper>|| <Loader />}
-            </div>
-        </section>;
+                        <div className="row justify-content-center">
+                            {
+                                this.props.goods.filter(i=>i.categories.map(ii=>ii.id).includes(this.props.currentCategory.id)).map(item=><Item key={item.id} item={item} />)
+                            }
+                        </div>
+                    </Wrapper>|| <Loader />}
+                </div>
+            </section>
+        );
     }
 }
 
-export default connect((state:DataState) => reduceStateToPlainObject(state))(AllItems);
+export default connect((state:DataState) => reduceStateToPlainObject(state))(ItemList);
