@@ -1,6 +1,7 @@
 package org.visionsoft.cms.mvc.controller.api
 
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Sort
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.client.HttpStatusCodeException
@@ -21,7 +22,7 @@ class GoodsController {
 
 
     @GetMapping
-    fun all() = goodsDao.findAll()
+    fun all() = goodsDao.findAll(Sort.by(Sort.Order.asc("name")))
 
     @GetMapping("/detail/{id}")
     fun item(@PathVariable id:Long) = goodsDao.findById(id).orElseThrow { ResponseStatusException(
