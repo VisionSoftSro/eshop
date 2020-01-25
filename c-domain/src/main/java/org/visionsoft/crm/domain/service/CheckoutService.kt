@@ -52,7 +52,6 @@ class CheckoutService {
         order.status = OrderStatus.New
         order.goods = checkout.goods.map { OrderContent().apply { goods = it.goods; pcs = it.pcs; this.order = order } }
         order.email = checkout.emailAddress
-        checkout.goods.clear()
         order.json = objectMapper.writeValueAsString(checkout)
         em.persist(order)
 
