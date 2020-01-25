@@ -53,7 +53,7 @@ class MailClient @Autowired constructor(var mailSender: JavaMailSender, var mail
                     params["bodyTemplate"] = bodyTemplate
                     params["mailInfo"] = infoEmail
                 }
-                messageHelper.setText(mailBuilder.build(params, mainTemplate))
+                messageHelper.setText(mailBuilder.build(params, mainTemplate), true)
             }
         } catch (e: MailException) {
             LoggerFactory.getLogger(javaClass).error("", e)
