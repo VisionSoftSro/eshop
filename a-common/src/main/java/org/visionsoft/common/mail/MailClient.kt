@@ -46,14 +46,14 @@ class MailClient @Autowired constructor(var mailSender: JavaMailSender, var mail
                 val messageHelper = MimeMessageHelper(it)
                 messageHelper.setFrom(mailFrom)
                 messageHelper.setTo(recipients)
-                messageHelper.setSubject("Sample mail subject")
+                messageHelper.setSubject(subject)
                 val params = parameters.toMutableMap()
                 params["domain"] = domain
                 bodyTemplate?.let {
                     params["bodyTemplate"] = bodyTemplate
                     params["mailInfo"] = infoEmail
                 }
-                messageHelper.setText(mailBuilder.build(params, mainTemplate))
+                messageHelper.setText(mailBuilder.build(params, mainTemplate), true)
             }
         } catch (e: MailException) {
             LoggerFactory.getLogger(javaClass).error("", e)

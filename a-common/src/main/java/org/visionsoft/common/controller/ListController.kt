@@ -41,10 +41,13 @@ abstract class DataController<E, W> : AdHocController() {
 
     val useDistinct = false
 
+    open fun testAccess(request: HttpServletRequest) {}
+
     @GetMapping("", "/")
     operator fun get(@Min(0) @RequestParam(value = "page", defaultValue = "1") start: Int,
                           @Min(1) @Max(100) @RequestParam(value = "pageSize", defaultValue = "10") length: Int,
                           @RequestParam(required = false, defaultValue = "true", value = "nextIsPage") nextIsPage: Boolean, ordering: OrderingWrapper, request: HttpServletRequest, result: BindingResult): ScrollableList<W> {
+        testAccess(request)
         if (result.hasErrors()) {
             throw WebError.createException(HttpStatus.BAD_REQUEST)
         }

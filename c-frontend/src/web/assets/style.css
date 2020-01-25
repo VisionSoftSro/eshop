@@ -10,6 +10,7 @@
 :: 1.0 Import Web Fonts
 -------------------- */
 @import url("https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,700|Roboto:300,400,500,700&display=swap");
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 /* ------------------
 :: 2.0 Import All CSS
 ------------------ */
@@ -31,4 +32,3 @@
 @import url(css/default/icofont.min.css);
 @import url(css/Bigshop.css);
 @import url(custom.css);
-

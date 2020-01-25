@@ -291,7 +291,7 @@ class Payment extends React.Component<MethodsState, ContinueState> {
 
     next = () => {
         if (checkoutStore.getState().checkout.paymentMethod !== null) {
-            checkoutStore.dispatch<CheckoutAction>({type: CheckoutActionType.SetStep, step: 3});
+            checkoutStore.dispatch<CheckoutAction>({type: CheckoutActionType.SetStep, step: 2});
         }
     };
 
@@ -350,7 +350,7 @@ class Payment extends React.Component<MethodsState, ContinueState> {
                         <div className="checkout_pagination mt-3 d-flex justify-content-end clearfix">
                             <Link href={() => checkoutStore.dispatch<CheckoutAction>({
                                 type: CheckoutActionType.SetStep,
-                                step: 1
+                                step: 0
                             })} className="btn bigshop-btn mt-2 ml-2">{Strings["Back"]}</Link>
                             <Link href={()=>this.state.canContinue&&this.next()} className={cs("btn bigshop-btn mt-2 ml-2", !this.state.canContinue&&"disabled")}>{Strings["Continue"]}</Link>
                         </div>
@@ -366,7 +366,7 @@ class Shipping extends React.Component<MethodsState, ContinueState> {
     state:ContinueState = {canContinue:checkoutStore.getState().checkout.shippingMethod !== null};
     next = () => {
         if (checkoutStore.getState().checkout.shippingMethod !== null) {
-            checkoutStore.dispatch<CheckoutAction>({type: CheckoutActionType.SetStep, step: 2});
+            checkoutStore.dispatch<CheckoutAction>({type: CheckoutActionType.SetStep, step: 1});
         }
     };
 
@@ -424,11 +424,6 @@ class Shipping extends React.Component<MethodsState, ContinueState> {
 
                     <div className="col-12">
                         <div className="checkout_pagination mt-3 d-flex justify-content-end clearfix">
-                            {/*<a href="checkout-2.html" className="btn bigshop-btn mt-2 ml-2">Go Back</a>*/}
-                            <Link href={() => checkoutStore.dispatch<CheckoutAction>({
-                                type: CheckoutActionType.SetStep,
-                                step: 0
-                            })} className="btn bigshop-btn mt-2 ml-2">{Strings["Back"]}</Link>
                             <Link href={()=>this.state.canContinue&&this.next()} className={cs("btn bigshop-btn mt-2 ml-2", !this.state.canContinue&&"disabled")}>{Strings["Continue"]}</Link>
                         </div>
                     </div>
@@ -447,7 +442,7 @@ class Billing extends React.Component<{}, ContinueState> {
         if (this.form.validate()) {
             checkoutStore.dispatch<CheckoutAction>({
                 type: CheckoutActionType.Update,
-                step: 1,
+                step: 3,
                 checkout: checkoutStore.getState().checkout
             });
         }
@@ -507,7 +502,11 @@ class Billing extends React.Component<{}, ContinueState> {
 
                     <div className="col-12">
                         <div className="checkout_pagination d-flex justify-content-end mt-50">
-                            {/*<Link href={this.next} className="btn bigshop-btn mt-2 ml-2">{Strings["Back"]}</Link>*/}
+                            <Link href={() => checkoutStore.dispatch<CheckoutAction>({
+                                type: CheckoutActionType.SetStep,
+                                step: 1
+                            })} className="btn bigshop-btn mt-2 ml-2">{Strings["Back"]}</Link>
+
                             <Link href={()=>this.state.canContinue&&this.next()} className={cs("btn bigshop-btn mt-2 ml-2", !this.state.canContinue&&"disabled")}>{Strings["Continue"]}</Link>
                         </div>
                     </div>
@@ -523,7 +522,7 @@ interface Step {
 
 class Checkout extends React.Component<CheckoutState> {
 
-    steps: Array<Step> = [{name: "Billing"}, {name: "Shipping"}, {name: "Payment"}, {name: "Review"}];
+    steps: Array<Step> = [{name: "Shipping"}, {name: "Payment"}, {name: "Billing"}, {name: "Review"}];
 
 
 
@@ -538,15 +537,15 @@ class Checkout extends React.Component<CheckoutState> {
                     ))}
                 </div>
                 <SwitchPage value={this.props.step} default={0}>
-                    <SwitchCase value={0}>
+                    <SwitchCase value={2}>
                         <Billing/>
                     </SwitchCase>
-                    <SwitchCase value={1}>
+                    <SwitchCase value={0}>
                         <Provider store={methodsStore}>
                             <ShippingRedux/>
                         </Provider>
                     </SwitchCase>
-                    <SwitchCase value={2}>
+                    <SwitchCase value={1}>
                         <Provider store={methodsStore}>
                             <PaymentRedux/>
                         </Provider>

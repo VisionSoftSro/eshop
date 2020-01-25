@@ -1,12 +1,16 @@
 import * as React from "react";
+import {forwardRef, useEffect, useImperativeHandle, useRef, useState} from "react";
 import {Form, FormButton, FormField, FormHttpResponse, FormInputType} from "../../../common/component/form/Form";
 import Wrapper from "../../../common/component/Wrapper";
-import {httpEndpointArray} from "../../../common/utils/HttpUtils";
-import {OrderDto} from "../../dto/OrderDto";
-import {Link} from "../../../common/component/Link";
+import {httpEndpoint} from "../../../common/utils/HttpUtils";
+import {OrderDto, OrderStatus} from "../../dto/OrderDto";
 import {productImageUrl} from "../../TemplateUtil";
 import {Price} from "../../dto/GoodsDto";
 import {Modal, ModalBody} from "react-bootstrap";
+import MaterialTable, {QueryResult} from "material-table";
+import {getHashValue, ScrollableList} from "../../../common/utils/Util";
+import {ObjectMapper} from "../../../common/utils/ObjectMapper";
+import ModalHeader from "react-bootstrap/ModalHeader";
 
 class StorageData {
     trackingNumber:string
@@ -14,103 +18,148 @@ class StorageData {
 
 interface AccessedFormState {
     id?:number
-    list:Array<OrderDto>
     detail?:OrderDto
+}
+
+const useQuery = (passcode:string) => {
+  const doQuery = async():Promise<QueryResult<OrderDto>> => {
+      const result = await httpEndpoint<ScrollableList<OrderDto>>(ScrollableList, "storage-list", true, {method:"GET", headers:{"passcode":passcode}});
+      console.log(result);
+      return {
+          data:new ObjectMapper<OrderDto>().readValueAsArray(OrderDto, result.data.data),
+          page:0,
+          totalCount:1
+      }
+  };
+  return [doQuery];
+};
+
+type OrderFormExposed = {
+    setOrder(order:OrderDto):void
+}
+const OrderForm = forwardRef<OrderFormExposed, {passcode:string, onResult:()=>void}>(({passcode, onResult}, ref) => {
+    const [order, setOrder] = useState(null as OrderDto);
+    useImperativeHandle(ref, ()=>{
+       return {
+           setOrder(o) {
+               setOrder(o);
+           }
+       }
+    });
+    return (
+        <Modal show={order !== null} onHide={()=>setOrder(null)} size={"lg"}>
+            <ModalHeader closeButton>
+                {order&&order.id}
+            </ModalHeader>
+            <ModalBody>
+                {order&&(
+                    <Form<StorageData> onResult={()=>{
+                        onResult();
+                        setOrder(null);
+                    }} data={new StorageData()} url={`storage/save/${order.id}`} inputGroupEnabled={false} simpleLabel={true} requestInit={{method:"POST", headers:{"passcode":passcode}}}>
+                        <table className="table table-bordered mb-30">
+                            <thead>
+                            <tr>
+                                <th scope="col">Obrázek</th>
+                                <th scope="col">Produkt</th>
+                                <th scope="col">Cena za kus</th>
+                                <th scope="col">Počet</th>
+                                <th scope="col">Celkem</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {order.goods.map(i => (
+                                <tr key={i.goods.id}>
+                                    <td>
+                                        <img width={50} src={productImageUrl(i.goods.code, 1)} alt="Product"/>
+                                    </td>
+                                    <td>
+                                        {/*<a href="#">Bluetooth Speaker</a>*/}
+                                        {i.goods.name}
+                                    </td>
+                                    <td>{i.goods.getPrice().format()}</td>
+                                    <td>
+                                        {i.pcs} ks
+                                    </td>
+                                    <td>{new Price(i.goods.price * i.pcs, 'CZK').format()}</td>
+                                </tr>
+                            ))}
+                            </tbody>
+                        </table>
+                        {order.status===OrderStatus.Invoice&&(
+                            <div className={"row"}>
+                                <div className={"col-md-12"}>
+                                    <FormField name={"trackingUrl"} title={"TrackingUrl"} type={FormInputType.Text} />
+                                </div>
+                            </div>
+                        )}
+                        <div className={"row"}>
+                            <div className={"col-md-12"}>
+                                {order.status===OrderStatus.New&&<FormButton className={"btn btn-small btn-success mr-1"} type={"invoice"}>Vytvořit fakturu</FormButton>}
+                                {order.status===OrderStatus.Invoice&&<FormButton className={"btn btn-small btn-success mr-1"} type={"ship"}>Potvrdit odeslaní</FormButton>}
+                                {
+                                    (order.status!==OrderStatus.Shipped && order.status!==OrderStatus.Cancel)&&(
+                                       <>
+                                           <FormButton className={"btn btn-small btn-danger mr-1"} type={"cancel"}>Zrusit</FormButton>
+                                           <FormButton className={"btn btn-small btn-warning mr-1"} type={"cancelWithEmail"}>Zrusit a odeslat email</FormButton>
+                                       </>
+                                    )
+                                }
+                            </div>
+                        </div>
+                    </Form>
+                )}
+            </ModalBody>
+        </Modal>
+    );
+});
+
+function Orders({passcode}:{passcode:string}) {
+    const [doQuery] = useQuery(passcode);
+    const formRef = useRef(null as OrderFormExposed);
+    const tableRef = useRef();
+    useEffect(()=>{
+        const orderId = getHashValue("orderId");
+        if(orderId) {
+            httpEndpoint<OrderDto>(OrderDto, `storage/${orderId}`, true, {method:"GET", headers:{"passcode":passcode}}).then(result=>{
+                console.log("detail order=", result);
+                if(result.data) {
+                    formRef.current.setOrder(result.data);
+                }
+            });
+        }
+    }, []);
+
+    return (
+        <>
+            <OrderForm onResult={async()=>{
+                // @ts-ignore
+                tableRef.current.onQueryChange();
+            }} passcode={passcode} ref={formRef} />
+            <MaterialTable tableRef={tableRef} columns={[
+                {field:"id", title:"ID"},
+                {field:"status", title:"status"},
+                {field:"email", title:"email"}
+            ]} data={doQuery} actions={[
+                {
+                    icon:"edit",
+                    onClick:(e, row)=>{
+                        formRef.current.setOrder(row as OrderDto);
+                    }
+                }
+            ]} options={{search:false}}/>
+        </>
+    )
 }
 
 class AccessedForm extends React.Component<{id?:number, passcode:string}, AccessedFormState> {
 
-    state:AccessedFormState = {list:new Array<OrderDto>(), id:this.props.id};
+    state:AccessedFormState = {id:this.props.id};
 
-
-    async componentDidMount() {
-        return this.refreshList()
-    }
-
-    refreshList = async() => {
-        const result = await httpEndpointArray<OrderDto>(OrderDto, "storage", {method:"GET", headers:{"passcode":this.props.passcode}});
-        console.log(result);
-        this.setState({list:result.data});
-    };
 
     render() {
         return <Wrapper>
-            {
-                this.state.detail&&
-                <Modal show={true} onHide={() => this.setState({detail: null})}>
-                    <ModalBody>
-                        <div className="table-responsive">
-                            <table className="table table-bordered mb-30">
-                                <thead>
-                                <tr>
-                                    <th scope="col">Obrázek</th>
-                                    <th scope="col">Produkt</th>
-                                    <th scope="col">Cena za kus</th>
-                                    <th scope="col">Počet</th>
-                                    <th scope="col">Celkem</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {this.state.detail.goods.map(i => (
-                                    <tr key={i.goods.id}>
-                                        <td>
-                                            <img src={productImageUrl(i.goods.code, 1)} alt="Product"/>
-                                        </td>
-                                        <td>
-                                            {/*<a href="#">Bluetooth Speaker</a>*/}
-                                            {i.goods.name}
-                                        </td>
-                                        <td>{i.goods.getPrice().format()}</td>
-                                        <td>
-                                            {i.pcs} ks
-                                        </td>
-                                        <td>{new Price(i.goods.price * i.pcs, 'CZK').format()}</td>
-                                    </tr>
-                                ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    </ModalBody>
-                </Modal>
-            }
-            Nevyrizene objednavky:
-            <table className="table mb-0">
-                <thead>
-                <tr>
-                    <td>id</td><td>email</td><td/>
-                </tr>
-                </thead>
-                <tbody>
-                    {this.state.list.map(item=>(
-                        <tr key={item.id}>
-                            <td>{item.id}</td>
-                            <td>{item.email}</td>
-                            <td>
-                                <Link href={()=>this.setState({id:item.id})} className={"mr-5"}>Vyridit</Link>
-                                <Link href={()=>this.setState({detail:item})}>Detail</Link>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-            {
-                this.state.id&&
-                <Form<StorageData> onResult={this.refreshList} data={new StorageData()} url={`storage/save/${this.state.id}`} inputGroupEnabled={false} simpleLabel={true} requestInit={{method:"POST", headers:{"passcode":this.props.passcode}}}>
-                    <hr/>
-                    <div className={"row"}>
-                        <div className={"col-md-12"}>
-                            <FormField name={"trackingUrl"} title={"TrackingUrl"} type={FormInputType.Text} />
-                        </div>
-                    </div>
-                    <div className={"row"}>
-                        <div className={"col-md-12"}>
-                            <FormButton className={"btn btn-small btn-success mr-1"} type={"confirm"}>Potvrdit</FormButton>
-                            <FormButton className={"btn btn-small btn-danger mr-1"} type={"cancel"}>Zrusit</FormButton>
-                            <FormButton className={"btn btn-small btn-warning mr-1"} type={"cancelWithEmail"}>Zrusit a odeslat email</FormButton>
-                        </div>
-                    </div>
-                </Form>
-            }
+            <Orders passcode={this.props.passcode} />
         </Wrapper>
     }
 

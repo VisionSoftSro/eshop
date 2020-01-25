@@ -24,7 +24,7 @@ export const setConfig = (c:HttpUtilsConfig) => {
 
 export async function httpEndpointJsonList<A>(constructor: { new(): A }, url: string, init?: RequestInit): Promise<HttpResult<JsonList<A>>> {
     const result = await httpEndpoint<JsonList<A>>(JsonList, url, true, init);
-    result.data.list = new ObjectMapper<A>().readValueAsArray(constructor, result.data.list);
+    result.data.data = new ObjectMapper<A>().readValueAsArray(constructor, result.data.data);
     return result;
 }
 

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+
+    <div th:fragment="content">
+
+        <table align="center" border="0" cellpadding="0" cellspacing="0" width="800">
+            <tbody>
+            <tr>
+                <td style="color:#1d2d64;text-align:left;font-size:16px">
+                    <p th:inline="text">Byla vygenerována faktura k objednávce č. [[${orderId}]]</p>
+                    <p>Vytiskněte ji a přiložte k objednávce.</p>
+                    <p>Případně stáhněte a uložte do účetního systému.</p>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+</body>
+</html>
