@@ -424,11 +424,6 @@ class Shipping extends React.Component<MethodsState, ContinueState> {
 
                     <div className="col-12">
                         <div className="checkout_pagination mt-3 d-flex justify-content-end clearfix">
-                            {/*<a href="checkout-2.html" className="btn bigshop-btn mt-2 ml-2">Go Back</a>*/}
-                            {/*<Link href={() => checkoutStore.dispatch<CheckoutAction>({*/}
-                                {/*type: CheckoutActionType.SetStep,*/}
-                                {/*step: 0*/}
-                            {/*})} className="btn bigshop-btn mt-2 ml-2">{Strings["Back"]}</Link>*/}
                             <Link href={()=>this.state.canContinue&&this.next()} className={cs("btn bigshop-btn mt-2 ml-2", !this.state.canContinue&&"disabled")}>{Strings["Continue"]}</Link>
                         </div>
                     </div>
@@ -507,11 +502,11 @@ class Billing extends React.Component<{}, ContinueState> {
 
                     <div className="col-12">
                         <div className="checkout_pagination d-flex justify-content-end mt-50">
-                            {/*<Link href={this.next} className="btn bigshop-btn mt-2 ml-2">{Strings["Back"]}</Link>*/}
                             <Link href={() => checkoutStore.dispatch<CheckoutAction>({
                                 type: CheckoutActionType.SetStep,
                                 step: 1
                             })} className="btn bigshop-btn mt-2 ml-2">{Strings["Back"]}</Link>
+
                             <Link href={()=>this.state.canContinue&&this.next()} className={cs("btn bigshop-btn mt-2 ml-2", !this.state.canContinue&&"disabled")}>{Strings["Continue"]}</Link>
                         </div>
                     </div>

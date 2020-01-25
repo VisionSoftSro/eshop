@@ -118,7 +118,6 @@ function Orders({passcode}:{passcode:string}) {
     const [doQuery] = useQuery(passcode);
     const formRef = useRef(null as OrderFormExposed);
     const tableRef = useRef();
-
     useEffect(()=>{
         const orderId = getHashValue("orderId");
         if(orderId) {
