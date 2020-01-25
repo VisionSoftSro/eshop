@@ -17,7 +17,14 @@ class WebApplicationConfiguration : WebMvcConfigurerAdapter() {
                 .addResourceHandler("/static/**")
                 .addResourceLocations("classpath:/public/static/")
                 .resourceChain(false)
-
+        registry
+                .addResourceHandler("/favicon.ico")
+                .addResourceLocations("classpath:/public/favicon.ico")
+                .resourceChain(false)
+        registry
+                .addResourceHandler("/manifest.json")
+                .addResourceLocations("classpath:/public/manifest.json")
+                .resourceChain(false)
         // redirects every page to index.html
         registry
                 .addResourceHandler("/**")
