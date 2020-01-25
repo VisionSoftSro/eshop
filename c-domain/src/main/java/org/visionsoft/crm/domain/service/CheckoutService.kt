@@ -1,5 +1,6 @@
 package org.visionsoft.crm.domain.service
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
@@ -40,6 +41,8 @@ class CheckoutService {
     @Autowired
     lateinit var mailClient: MailClient
 
+    @Autowired
+    lateinit var objectMapper: ObjectMapper
 
     /**
      * Make order. Return goods what are out of stock else
@@ -49,6 +52,8 @@ class CheckoutService {
         order.status = OrderStatus.New
         order.goods = checkout.goods.map { OrderContent().apply { goods = it.goods; pcs = it.pcs; this.order = order } }
         order.email = checkout.emailAddress
+        checkout.goods.clear()
+        order.json = objectMapper.writeValueAsString(checkout)
         em.persist(order)
 
         checkout.goods.forEach {
@@ -63,20 +68,32 @@ class CheckoutService {
                 "checkout" to checkout,
                 "totalPrice" to (checkout.goods.sumByDouble { it.goods!!.price.multiply(BigDecimal(it.pcs!!)).toDouble()} + checkout.shippingMethod!!.price.toDouble() + checkout.paymentMethod!!.price.toDouble())
         )
-        mailClient.send("Vaše objednávka", "general", "customerOrderConfirmTemplate", map, checkout.emailAddress!!)
-        mailClient.send("Nová objednávka", "general", "storageOrderConfirmTemplate", map, storageEmail)
+        mailClient.send("Vaše objednávka", "general", "customerOrderAcceptedTemplate", map, checkout.emailAddress!!)
+        mailClient.send("Nová objednávka", "general", "storageOrderAcceptedTemplate", map, storageEmail)
         order
     }
 
-    fun confirm(order:Order, trackingUrl:String?) = transaction {
+    fun createInvoice(order:Order) = transaction {
         val orderMerged = it.merge(order)
-        orderMerged.status = OrderStatus.Confirm
+        val checkout = objectMapper.readValue(orderMerged.json, Checkout::class.java)
+        orderMerged.status = OrderStatus.Invoice
+        val map = mutableMapOf(
+                "orderId" to order.id!!
+        )
+        mailClient.send("Vaše faktura k objednávce", "general", "customerOrderInvoiceTemplate", map, order.email!!)
+        mailClient.send("Byla vygenerována faktura", "general", "storageOrderInvoiceTemplate", map, storageEmail)
+        print(checkout)
+    }
+
+    fun ship(order:Order, trackingUrl:String?) = transaction {
+        val orderMerged = it.merge(order)
+        orderMerged.status = OrderStatus.Shipped
     }?.let {
         val map = mutableMapOf(
-                "orderId" to order.id!!,
-                "checkout" to SimpleCheckout().apply {
-                    goods = order.goods.map { CartGoods().apply { pcs = it.pcs; goods = it.goods } }.toMutableList()
-                }
+            "orderId" to order.id!!,
+            "checkout" to SimpleCheckout().apply {
+                goods = order.goods.map { CartGoods().apply { pcs = it.pcs; goods = it.goods } }.toMutableList()
+            }
         )
         if(trackingUrl != null) {
             map["trackingUrl"] = trackingUrl

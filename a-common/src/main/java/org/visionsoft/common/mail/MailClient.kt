@@ -46,7 +46,7 @@ class MailClient @Autowired constructor(var mailSender: JavaMailSender, var mail
                 val messageHelper = MimeMessageHelper(it)
                 messageHelper.setFrom(mailFrom)
                 messageHelper.setTo(recipients)
-                messageHelper.setSubject("Sample mail subject")
+                messageHelper.setSubject(subject)
                 val params = parameters.toMutableMap()
                 params["domain"] = domain
                 bodyTemplate?.let {

@@ -62,7 +62,7 @@ class OrderContent {
 }
 
 enum class OrderStatus {
-    New, Confirm, Cancel
+    New, Invoice, Shipped, Cancel
 }
 
 
@@ -75,6 +75,8 @@ class Order {
 
     @NotNull
     var email:String? = null
+
+    var json:String? = null
 
     @Enumerated(EnumType.STRING)
     var status:OrderStatus? = null

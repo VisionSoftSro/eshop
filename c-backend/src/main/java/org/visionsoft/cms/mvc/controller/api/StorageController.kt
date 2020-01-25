@@ -3,8 +3,10 @@ package org.visionsoft.cms.mvc.controller.api
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
+import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.*
 import org.visionsoft.common.JsonWrapper
+import org.visionsoft.common.controller.DataControllerSingleType
 import org.visionsoft.common.controller.WebError
 import org.visionsoft.common.toJson
 import org.visionsoft.common.transaction.transaction
@@ -12,8 +14,28 @@ import org.visionsoft.crm.domain.dao.OrdersDao
 import org.visionsoft.crm.domain.scheme.Order
 import org.visionsoft.crm.domain.scheme.OrderStatus
 import org.visionsoft.crm.domain.service.CheckoutService
+import javax.servlet.http.HttpServletRequest
 
 data class Passcode(val passcode: String, val value:Boolean)
+
+@Component
+class StoragePasscode {
+    @Value("\${storage.passcode}")
+    lateinit var passcode: String
+    fun testPasscode(passcode:String) = if(passcode != this.passcode) throw WebError.createException(HttpStatus.FORBIDDEN) else true
+
+}
+@RestController
+@RequestMapping("/storage-list")
+class StorageListController:DataControllerSingleType<Order>() {
+    @Autowired
+    lateinit var storagePasscode:StoragePasscode
+    override fun testAccess(request: HttpServletRequest) {
+        storagePasscode.testPasscode(request.getHeader("passcode"))
+    }
+}
+
+
 
 @RestController
 @RequestMapping("/storage")
@@ -21,33 +43,33 @@ class StorageController {
 
     @Autowired
     lateinit var ordersDao: OrdersDao
+    @Autowired
+    lateinit var storagePasscode:StoragePasscode
 
-    @Value("\${storage.passcode}")
-    lateinit var passcode: String
 
     @Autowired
     lateinit var checkoutService: CheckoutService
 
     @PostMapping("passcode")
-    fun passcode(@RequestParam passcode:String) = Passcode(passcode, passcode == this.passcode)
+    fun passcode(@RequestParam passcode:String) = Passcode(passcode, passcode == storagePasscode.passcode)
+
+
+    @GetMapping("{order}")
+    fun order(@RequestHeader passcode:String, @PathVariable order:Order): Order {
+        storagePasscode.testPasscode(passcode)
+        return order
+    }
 
     @PostMapping("save/{order}")
     fun save(order:Order, @RequestParam(required = false) trackingUrl:String?, @RequestHeader passcode:String, @RequestHeader type:String): JsonWrapper {
-        testPasscode(passcode)
+        storagePasscode.testPasscode(passcode)
         when (type) {
-            "confirm" -> checkoutService.confirm(order, trackingUrl)
+            "invoice" ->  this.checkoutService.createInvoice(order)
+            "ship" -> checkoutService.ship(order, trackingUrl)
             "cancelWithEmail" -> checkoutService.cancel(order, true)
             "cancel" -> checkoutService.cancel(order, false)
         }
         return true.toJson()
     }
-
-    @GetMapping
-    fun list(order:Order, @RequestHeader passcode:String): List<Order> {
-        testPasscode(passcode)
-        return ordersDao.findByStatus(OrderStatus.New)
-    }
-
-    fun testPasscode(passcode:String) = if(passcode != this.passcode) throw WebError.createException(HttpStatus.FORBIDDEN) else true
 
 }

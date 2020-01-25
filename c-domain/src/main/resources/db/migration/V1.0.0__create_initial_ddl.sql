@@ -33,7 +33,8 @@ ALTER TABLE goods_category ADD CONSTRAINT FK_goods_category_goods
 create table c_order (
   id bigint DEFAULT nextval(('c_order_id_seq'::text)::regclass) NOT NULL primary key,
   email text not null,
-  status text not null
+  status text not null,
+  json text not null
 );
 
 create table c_order_goods (

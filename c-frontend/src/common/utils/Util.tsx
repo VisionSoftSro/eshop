@@ -35,9 +35,18 @@ export type GenericMap<T> = {[key:string]:T}
 export class JsonList<E> {
 
     @JsonProperty()
-    list:Array<E>;
+    data:Array<E>;
 }
-
+export class ScrollableList<E> extends JsonList<E> {
+    @JsonProperty()
+    page: number = 0;
+    @JsonProperty()
+    objectsPerPage: number = 0;
+    @JsonProperty()
+    total: number = 0;
+    @JsonProperty()
+    pages: number;
+}
 // export const isAuthenticated = () => {
 //     return TokenStore.getToken() !== null;
 // };
