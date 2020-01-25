@@ -90,7 +90,7 @@ function Item({item}:{item:GoodsDto}) {
                 <div className="row justify-content-center">
                     <div className="col-12 col-lg-6">
                         <div className={"single_product_thumb"}>
-                            <Carousel id="product_details_slider" indicators={false} activeIndex={index} next={()=>setIndex(index+1)} previous={()=>setIndex(index-1)} autoPlay={false}>
+                            <Carousel interval={false} id="product_details_slider" indicators={false} activeIndex={index} next={()=>setIndex(index+1)} previous={()=>setIndex(index-1)} autoPlay={false}>
                                 {
                                     imageIterator(number=>(
                                         <CarouselItem key={number} style={{height:500}}>
