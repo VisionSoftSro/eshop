@@ -22,8 +22,27 @@ interface AccessedFormState {
 }
 
 const useQuery = (passcode:string) => {
-  const doQuery = async():Promise<QueryResult<OrderDto>> => {
-      const result = await httpEndpoint<ScrollableList<OrderDto>>(ScrollableList, "storage-list", true, {method:"GET", headers:{"passcode":passcode}});
+  const doQuery = async(query:Query<OrderDto>):Promise<QueryResult<OrderDto>> => {
+      let params = new Array<string>();
+
+      //column filter
+      if(query.filters.length > 0) {
+          params.push(`${query.filters.map(filter=>`${filter.column.field}=${filter.value}`).join("&")}`);
+      }
+      //order by
+      if(query.orderBy) {
+          params.push(`sortBy=${query.orderBy.field}&sortDir=${query.orderDirection}`);
+      }
+      //search
+      if(query.search) {
+          params.push(`term=${query.search}`);
+      }
+      //pagination
+      if(query.page !== null && query.pageSize !== null) {
+          params.push(`page=${query.page + 1}&pageSize=${query.pageSize}`);
+      }
+      let url = `storage-list?${params.join("&")}`;
+      const result = await httpEndpoint<ScrollableList<OrderDto>>(ScrollableList, url, {method:"GET", headers:{"passcode":passcode}});
       console.log(result);
       return {
           data:new ObjectMapper<OrderDto>().readValueAsArray(OrderDto, result.data.data),
