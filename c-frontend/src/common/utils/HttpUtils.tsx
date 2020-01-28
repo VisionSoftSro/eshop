@@ -1,39 +1,67 @@
-import {ObjectMapper} from "./ObjectMapper";
 import {toast} from 'react-toastify';
 import _ from 'lodash';
 import {GenericMap, JsonList} from "./Util";
-export class HttpResult<Data> {
-    data: Data;
+import {Mapper} from "./objectmapper/Mapper";
+import {useContext} from "react";
+import * as UserContext from "../../web/redux/UserContext";
+import {ValidationError} from "../../web/model/ValidationError";
+
+export class HttpResultSimple {
     json:any;
     response: Response;
+}
+
+export class HttpResult<Data> extends HttpResultSimple {
+    data: Data;
+    errors?:ValidationError
 }
 
 interface HttpUtilsConfig {
     apiUrl?:string;
     token?:string;
+    on401?():void
 }
 
 let httpConfig:HttpUtilsConfig = {
 
 };
 
-export const setConfig = (c:HttpUtilsConfig) => {
+export const setHttpConfig = (c:HttpUtilsConfig) => {
     httpConfig = _.merge(httpConfig, c);
 };
 
 
 export async function httpEndpointJsonList<A>(constructor: { new(): A }, url: string, init?: RequestInit): Promise<HttpResult<JsonList<A>>> {
-    const result = await httpEndpoint<JsonList<A>>(JsonList, url, true, init);
-    result.data.data = new ObjectMapper<A>().readValueAsArray(constructor, result.data.data);
+    const result = await httpEndpoint<JsonList<A>>(JsonList, url, init);
+    result.data.list = new Mapper<A>({constructor:constructor}).readValueAsArray(result.data.list);
     return result;
 }
 
 export async function httpEndpointArray<A>(constructor: { new(): A }, url: string, init?: RequestInit): Promise<HttpResult<Array<A>>> {
-    const result = await httpEndpoint<Array<A>>(Array, url, false, init);
-    result.data = result.json.map((i:any)=>new ObjectMapper<A>().readValue(constructor, i));
+    const result = await httpEndpoint<Array<A>>(Array, url, init);
+    result.data = result.json.map((i:any)=>new Mapper<A>({constructor:constructor}).readValue(i));
     return result;
 }
-export async function httpEndpoint<A>(constructor: { new(): A }, url: string, customMapping:boolean = true, init?: RequestInit): Promise<HttpResult<A>> {
+
+export async function httpEndpoint<A>(constructor: { new(): A }, url: string, init?: RequestInit): Promise<HttpResult<A>> {
+    try {
+        const resultSimple = await httpEndpointCustom(url, init);
+        const result = new HttpResult<A>();
+        result.json = resultSimple.json;
+        result.response = resultSimple.response;
+        if(result.response.status === 422) {
+            result.errors = new Mapper<ValidationError>({constructor:ValidationError}).readValue(resultSimple.json);
+        } else {
+            result.data = new Mapper<A>({constructor:constructor}).readValue(resultSimple.json);
+        }
+
+        return result;
+    } catch (e) {
+        throw e;
+    }
+}
+
+export async function httpEndpointCustom(url: string, init?: RequestInit): Promise<HttpResultSimple> {
     const init2:RequestInit = {
         headers: {}
     };
@@ -41,19 +69,20 @@ export async function httpEndpoint<A>(constructor: { new(): A }, url: string, cu
         // @ts-ignore
         init2.headers["Authorization"] = `Bearer ${httpConfig.token}`;
     }
-    return await http<A>(constructor, `${httpConfig.apiUrl}${url}`, customMapping, _.merge(init2, init || {}));
+    return await http(`${httpConfig.apiUrl}${url}`, _.merge(init2, init || {}));
 }
 
-export function http<T>(constructor: { new(): T }, input: RequestInfo, useMapping:boolean = true, init?: RequestInit): Promise<HttpResult<T>> {
+export async function http(input: RequestInfo, init?: RequestInit): Promise<HttpResultSimple> {
     return fetch(input, init).then(r => {
-        const result = new HttpResult<T>();
+        const result = new HttpResultSimple();
         result.response = r;
+        if(r.status === 401 && httpConfig.on401) {
+            httpConfig.on401();
+            throw 401;
+        }
         if(r.body !== null) {
             return r.json().then(e => {
                 result.json = e;
-                if(r.status === 200 && useMapping) {
-                    result.data = new ObjectMapper<T>().readValue(constructor, e);
-                }
                 return result;
             }).catch(()=>result);
         } else {
@@ -61,7 +90,11 @@ export function http<T>(constructor: { new(): T }, input: RequestInfo, useMappin
         }
     }).catch(e => {
         console.error(e);
-        toast.error(Strings["NetworkError"]);
-        return null;
+        if(e === 401) {
+            toast.error(Strings.Error401);
+        } else {
+            toast.error(Strings.NetworkError);
+        }
+        throw null;
     })
 }
