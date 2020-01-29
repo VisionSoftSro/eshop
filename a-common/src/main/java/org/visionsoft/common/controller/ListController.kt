@@ -59,7 +59,7 @@ abstract class DataController<E, W> : AdHocController() {
         }
         ec.useDistinct = useDistinct
         val list = ScrollableList<W>()
-        list.data = extract(ec.list(start, nextIsPage))
+        list.list = extract(ec.list(start, nextIsPage))
         list.page = start
         list.objectsPerPage = length
         list.total = ec.count()

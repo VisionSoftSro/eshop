@@ -1,5 +1,5 @@
 import {CartGoods} from "./GoodsDto";
-import {JsonProperty} from "../../common/utils/ObjectMapper";
+import {JsonProperty} from "../../common/utils/objectmapper/Mapper";
 
 
 export enum OrderStatus {
@@ -8,8 +8,8 @@ export enum OrderStatus {
 export class OrderDto {
     id:number;
     email:string;
-    @JsonProperty({enumSource:OrderStatus})
+    @JsonProperty({type:{enum:OrderStatus}})
     status:OrderStatus;
-    @JsonProperty({strict:{isArray:true}, clazz:CartGoods})
+    @JsonProperty({type:{clazz:CartGoods, isArray:true}})
     goods:Array<CartGoods>
 }

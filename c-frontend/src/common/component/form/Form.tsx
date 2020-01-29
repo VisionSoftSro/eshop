@@ -7,15 +7,15 @@ import Wrapper from "../Wrapper";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import * as faIcon from "@fortawesome/free-solid-svg-icons";
 import {IconProp} from "@fortawesome/fontawesome-svg-core";
-import {httpEndpoint} from "../../utils/HttpUtils";
+import {FieldError, httpEndpoint, httpEndpointCustom, ValidationError} from "../../utils/HttpUtils";
 import {GenericMap, jsonToFormData} from "../../utils/Util";
 import {FormSelect, SelectProps} from "./FormSelect";
 import {toast} from "react-toastify";
-import {JsonProperty, ObjectMapper} from "../../utils/ObjectMapper";
 import {FormTextarea} from "./FormTextarea";
 import {FormCheckbox} from "./FormCheckbox";
 import {CustomFieldComponent, FormFieldInterface} from "./FormFieldInterface";
 import _ from 'lodash';
+import {JsonProperty, Mapper} from "../../utils/objectmapper/Mapper";
 
 
 /********************
@@ -295,18 +295,6 @@ export class FormButton<T> extends React.Component<FormButtonProps<T>, { loading
  * FORM
  *
  ********************/
-class FieldError {
-    name:string;
-    message:string;
-    localize:boolean;
-}
-class ValidationError {
-    code:number;
-    message:string;
-    @JsonProperty({clazz:FieldError, strict:{isArray:true}})
-    errors:Array<FieldError> = new Array<FieldError>();
-}
-
 export class FormHttpResponse<T> {
     response: Response;
     status: FormStatus;
@@ -431,27 +419,27 @@ export class Form<Data> extends React.Component<FormProps<Data>, FormState> {
     }
 
     async sendForm(event: FormButtonClickEvent): Promise<FormHttpResponse<Data>> {
+        const mapper = new Mapper<Data>({constructor:this.data.constructor as {new():Data}});
         const url = event.modifyUrl && event.modifyUrl(this.props.url) || this.props.url;
-        const init = _.merge(this.props.requestInit, {body: jsonToFormData(this.data, (field)=>{
-                //convert object to id for spring and jpa support
-                if(typeof field === 'object' && field.id !== undefined) {
-                    return field.id;
-                }
-                return field;
-            }), headers:{"type":event.type}});
-        // @ts-ignore
-        const result = await httpEndpoint<Data>(this.data.constructor, url, true, {...init, ...(event.requestInit||{})});
+        const json = mapper.writeValueAsJson(this.data);
+        const init = {method: "POST", body: jsonToFormData(json)};
+        const result = await httpEndpointCustom(url, {...init, ...event.requestInit});
         const response = new FormHttpResponse<Data>();
-        response.status = FormStatus.Success;
-        response.response = result.response;
-        if(result.response.status === 200) {
-            response.data = result.data;
-        } else if(result.response.status === 422) {
-            response.status = FormStatus.Validation;
-            response.validationError = new ObjectMapper<ValidationError>().readValue(ValidationError, result.json);
-        } else {
-            response.status = FormStatus.Error;
+        response.status = FormStatus.Nothing;
+
+        if((result || null) !== null) {
+            response.response = result.response;
+            if (result.response.status >= 200 && result.response.status < 300) {
+                response.status = FormStatus.Success;
+                response.data = mapper.readValue(result.json);
+            } else if (result.response.status === 422) {
+                response.status = FormStatus.Validation;
+                response.validationError = new Mapper<ValidationError>({constructor:ValidationError}).readValue(result.json);
+            } else {
+                response.status = FormStatus.Error;
+            }
         }
+
         return response;
     }
 

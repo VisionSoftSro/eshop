@@ -27,7 +27,7 @@ const useDetailLoading = ():[GoodsDto, boolean] => {
     const [loading, setLoading] = useState(true);
     useEffect(()=>{
         const id = getHashValue("pid");
-        httpEndpoint(GoodsDto, `goods/detail/${id}`).then(result=>{
+        httpEndpoint<GoodsDto>(GoodsDto, `goods/detail/${id}`).then(result=>{
             if(result && result.response.status !== 200) {
                 setLoading(false);
             } else {

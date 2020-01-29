@@ -1,5 +1,6 @@
 import {formatPrice, toSeoString} from "../../common/utils/Util";
-import {JsonProperty} from "../../common/utils/ObjectMapper";
+import {JsonProperty} from "../../common/utils/objectmapper/Mapper";
+
 
 
 export class Category {
@@ -23,7 +24,7 @@ export class GoodsDto {
     images:number;
     hot:boolean;
 
-    @JsonProperty({strict:{isArray:true}, clazz:Category})
+    @JsonProperty({type:{clazz:Category, isArray:true}})
     categories:Array<Category>;
 
     getPrice():Price {
@@ -46,7 +47,7 @@ export class GoodsDto {
 
 export class CartGoods {
 
-    @JsonProperty({clazz:GoodsDto})
+    @JsonProperty({type:{clazz:GoodsDto}})
     goods:GoodsDto;
     pcs:number;
 

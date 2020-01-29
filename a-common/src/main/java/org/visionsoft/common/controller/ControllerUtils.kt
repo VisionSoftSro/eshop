@@ -3,6 +3,7 @@ package org.visionsoft.common.controller
 import org.springframework.web.context.request.RequestContextHolder
 import org.springframework.web.context.request.ServletRequestAttributes
 import javax.servlet.http.HttpServletRequest
+import kotlin.math.ceil
 
 val request:RequestWrapper get() = RequestWrapper((RequestContextHolder.getRequestAttributes() as ServletRequestAttributes).request as HttpServletRequest)
 class RequestWrapper(val request: HttpServletRequest) {
@@ -11,7 +12,7 @@ class RequestWrapper(val request: HttpServletRequest) {
     }
 }
 
-open class JsonList<E>(var data: List<E>? = null)
+open class JsonList<E>(var list: List<E>? = null)
 
 open class ScrollableList<E>: JsonList<E>(){
     var page: Int = 0
@@ -19,7 +20,7 @@ open class ScrollableList<E>: JsonList<E>(){
     var total: Long = 0
 
     val pages: Long
-        get() = Math.ceil(total.toDouble() / objectsPerPage).toLong()
+        get() = ceil(total.toDouble() / objectsPerPage).toLong()
 }
 //val currentUser get() = UserContextHolder.getAuthentication().user
 

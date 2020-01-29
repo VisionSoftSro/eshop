@@ -16,7 +16,6 @@ import {httpEndpoint} from "../../../common/utils/HttpUtils";
 import {jsonToFormData} from "../../../common/utils/Util";
 import {PaymentMethodDto, ShippingMethodDto} from "../../dto/Methods";
 import {MethodsState} from "../../redux/reducers/cart/MethodsReducer";
-import {JsonProperty} from "../../../common/utils/ObjectMapper";
 import {CartAction, CartActionType, CartState} from "../../redux/reducers/cart/CartReducer";
 import {Modal, ModalBody} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -24,6 +23,7 @@ import * as faIcon from "@fortawesome/free-solid-svg-icons";
 import ModalHeader from "react-bootstrap/ModalHeader";
 import {Quantity} from "../Quantity";
 import {booleanComparator, Loader} from "../../../common/component/Loader";
+import {JsonProperty} from "../../../common/utils/objectmapper/Mapper";
 
 class Complete extends React.Component {
 
@@ -54,7 +54,7 @@ class CheckoutResult {
 
     success: boolean;
 
-    @JsonProperty({strict: {isArray: true}, clazz: GoodsDto})
+    @JsonProperty({type:{clazz:GoodsDto, isArray:true}})
     outOfStock: Array<GoodsDto>;
 }
 
@@ -84,16 +84,17 @@ class Review extends React.Component<any, ReviewState> {
         form.goods = cart.map(i => new FormDtoCart(i.goods.id, i.pcs));
         const json = {...form, ...checkout};
 
-        const result = await httpEndpoint<CheckoutResult>(CheckoutResult, "checkout", true, {
-            body: jsonToFormData(json, (field) => {
-                //convert object to id for spring and jpa support
-                if (typeof field === 'object' && field.id !== undefined) {
-                    return field.id;
+        const result = await httpEndpoint<CheckoutResult>(CheckoutResult, "checkout", {
+            body: jsonToFormData(json, {
+                dataConverter:(key, value) => {
+                    //convert object to id for spring and jpa support
+                    if (typeof value === 'object' && value.id !== undefined) {
+                        return value.id;
+                    }
+                    return value;
                 }
-                return field;
             }),
             method: "POST",
-
         });
         let data = result.data;
         if(!data) {

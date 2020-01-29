@@ -7,10 +7,10 @@ import {OrderDto, OrderStatus} from "../../dto/OrderDto";
 import {productImageUrl} from "../../TemplateUtil";
 import {Price} from "../../dto/GoodsDto";
 import {Modal, ModalBody} from "react-bootstrap";
-import MaterialTable, {QueryResult} from "material-table";
+import MaterialTable, {Query, QueryResult} from "material-table";
 import {getHashValue, ScrollableList} from "../../../common/utils/Util";
-import {ObjectMapper} from "../../../common/utils/ObjectMapper";
 import ModalHeader from "react-bootstrap/ModalHeader";
+import {Mapper} from "../../../common/utils/objectmapper/Mapper";
 
 class StorageData {
     trackingNumber:string
@@ -45,7 +45,7 @@ const useQuery = (passcode:string) => {
       const result = await httpEndpoint<ScrollableList<OrderDto>>(ScrollableList, url, {method:"GET", headers:{"passcode":passcode}});
       console.log(result);
       return {
-          data:new ObjectMapper<OrderDto>().readValueAsArray(OrderDto, result.data.data),
+          data:new Mapper({constructor:OrderDto}).readValueAsArray(result.data.list),
           page:0,
           totalCount:1
       }
@@ -140,7 +140,7 @@ function Orders({passcode}:{passcode:string}) {
     useEffect(()=>{
         const orderId = getHashValue("orderId");
         if(orderId) {
-            httpEndpoint<OrderDto>(OrderDto, `storage/${orderId}`, true, {method:"GET", headers:{"passcode":passcode}}).then(result=>{
+            httpEndpoint<OrderDto>(OrderDto, `storage/${orderId}`, {method:"GET", headers:{"passcode":passcode}}).then(result=>{
                 console.log("detail order=", result);
                 if(result.data) {
                     formRef.current.setOrder(result.data);

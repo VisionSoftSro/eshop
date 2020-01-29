@@ -1,7 +1,7 @@
 import {Action} from "redux";
 import {CartGoods} from "../../../dto/GoodsDto";
-import {JsonProperty} from "../../../../common/utils/ObjectMapper";
 import {PlainReduceState} from "../../../../common/redux/Reducers";
+import {JsonProperty} from "../../../../common/utils/objectmapper/Mapper";
 
 export enum CartActionType {
     AddCart="cart/add",
@@ -11,7 +11,7 @@ export enum CartActionType {
 }
 
 export class CartState {
-    @JsonProperty({clazz:CartGoods, strict:{isArray:true}})
+    @JsonProperty({type:{isArray:true, clazz:CartGoods}})
     cart?:Array<CartGoods> = new Array<CartGoods>();
 
     constructor(cart?: Array<CartGoods>) {
