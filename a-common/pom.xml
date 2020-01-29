@@ -11,7 +11,13 @@
 
     <artifactId>cms-common</artifactId>
 
-
+    <dependencies>
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
+            <version>6.7.0</version>
+        </dependency>
+    </dependencies>
 
 
 </project>
