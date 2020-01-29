@@ -1,10 +1,21 @@
 import {toast} from 'react-toastify';
 import _ from 'lodash';
 import {GenericMap, JsonList} from "./Util";
-import {Mapper} from "./objectmapper/Mapper";
+import {JsonProperty, Mapper} from "./objectmapper/Mapper";
 import {useContext} from "react";
-import * as UserContext from "../../web/redux/UserContext";
-import {ValidationError} from "../../web/model/ValidationError";
+
+export class FieldError {
+    name: string;
+    message: string;
+    localize:boolean = false;
+}
+
+export class ValidationError {
+    code: number;
+    message: string;
+    @JsonProperty({type:{clazz: FieldError, isArray: true}})
+    errors: Array<FieldError> = new Array<FieldError>();
+}
 
 export class HttpResultSimple {
     json:any;

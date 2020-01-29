@@ -29,7 +29,7 @@ const reducers: WebReducerMembers = {
 
 export const cartStore = createStore(cartReducer, loadState(CartState, "cartState"));
 cartStore.subscribe(() => {
-    saveState<CartState>("cartState", cartStore.getState());
+    saveState<CartState>(CartState, "cartState", cartStore.getState());
 });
 
 export const selectedItemStore = createStore(itemReducer);
