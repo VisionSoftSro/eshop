@@ -3,11 +3,15 @@ package org.visionsoft.crm.domain.service
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.core.io.InputStreamSource
 import org.springframework.stereotype.Component
+import org.visionsoft.common.mail.Attachment
 import org.visionsoft.common.mail.MailClient
+import org.visionsoft.common.reports.ReportRepository
 import org.visionsoft.common.transaction.transaction
 
 import org.visionsoft.crm.domain.scheme.*
+import java.io.ByteArrayInputStream
 
 import java.math.BigDecimal
 
@@ -44,6 +48,9 @@ class CheckoutService {
     @Autowired
     lateinit var objectMapper: ObjectMapper
 
+    @Autowired
+    lateinit var reports:ReportRepository
+
     /**
      * Make order. Return goods what are out of stock else
      */
@@ -79,8 +86,10 @@ class CheckoutService {
         val map = mutableMapOf(
                 "orderId" to order.id!!
         )
-        mailClient.send("Vaše faktura k objednávce", "general", "customerOrderInvoiceTemplate", map, order.email!!)
-        mailClient.send("Byla vygenerována faktura", "general", "storageOrderInvoiceTemplate", map, storageEmail)
+        val bytea = ByteArrayInputStream(reports["invoice"].exportToPdf(mutableMapOf()))
+        print(bytea)
+        mailClient.send("Vaše faktura k objednávce", "general", "customerOrderInvoiceTemplate", map, listOf(Attachment("faktura_${order.id}.png", InputStreamSource { bytea })), order.email!!)
+        mailClient.send("Byla vygenerována faktura", "general", "storageOrderInvoiceTemplate", map, listOf(Attachment("faktura_${order.id}.png", InputStreamSource { bytea })), storageEmail)
         print(checkout)
     }
 

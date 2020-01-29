@@ -7,8 +7,10 @@ import org.springframework.boot.web.servlet.ServletRegistrationBean
 import org.springframework.context.annotation.*
 import org.springframework.web.multipart.commons.CommonsMultipartResolver
 import org.springframework.context.annotation.Bean
-
-
+import org.springframework.core.io.ClassPathResource
+import org.springframework.core.io.Resource
+import org.visionsoft.common.reports.ReportPrinter
+import org.visionsoft.common.reports.ReportRepository
 
 
 @Configuration
@@ -29,11 +31,20 @@ class MvcConfig {
         servletRegistrationBean.setName("api-v1")
         return servletRegistrationBean
     }
+
     @Bean
     fun multiPartResolver(): CommonsMultipartResolver {
-
         return CommonsMultipartResolver()
     }
+
+    @Bean
+    fun reportPrinter()  = ReportPrinter()
+
+    @Bean
+    fun reportRepository() = ReportRepository(mutableMapOf(
+        "invoice" to ClassPathResource("reports/invoice.jrxml")
+    ))
+
 }
 
 

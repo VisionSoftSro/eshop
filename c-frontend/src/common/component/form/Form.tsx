@@ -8,7 +8,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import * as faIcon from "@fortawesome/free-solid-svg-icons";
 import {IconProp} from "@fortawesome/fontawesome-svg-core";
 import {FieldError, httpEndpoint, httpEndpointCustom, ValidationError} from "../../utils/HttpUtils";
-import {GenericMap, jsonToFormData} from "../../utils/Util";
+import {GenericMap, jsonToFormData, jsonToFormUrlEncoded} from "../../utils/Util";
 import {FormSelect, SelectProps} from "./FormSelect";
 import {toast} from "react-toastify";
 import {FormTextarea} from "./FormTextarea";
@@ -251,7 +251,6 @@ export class FormField<CustomOptions = any> extends React.Component<FormFieldPro
  *
  ********************/
 export class FormButtonClickEvent {
-    type?: string;
     modifyUrl?: (url: string) => string;
     requestInit?: RequestInit
 }
@@ -284,7 +283,7 @@ export class FormButton<T> extends React.Component<FormButtonProps<T>, { loading
         return <button onClick={() => {
             // @ts-ignore
             const event = this.props.onSend && this.props.onSend(this.props.form, this.props.type) || new FormButtonClickEvent();
-            event.type = this.props.type;
+            event.requestInit = _.merge({headers:{"type": this.props.type}}, event.requestInit);
             this.onButtonClick(event)
         }} className={cs("btn", this.props.className)}>{this.props.children}</button>;
     }
@@ -422,8 +421,10 @@ export class Form<Data> extends React.Component<FormProps<Data>, FormState> {
         const mapper = new Mapper<Data>({constructor:this.data.constructor as {new():Data}});
         const url = event.modifyUrl && event.modifyUrl(this.props.url) || this.props.url;
         const json = mapper.writeValueAsJson(this.data);
-        const init = {method: "POST", body: jsonToFormData(json)};
-        const result = await httpEndpointCustom(url, {...init, ...event.requestInit});
+        const init = _.merge({method: "POST", body: jsonToFormData(json)}, _.merge(event.requestInit, this.props.requestInit));
+        console.log(event);
+        console.log(init);
+        const result = await httpEndpointCustom(url, init);
         const response = new FormHttpResponse<Data>();
         response.status = FormStatus.Nothing;
 
