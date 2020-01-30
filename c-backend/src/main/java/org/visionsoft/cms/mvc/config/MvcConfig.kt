@@ -9,7 +9,9 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver
 import org.springframework.context.annotation.Bean
 import org.springframework.core.io.ClassPathResource
 import org.springframework.core.io.Resource
+
 import org.springframework.core.io.ResourceLoader
+
 import org.visionsoft.common.reports.ReportPrinter
 import org.visionsoft.common.reports.ReportRepository
 
@@ -45,7 +47,6 @@ class MvcConfig {
     fun reportRepository(resourceLoader: ResourceLoader) = ReportRepository(mutableMapOf(
         "invoice" to resourceLoader.getResource("classpath:reports/invoice.jrxml")
     ))
-
 }
 
 
