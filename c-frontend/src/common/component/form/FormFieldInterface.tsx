@@ -1,19 +1,30 @@
-import {GenericMap} from "../../utils/Util";
 import * as React from "react";
+import {GenericMap} from "../../utils/Util";
 
 export interface FormFieldInterface {
 
 }
+
+export class FormFieldListeners {
+    onLabelClick:(e:React.MouseEvent)=>void
+}
+
 export interface FormFieldInterfaceProps<T> {
     name:string;
     value?:T;
     disabled?:boolean;
     className?:string;
     placeholder?:string;
+    simpleLabel?:boolean;
+    dataTip?:string;
     onValueChanged:(value:any)=>void
+    listeners?:FormFieldListeners,
+    focused?:boolean,
+    enableFocusSupport?:VoidFunction,
+    title?:string
 }
 
-interface CustomFieldComponentProps<T, O> extends FormFieldInterfaceProps<T> {
+export interface CustomFieldComponentProps<T, O> extends FormFieldInterfaceProps<T> {
     options?:O
 }
 

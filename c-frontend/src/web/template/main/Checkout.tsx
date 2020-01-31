@@ -12,7 +12,7 @@ import {CheckoutDto} from "../../dto/CheckoutDto";
 import {CartGoods, Category, GoodsDto, Price} from "../../dto/GoodsDto";
 
 import {productImageUrl} from "../../TemplateUtil";
-import {httpEndpoint} from "../../../common/utils/HttpUtils";
+import {FieldError, httpEndpoint} from "../../../common/utils/HttpUtils";
 import {jsonToFormData} from "../../../common/utils/Util";
 import {PaymentMethodDto, ShippingMethodDto} from "../../dto/Methods";
 import {MethodsState} from "../../redux/reducers/cart/MethodsReducer";
@@ -478,7 +478,7 @@ class Billing extends React.Component<{}, ContinueState> {
                                     </div>
                                     <div className="col-md-6 mb-3">
                                         <FormField type={FormInputType.Text} name={"phoneNumber"}
-                                                   title={Strings["PhoneNumber"]}/>
+                                                   title={Strings["PhoneNumber"]} validate={{regexp:/^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\s\./0-9]*$/g, message:"Vyplňte správné telefonní číslo"}}/>
                                     </div>
                                     <div className="col-md-6 mb-3">
                                         <FormField type={FormInputType.Text} name={"street"} title={Strings["Street"]}

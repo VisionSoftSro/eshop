@@ -8,6 +8,13 @@ export class FieldError {
     name: string;
     message: string;
     localize:boolean = false;
+
+    static Create(message:string):FieldError {
+        const fe = new FieldError();
+        fe.message = message;
+        return fe;
+    }
+
 }
 
 export class ValidationError {
