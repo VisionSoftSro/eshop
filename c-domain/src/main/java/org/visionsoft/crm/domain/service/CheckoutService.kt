@@ -75,7 +75,7 @@ class CheckoutService {
         order.firstName = checkout.firstName
         order.lastName = checkout.lastName
         order.postCode = checkout.postCode
-//        order.json = objectMapper.writeValueAsString(checkout)
+        order.json = ""//objectMapper.writeValueAsString(checkout)
         em.persist(order)
 
         checkout.goods.forEach {

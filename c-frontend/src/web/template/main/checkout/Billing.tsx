@@ -99,7 +99,7 @@ export function Billing() {
                                     <div className="col-12 mb-3">
                                         <FormField type={FormInputType.Custom} name={"czechPost"}
                                                    customComponent={FormCzechPostAutocomplete} title={"Balíkovna"}
-                                                   customComponentOptions={{checkout: checkout}}/>
+                                                   customComponentOptions={{checkout: checkout}} required/>
                                     </div>
                                     {/*<div className="col-md-6 mb-3">*/}
                                     {/*<FormField type={FormInputType.Text} name={"street"} title={Strings["Street"]}*/}
