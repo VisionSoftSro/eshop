@@ -33,9 +33,9 @@
 
                 <tr style="height: 75px">
                     <td style="padding:20px;text-align:left;border-bottom:solid 1px #ccc" width="110">
-                        <!--<img-->
-                            <!--alt="Způsob dopravy" title="Způsob dopravy" style="border:solid 1px #ccc;border-radius:5px"-->
-                            <!--class="CToWUd">-->
+                        <img th:src="@{${domain} + '/static/img/'+${checkout.shippingMethod.code}+'.png'}"
+                            alt="Způsob dopravy" title="Způsob dopravy" style="border:solid 1px #ccc;border-radius:5px"
+                            class="CToWUd">
                     </td>
                     <td style="border-bottom:solid 1px #ccc;text-align:left">
                         <h2 style="margin:0;color:#1d2d64;font-size:18px;font-weight:normal" th:inline="text">

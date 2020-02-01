@@ -19,7 +19,7 @@ import java.util.logging.Logger
 @Component
 class MailContentBuilder @Autowired constructor(var templateEngine: TemplateEngine) {
 
-    fun build(map:Map<String, Any>, template:String): String {
+    fun build(map:Map<String, Any?>, template:String): String {
         val context = Context()
         context.setVariables(map)
         return templateEngine.process(template, context)
@@ -42,11 +42,11 @@ class MailClient @Autowired constructor(var mailSender: JavaMailSender, var mail
     @Value("\${mail.domain}")
     lateinit var domain:String
 
-    fun send(subject:String, mainTemplate:String, bodyTemplate:String? = null, parameters:Map<String, Any>, vararg recipients:String) {
+    fun send(subject:String, mainTemplate:String, bodyTemplate:String? = null, parameters:Map<String, Any?>, vararg recipients:String) {
         send(subject, mainTemplate, bodyTemplate, parameters, null, *recipients)
     }
 
-    fun send(subject:String, mainTemplate:String, bodyTemplate:String? = null, parameters:Map<String, Any>, attachments:List<Attachment>?, vararg recipients:String) {
+    fun send(subject:String, mainTemplate:String, bodyTemplate:String? = null, parameters:Map<String, Any?>, attachments:List<Attachment>?, vararg recipients:String) {
         try {
             mailSender.send {
                 val messageHelper = MimeMessageHelper(it, (attachments?.size ?: 0) > 0)

@@ -6,11 +6,20 @@ export interface FormTextareaProps extends FormFieldInterfaceProps<any> {
 }
 
 export class FormTextarea extends React.Component<FormTextareaProps> implements FormFieldInterface {
-
+    dom:HTMLTextAreaElement;
     state = {value:this.props.value};
 
+    componentDidMount(): void {
+        this.props.enableFocusSupport();
+    }
+
     componentWillReceiveProps(nextProps: Readonly<FormTextareaProps>, nextContext: any): void {
-        this.setState({value:nextProps.value});
+        const triggerFocus = nextProps.focused !== this.props.focused && nextProps.focused;
+        this.setState({value:nextProps.value}, ()=>{
+            if(triggerFocus) {
+                this.dom.focus();
+            }
+        });
     }
 
     onValueChange(value:any) {
@@ -21,8 +30,9 @@ export class FormTextarea extends React.Component<FormTextareaProps> implements 
 
     render() {
      return <textarea
+         ref={(input) => { this.dom = input; }}
          disabled={this.props.disabled}
-         className={"form-control"} value={this.state.value||""} name={this.props.name} placeholder={this.props.placeholder}
+         className={"form-control"} value={this.state.value||""} name={this.props.name} placeholder={this.props.placeholder} data-tip={this.props.dataTip}
         onChange={e=>{
             this.onValueChange(e.target.value);
         }}

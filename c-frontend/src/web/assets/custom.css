@@ -23,6 +23,7 @@ section>div, .checkout_area {
 }
 .main-font * {
     font-family: 'mtcorsva', cursive !important;
+    color: #323232;
 }
 .font-medium {
     font-size: medium;

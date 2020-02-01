@@ -10,10 +10,10 @@ import java.io.FileInputStream
 
 
 val mapping = mapOf("gift" to ("Dárky" to 2), "party" to ("Oslavy" to 3))
-val exportPath = "/Users/tremll/devel/eshop-export/"
+val exportPath = "C:\\Users\\heris\\Downloads\\export\\dest\\"
 fun main() {
     mapping.forEach {
-        DataExporter("/Users/tremll/Google Drive/${it.value.first}/", it.key, it.value.second).export()
+        DataExporter("C:\\Users\\heris\\Downloads\\export\\source\\${it.value.first}/", it.key, it.value.second).export()
     }
 }
 

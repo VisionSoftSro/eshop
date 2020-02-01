@@ -1,12 +1,12 @@
-package org.visionsoft.cms.mvc.config
+package org.visionsoft.cms.mvc.service
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.ApplicationListener
 import org.springframework.stereotype.Component
-import org.visionsoft.common.applyAndPersist
-import org.visionsoft.common.transaction.transaction
-import org.visionsoft.crm.domain.scheme.RoleCode
+import org.visionsoft.cms.mvc.service.czechpost.BalikovnyService
+import org.visionsoft.common.async.async
+import org.visionsoft.crm.domain.dao.CzechPostDao
 import org.visionsoft.crm.domain.scheme.User
 import org.visionsoft.crm.domain.service.UserService
 
@@ -15,15 +15,18 @@ class AppInitialization: ApplicationListener<ApplicationReadyEvent> {
     @Autowired
     lateinit var userService: UserService
 
+    @Autowired
+    lateinit var balikovnyService:BalikovnyService
+
+    @Autowired
+    lateinit var czechPostDao: CzechPostDao
+
     override fun onApplicationEvent(event: ApplicationReadyEvent) {
-        transaction {
-//            if(userService.findUser("admin") == null) {
-//                User().applyAndPersist {
-//                    email = "admin"
-//                    roles = RoleCode.values().toMutableList()
-//                    enabled = true
-//                }
-//            }
+        async<User>(null) {
+            if(czechPostDao.count() == 0L) {
+                balikovnyService.migrate()
+            }
+
         }
     }
 }

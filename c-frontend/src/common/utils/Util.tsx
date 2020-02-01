@@ -1,5 +1,6 @@
 import {currentLocale} from "./LocaleAccessor";
 import _ from 'lodash';
+import Fingerprint2, {Component} from "fingerprintjs2";
 
 
 
@@ -35,8 +36,6 @@ export const jsonToFormData = (json:GenericMap, userOptions?:jsonToFormDataType)
 };
 
 export const jsonTo = ({set}:{set:(name:string, value:any)=>void}, json:GenericMap, userOptions?:jsonToFormDataType) => {
-    console.log("json", json);
-    // const formData = new FormData();
     const defaultOptions:jsonToFormDataType = {dataConverter:(key, value)=>value, skipNull:true};
     const {dataConverter, skipNull} = _.merge(defaultOptions, userOptions);
     Object.keys(json).forEach(e=>{
@@ -56,6 +55,10 @@ export const jsonTo = ({set}:{set:(name:string, value:any)=>void}, json:GenericM
                         }
                     }
                     set(`${e}_length`, resultValue.length.toString())
+                } else if(typeof resultValue === "object") {
+                    jsonTo({set:(name, value) => {
+                            set(`${e}.${name}`, value);
+                        }}, resultValue);
                 } else {
                     set(e, resultValue);
                 }
@@ -102,6 +105,17 @@ export const arrayToObject = (array:any[], {idKey, valueKey}:{idKey:any, valueKe
     array.forEach(o=>obj[o[idKey]]=o[valueKey]);
     return obj;
 };
+
+
+export function GetFingerPrint():Promise<string> {
+    return new Promise<string>((resolve => {
+        setTimeout(function () {
+            Fingerprint2.getV18(function (result, components) {
+                resolve(result);
+            })
+        }, 500);//podle dokumentace
+    }))
+}
 
 export function getHashValue(key:string) {
     const matches = location.hash.match(new RegExp(key+'=([^&]*)'));

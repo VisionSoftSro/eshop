@@ -197,7 +197,7 @@ export class StorageForm extends React.Component<any, PasscodeState> {
     state:PasscodeState = {passcode:null};
 
     passCodeResult = (result:FormHttpResponse<PasscodeResult>) => {
-        if(result.data.value) {
+        if(result&&result.data&&result.data.value) {
             this.setState({passcode:result.data.passcode})
         }
     };

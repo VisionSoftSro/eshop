@@ -1,3 +1,5 @@
+import {GenericMap} from "../common/utils/Util";
+
 export const AssetCache = {
   Image: {
     Logo:require('./assets/img/core-img/logo_gift.png'),
@@ -9,7 +11,7 @@ export const AssetCache = {
     Flags: {
       // Spanish:require('./assets/images/flags/spanish.png'),
       // English:require('./assets/images/flags/usa.png'),
-    }
-
-  }
+    },
+    czech_post:require('./assets/img/czech_post.png'),
+  } as GenericMap
 };

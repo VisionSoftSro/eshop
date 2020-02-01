@@ -18,6 +18,7 @@ import {CartGoods, Category} from "../dto/GoodsDto";
 import {DataAction, DataActionType} from "../redux/reducers/cart/DataReducer";
 import {booleanComparator, Loader} from "../../common/component/Loader";
 import {toast, ToastContainer} from "react-toastify";
+import {setLocalization} from "../../common/component/form/Form";
 
 export const announceAddedToCart = (cartGoods:CartGoods) => {
     toast.info(Strings["ItemAddedToCart"]);
@@ -42,6 +43,7 @@ export function setCategory(category:Category) {
     dataStore.dispatch<DataAction>({type:DataActionType.SetCategory, currentCategory:category});
 
 }
+
 
 class Root extends React.Component<LocaleState> {
 
@@ -69,7 +71,6 @@ class Root extends React.Component<LocaleState> {
                             loader&&(
                                 <Loader />
                             )||(
-
                                 <>
                                     <Header />
                                     <RouteMapping />

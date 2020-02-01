@@ -34,7 +34,12 @@ create table c_order (
   id bigint DEFAULT nextval(('c_order_id_seq'::text)::regclass) NOT NULL primary key,
   email text not null,
   status text not null,
-  json text not null
+  json text not null,
+  address text not null,
+  first_name text not null,
+  last_name text not null,
+  post_code integer not null,
+  city text not null
 );
 
 create table c_order_goods (
@@ -77,3 +82,4 @@ create table shipping_method (
 
 CREATE SEQUENCE c_shipping_method_seq INCREMENT 1 START 1
 ;
+--ceska posta balikovny

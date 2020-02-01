@@ -2,6 +2,7 @@ import {capitalize} from "../StringExtension";
 import {Converters, FieldType} from "./Mapper.d";
 import {type} from "os";
 import {GenericMap} from "../Util";
+import _ from 'lodash';
 
 
 export interface MapperConfig<T> {
@@ -153,7 +154,8 @@ export class Mapper<A extends Mapped> {
 
 
 
-    writeValueAsJson(instance:A, {springSupport}:writeType = defaultWriteConfig):GenericMap {
+    writeValueAsJson(instance:A, options?:writeType):GenericMap {
+        const {springSupport} = _.merge(defaultWriteConfig, options);
         const json = {} as GenericMap;
         Object.keys(instance).forEach(oKey=>{
            let value = instance[oKey];
@@ -174,7 +176,7 @@ export class Mapper<A extends Mapped> {
                     }
                 }
                 if(newValue && typeof newValue === "object") {
-                    return this.writeValueAsJson(newValue);
+                    return this.writeValueAsJson(newValue, options);
                 } else {
                     return newValue;
                 }
@@ -192,7 +194,7 @@ export class Mapper<A extends Mapped> {
         });
         return json;
     }
-    writeValueAsString(obj:A, options:writeType = defaultWriteConfig) {
+    writeValueAsString(obj:A, options:writeType) {
         return JSON.stringify(this.writeValueAsJson(obj, options));
     }
 

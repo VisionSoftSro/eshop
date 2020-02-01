@@ -4,20 +4,18 @@ import moment from "moment";
 export class Footer extends React.Component {
     render() {
         return (
-            <footer className="footer_area">
-                {/*<div className="container">*/}
-                    {/*<div className="row">*/}
-                        {/*<div className="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3">*/}
-                            {/*<div className="single_footer_area mb-100">*/}
-                                {/*<div className="footer_heading mb-4">*/}
-                                    {/*<h6>Contact Us</h6>*/}
-                                {/*</div>*/}
-                                {/*<ul className="footer_content">*/}
-                                    {/*<li><span>Address:</span> Lords, London, UK - 1259</li>*/}
-                                    {/*<li><span>Phone:</span> 002 63695 24624</li>*/}
-                                    {/*<li><span>FAX:</span> 002 78965 369552</li>*/}
-                                    {/*<li><span>Email:</span> support@example.com</li>*/}
-                                {/*</ul>*/}
+            <footer className="footer_area" style={{zIndex:0}}>
+                <div className="container">
+                    <div className="row">
+                        <div className="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3">
+                            <div className="single_footer_area mb-50 mt-50">
+                                <div className="footer_heading mb-4">
+                                    <h6>Zákaznická podpora</h6>
+                                </div>
+                                <ul className="footer_content">
+                                    <li><span>Email:</span> <a style={{color:"white"}} href={"mailto:info@oslavyadarky.cz"}>info@oslavyadarky.cz</a></li>
+                                    <li><span>Telefon:</span> <a style={{color:"white"}} href={"tel:+420 608 319 575"}>+420 608 319 575</a></li>
+                                </ul>
                                 {/*<div className="footer_social_area mt-15">*/}
                                     {/*<a href="#"><i className="fa fa-facebook" aria-hidden="true"></i></a>*/}
                                     {/*<a href="#"><i className="fa fa-twitter" aria-hidden="true"></i></a>*/}
@@ -26,8 +24,8 @@ export class Footer extends React.Component {
                                     {/*<a href="#"><i className="fa fa-dribbble" aria-hidden="true"></i></a>*/}
                                     {/*<a href="#"><i className="fa fa-rss" aria-hidden="true"></i></a>*/}
                                 {/*</div>*/}
-                            {/*</div>*/}
-                        {/*</div>*/}
+                            </div>
+                        </div>
                         {/*<div className="col-12 col-sm-6 col-md col-lg-4 col-xl-2">*/}
                             {/*<div className="single_footer_area mb-100">*/}
                                 {/*<div className="footer_heading mb-4">*/}
@@ -100,8 +98,8 @@ export class Footer extends React.Component {
                                 {/*</div>*/}
                             {/*</div>*/}
                         {/*</div>*/}
-                    {/*</div>*/}
-                {/*</div>*/}
+                    </div>
+                </div>
                 <div className="footer_bottom_area">
                     <div className="container">
                         <div className="row align-items-center">

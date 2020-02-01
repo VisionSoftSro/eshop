@@ -1,29 +1,31 @@
 import React, {ChangeEvent} from "react";
-import Wrapper from "../../../common/component/Wrapper";
-import {Link} from '../../../common/component/Link';
-import {SwitchCase, SwitchPage} from "../../../common/component/SwitchPage";
+import Wrapper from "../../../../common/component/Wrapper";
+import {Link} from '../../../../common/component/Link';
+import {SwitchCase, SwitchPage} from "../../../../common/component/SwitchPage";
 import cs from 'classnames';
 import {connect, Provider} from "react-redux";
-import {reduceStateToPlainObject} from "../../../common/redux/Reducers";
-import {CheckoutAction, CheckoutActionType, CheckoutState} from "../../redux/reducers/cart/CheckoutReducer";
-import {cartStore, checkoutStore, dataStore, methodsStore} from "../../redux/WebRedux";
-import {Form, FormField, FormInputType} from "../../../common/component/form/Form";
-import {CheckoutDto} from "../../dto/CheckoutDto";
-import {CartGoods, Category, GoodsDto, Price} from "../../dto/GoodsDto";
+import {reduceStateToPlainObject} from "../../../../common/redux/Reducers";
+import {CheckoutAction, CheckoutActionType, CheckoutState} from "../../../redux/reducers/cart/CheckoutReducer";
+import {cartStore, checkoutStore, dataStore, methodsStore} from "../../../redux/WebRedux";
+import {Form, FormField, FormInputType} from "../../../../common/component/form/Form";
+import {CheckoutDto} from "../../../dto/CheckoutDto";
+import {CartGoods, Category, GoodsDto, Price} from "../../../dto/GoodsDto";
 
-import {productImageUrl} from "../../TemplateUtil";
-import {httpEndpoint} from "../../../common/utils/HttpUtils";
-import {jsonToFormData} from "../../../common/utils/Util";
-import {PaymentMethodDto, ShippingMethodDto} from "../../dto/Methods";
-import {MethodsState} from "../../redux/reducers/cart/MethodsReducer";
-import {CartAction, CartActionType, CartState} from "../../redux/reducers/cart/CartReducer";
+import {productImageUrl} from "../../../TemplateUtil";
+import {FieldError, httpEndpoint} from "../../../../common/utils/HttpUtils";
+import {jsonToFormData} from "../../../../common/utils/Util";
+import {PaymentMethodDto, ShippingMethodDto} from "../../../dto/Methods";
+import {MethodsState} from "../../../redux/reducers/cart/MethodsReducer";
+import {CartAction, CartActionType, CartState} from "../../../redux/reducers/cart/CartReducer";
 import {Modal, ModalBody} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import * as faIcon from "@fortawesome/free-solid-svg-icons";
 import ModalHeader from "react-bootstrap/ModalHeader";
-import {Quantity} from "../Quantity";
-import {booleanComparator, Loader} from "../../../common/component/Loader";
-import {JsonProperty} from "../../../common/utils/objectmapper/Mapper";
+import {Quantity} from "../../Quantity";
+import {booleanComparator, Loader} from "../../../../common/component/Loader";
+import {JsonProperty} from "../../../../common/utils/objectmapper/Mapper";
+import {Billing} from "./Billing";
+import {AssetCache} from "../../../AssetCache";
 
 class Complete extends React.Component {
 
@@ -38,7 +40,7 @@ class Complete extends React.Component {
                     <div className="col-12">
                         <div className="order_complated_area clearfix">
                             <h5>Děkujeme za objednávku.</h5>
-                            <p>O dalším postupu budete informováni emailem.</p>
+                            <p>O jejím stavu budete informováni emailem.</p>
                             <p className="orderid mb-0">Číslo objednávky: {checkoutStore.getState().orderNumber}</p>
                         </div>
                     </div>
@@ -401,7 +403,7 @@ class Shipping extends React.Component<MethodsState, ContinueState> {
                                         <tbody>
                                         {this.props.shipping.map((i) => (
                                             <tr key={i.id}>
-                                                <th scope="row">{Strings[`ShippingTexts.${i.code}.name`]}</th>
+                                                <th scope="row">{AssetCache.Image[i.code]&&<img style={{height:30}} src={AssetCache.Image[i.code]} />||Strings[`ShippingTexts.${i.code}.name`]}{}</th>
                                                 <td>{new Price(i.price, 'CZK').format()}</td>
                                                 <td>
                                                     <div className="custom-control custom-radio">
@@ -436,86 +438,6 @@ class Shipping extends React.Component<MethodsState, ContinueState> {
 const ShippingRedux = connect((state: MethodsState) => reduceStateToPlainObject(state))(Shipping);
 
 
-class Billing extends React.Component<{}, ContinueState> {
-    state:ContinueState = {canContinue:false};
-    form: Form<CheckoutDto> = null;
-    next = () => {
-        if (this.form.validate()) {
-            checkoutStore.dispatch<CheckoutAction>({
-                type: CheckoutActionType.Update,
-                step: 3,
-                checkout: checkoutStore.getState().checkout
-            });
-        }
-    };
-
-    componentDidMount(): void {
-        this.setState({canContinue: this.form.validate()})
-    }
-
-
-    render() {
-        return <div className="checkout_area section_padding_100">
-            <div className="container">
-                <div className="row">
-                    <div className="col-12">
-                        <div className="checkout_details_area clearfix">
-                            <h5 className="mb-4">{Strings["BillDetails"]}</h5>
-                            <Form<CheckoutDto> data={checkoutStore.getState().checkout} simpleLabel
-                                               inputGroupEnabled={false} ref={o => this.form = o} onChange={(form)=>this.setState({canContinue: form.validate()})}>
-                                <div className="row">
-                                    <div className="col-md-6 mb-3">
-                                        <FormField type={FormInputType.Text} name={"firstName"}
-                                                   title={Strings["FirstName"]} required/>
-                                    </div>
-                                    <div className="col-md-6 mb-3">
-                                        <FormField type={FormInputType.Text} name={"lastName"}
-                                                   title={Strings["LastName"]} required/>
-                                    </div>
-                                    <div className="col-md-6 mb-3">
-                                        <FormField type={FormInputType.Text} name={"emailAddress"}
-                                                   title={Strings["EmailAddress"]} required/>
-                                    </div>
-                                    <div className="col-md-6 mb-3">
-                                        <FormField type={FormInputType.Text} name={"phoneNumber"}
-                                                   title={Strings["PhoneNumber"]}/>
-                                    </div>
-                                    <div className="col-md-6 mb-3">
-                                        <FormField type={FormInputType.Text} name={"street"} title={Strings["Street"]}
-                                                   required/>
-                                    </div>
-                                    <div className="col-md-6 mb-3">
-                                        <FormField type={FormInputType.Text} name={"streetNo"}
-                                                   title={Strings["StreetNo"]} required/>
-                                    </div>
-                                    <div className="col-md-6 mb-3">
-                                        <FormField type={FormInputType.Text} name={"city"} title={Strings["City"]}
-                                                   required/>
-                                    </div>
-                                    <div className="col-md-6 mb-3">
-                                        <FormField type={FormInputType.Number} name={"postCode"}
-                                                   title={Strings["PostCode"]} required/>
-                                    </div>
-                                </div>
-                            </Form>
-                        </div>
-                    </div>
-
-                    <div className="col-12">
-                        <div className="checkout_pagination d-flex justify-content-end mt-50">
-                            <Link href={() => checkoutStore.dispatch<CheckoutAction>({
-                                type: CheckoutActionType.SetStep,
-                                step: 1
-                            })} className="btn bigshop-btn mt-2 ml-2">{Strings["Back"]}</Link>
-
-                            <Link href={()=>this.state.canContinue&&this.next()} className={cs("btn bigshop-btn mt-2 ml-2", !this.state.canContinue&&"disabled")}>{Strings["Continue"]}</Link>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    }
-}
 
 interface Step {
     name: string
@@ -538,9 +460,6 @@ class Checkout extends React.Component<CheckoutState> {
                     ))}
                 </div>
                 <SwitchPage value={this.props.step} default={0}>
-                    <SwitchCase value={2}>
-                        <Billing/>
-                    </SwitchCase>
                     <SwitchCase value={0}>
                         <Provider store={methodsStore}>
                             <ShippingRedux/>
@@ -550,6 +469,9 @@ class Checkout extends React.Component<CheckoutState> {
                         <Provider store={methodsStore}>
                             <PaymentRedux/>
                         </Provider>
+                    </SwitchCase>
+                    <SwitchCase value={2}>
+                        <Billing />
                     </SwitchCase>
                     <SwitchCase value={3}>
                         <Provider store={cartStore}>

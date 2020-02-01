@@ -29,8 +29,8 @@ class GoodsController {
             HttpStatus.NOT_FOUND, "entity not found"
     ) }
 
-    @GetMapping("/category")
-    fun byCategory(@RequestParam category: List<Category>) = goodsDao.findByCategories(category)
+//    @GetMapping("/category")
+//    fun byCategory(@RequestParam category: List<Category>) = goodsDao.findByCategories(category, Sort.by(Sort.Order.asc("name")))
 
 }
 

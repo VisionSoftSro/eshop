@@ -61,7 +61,7 @@ class ReportRepository {
                 println("*********************************************************************")
                 println("**********************Compiling Report ${key}************************")
                 println("*********************************************************************")
-                FileInputStream(value.file).use {
+                value.inputStream.use {
                     val compiledReport = JasperCompileManager.compileReport(it)
                     localCompiledReports[key] = ReportWrapper(compiledReport, reportPrinter)
                 }
