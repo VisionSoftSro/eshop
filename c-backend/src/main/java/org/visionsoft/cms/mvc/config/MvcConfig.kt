@@ -7,7 +7,10 @@ import org.springframework.boot.web.servlet.ServletRegistrationBean
 import org.springframework.context.annotation.*
 import org.springframework.web.multipart.commons.CommonsMultipartResolver
 import org.springframework.context.annotation.Bean
+
+import org.springframework.core.io.Resource
 import org.springframework.core.io.ResourceLoader
+
 import org.visionsoft.common.reports.ReportPrinter
 import org.visionsoft.common.reports.ReportRepository
 
@@ -44,7 +47,6 @@ class MvcConfig {
         "invoice" to resourceLoader.getResource("classpath:reports/invoice.jrxml"),
         "cod" to resourceLoader.getResource("classpath:reports/payment_cod.jrxml")
     ))
-
 }
 
 
