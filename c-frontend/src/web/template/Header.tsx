@@ -31,7 +31,7 @@ class Header extends React.Component<DataState> {
                         <div className="row h-100 align-items-center">
                             <div className="col-8">
                                 <div className="welcome-note">
-                                    <span className="text" style={{fontSize:"large"}}>Dekorace pro dětské dárky oslavy a dárky pro děti. Vše na jednom místě.</span>
+                                    <span className="text" style={{fontSize:"large"}}>Dekorace pro dětské oslavy a dárky pro děti. Vše na jednom místě!</span>
                                 </div>
                             </div>
                             <div className="col-4">

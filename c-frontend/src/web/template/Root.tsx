@@ -69,7 +69,6 @@ class Root extends React.Component<LocaleState> {
                             loader&&(
                                 <Loader />
                             )||(
-
                                 <>
                                     <Header />
                                     <RouteMapping />

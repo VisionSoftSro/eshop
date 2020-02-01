@@ -38,7 +38,7 @@ class Complete extends React.Component {
                     <div className="col-12">
                         <div className="order_complated_area clearfix">
                             <h5>Děkujeme za objednávku.</h5>
-                            <p>O dalším postupu budete informováni emailem.</p>
+                            <p>O jejím stavu budete informováni emailem.</p>
                             <p className="orderid mb-0">Číslo objednávky: {checkoutStore.getState().orderNumber}</p>
                         </div>
                     </div>
