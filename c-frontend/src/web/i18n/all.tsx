@@ -31,7 +31,7 @@ export default {
         FieldIsRequired:"Pole je povinné",
         Back:"Zpět",
         Billing:"Dodání",
-        Shipping:"Přeprava",
+        Shipping:"Doprava",
         ShippingMethod:"Způsob dopravy",
         Payment:"Platba",
         PaymentMethod:"Způsob platba",
@@ -55,7 +55,14 @@ export default {
                 name:"Zásilkovna"
             }
         },
-        ItemAddedToCart:"Zboží přidáno do košíku"
+        ItemAddedToCart:"Zboží přidáno do košíku",
+        Form:{
+            ServerError:"Chyba serveru",
+            DataSaved:"Data uložena",
+            FieldMessages: {
+                FieldIsRequired:"Pole je povinné"
+            }
+        }
     },
     en: {
         Offers:"For you"

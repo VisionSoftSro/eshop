@@ -252,8 +252,8 @@ export class FormField<CustomOptions = any> extends React.Component<FormFieldPro
 
     validate():FieldError[] {
         const errors = [] as FieldError[];
-        const isNull = this.props.required && (this.value === undefined || this.value === null || this.value === '');
-        if(isNull) {
+        const isNull = (this.value === undefined || this.value === null || this.value === '');
+        if(isNull && this.props.required) {
             errors.push(FieldError.Create("FieldIsRequired", true));
         }
         if(this.props.validate)
@@ -262,7 +262,7 @@ export class FormField<CustomOptions = any> extends React.Component<FormFieldPro
             } else {
                 // typeof this.props.validate === "object"
                 const doValidate = (validation:Validation) => {
-                    if(this.value&&!this.value.toString().match(validation.regexp)) {
+                    if(!isNull&&!this.value.toString().match(validation.regexp)) {
                         errors.push(FieldError.Create(validation.message));
                     }
                 };

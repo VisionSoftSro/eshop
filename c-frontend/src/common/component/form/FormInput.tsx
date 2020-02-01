@@ -15,7 +15,6 @@ export class FormInput extends React.Component<FormInputProps, {value:string, ba
     };
 
     componentDidMount(): void {
-        console.log("input did mount");
         this.props.enableFocusSupport&&this.props.enableFocusSupport();
         ReactTooltip.rebuild();
     }

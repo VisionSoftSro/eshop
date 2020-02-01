@@ -9,32 +9,34 @@ import {exist, GenericMap, JsonList, jsonToFormData} from "../../utils/Util";
 import {ReactElement} from "react";
 import {StateManager} from "react-select/src/stateManager";
 import {any} from "prop-types";
-import {httpEndpoint} from "../../utils/HttpUtils";
+import {httpEndpoint, httpEndpointCustom} from "../../utils/HttpUtils";
 import qs from 'qs';
 import {ThemeConfig} from "react-select/src/theme";
+import {Mapper} from "../../utils/objectmapper/Mapper";
 
 type OptionType = any;
 type OptionTypes = OptionType|OptionsType<OptionType>;
 
-type SelectOptionType = {label:string, value:string};
+type SelectOptionType<T = any> = {label:any, value:T};
 interface AjaxOptions {
     url:string;
     searchKey?:string;
     params?:GenericMap<string>;
+    mapper?():Mapper<any>
 }
-export class SelectProps {
+export class SelectProps<T = any> {
     options?:Array<OptionType>;
-    formatOption?:(value:OptionType)=>SelectOptionType;
+    formatOption?(value:OptionType):SelectOptionType<T>;
+    formatValue?(value:SelectOptionType<T>):OptionType;
     labelKey?:string = "label";
     valueKey?:string = "value";
     isMulti?:boolean = false;
     isSearchable?:boolean = false;
     ajax?:AjaxOptions;
-    formatValue?:(value:SelectOptionType)=>OptionType;
     theme?:ThemeConfig
 }
 interface FormSelectProps extends FormFieldInterfaceProps<OptionTypes> {
-    selectProps:SelectProps
+    selectProps:SelectProps<any>
 }
 
 class FormSelectState {
@@ -46,7 +48,7 @@ class FormSelectState {
         this.options = options;
     }
 }
-const formatValue = (value:OptionType, props:SelectProps):SelectOptionType|Array<SelectOptionType> => {
+const formatValue = (value:OptionType, props:SelectProps<any>):SelectOptionType|Array<SelectOptionType> => {
     if(!exist(value)) {
         return null;
     }
@@ -56,13 +58,13 @@ const formatValue = (value:OptionType, props:SelectProps):SelectOptionType|Array
     return formatOption(value, props);
 };
 
-const formatOptions = (array:Array<OptionType>, props:SelectProps):Array<SelectOptionType> => {
+const formatOptions = (array:Array<OptionType>, props:SelectProps<any>):Array<SelectOptionType> => {
     const newArray = new Array<SelectOptionType>();
     array&&array.forEach(item=>newArray.push(formatOption(item, props)));
     return newArray;
 };
 
-const formatOption = (value:OptionType, props:SelectProps):SelectOptionType => {
+const formatOption = (value:OptionType, props:SelectProps<any>):SelectOptionType => {
     if(props.formatOption){
         return props.formatOption(value);
     }
@@ -73,7 +75,6 @@ const formatOption = (value:OptionType, props:SelectProps):SelectOptionType => {
 
 
 export class FormSelect extends React.Component<FormSelectProps, FormSelectState> implements FormFieldInterface {
-
     state = new FormSelectState(
         formatValue(this.props.value, this.props.selectProps),
         formatOptions(this.props.selectProps.options, this.props.selectProps)
@@ -82,7 +83,7 @@ export class FormSelect extends React.Component<FormSelectProps, FormSelectState
     dom:any;
 
     componentDidMount(): void {
-        this.props.listeners.onLabelClick = this.onLabelClick
+        if(this.props.listeners)this.props.listeners.onLabelClick = this.onLabelClick
     }
 
     onLabelClick = (e:React.MouseEvent) => {
@@ -123,8 +124,12 @@ export class FormSelect extends React.Component<FormSelectProps, FormSelectState
         const params = ajax.params || {};
         // @ts-ignore
         params[ajax.searchKey||"term"] = inputValue;
-        const result = await httpEndpoint<JsonList<GenericMap<any>>>(JsonList, `${ajax.url}?${qs.stringify(params)}`);
-        return formatOptions(result.data.list, this.props.selectProps);
+        const result = await httpEndpointCustom(`${ajax.url}?${qs.stringify(params)}`);
+        let data = result.json.list;
+        if(ajax.mapper) {
+            data = ajax.mapper().readValueAsArray(data);
+        }
+        return formatOptions(data, this.props.selectProps);
     };
 
     render() {

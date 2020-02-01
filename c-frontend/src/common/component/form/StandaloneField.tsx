@@ -18,6 +18,7 @@ export type StandaloneFieldProps<CustomOptions = any> = {
     value?:any
     type:FormInputType|string
     dataTip?:any
+    className?:string
     selectProps?: SelectProps
     customComponent?: CustomFieldComponent | any
     customComponentOptions?: CustomOptions
@@ -75,11 +76,12 @@ export function StandaloneField<CustomOptions = any>(props:StandaloneFieldProps<
     const createDefaultComponentProps = () => {
         return {
             name:"",
+            className:props.className,
             dataTip:props.dataTip,
             disabled: props.disabled,
             placeholder: props.placeholder,
             value: props.value,
-            onValueChanged: props.onValueChanged,
+            onValueChanged: props.onValueChanged||(()=>{}),
             enableFocusSupport:()=>false
         } as FormFieldInterfaceProps<any>;
     };

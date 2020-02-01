@@ -4,7 +4,7 @@ import moment from "moment";
 export class Footer extends React.Component {
     render() {
         return (
-            <footer className="footer_area">
+            <footer className="footer_area" style={{zIndex:0}}>
                 <div className="container">
                     <div className="row">
                         <div className="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3">

@@ -3,6 +3,7 @@ import {ReducersState} from "../../../common/redux/Reducers";
 import {LocaleAction, LocaleActionType} from "../../../common/redux/reducers/locale/LocaleReducer";
 import DataStorage from "../../../common/DataStorage";
 import moment from 'moment';
+import {setLocalization} from "../../../common/component/form/Form";
 
 
 export const changeLocale = (locale:string) => {
@@ -10,6 +11,7 @@ export const changeLocale = (locale:string) => {
         window.Strings.locale = locale;
         moment.locale(locale);
         DataStorage.set("locale", locale);
+        setLocalization(Strings.Form);
         dispatch({type:LocaleActionType.SetLocale, locale:locale});
     }
 };

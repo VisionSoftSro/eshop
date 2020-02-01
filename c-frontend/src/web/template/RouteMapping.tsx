@@ -9,9 +9,9 @@ import ItemList from "./main/ItemList";
 import ModalItem from "./main/ModalItem";
 import {Router, BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
 import history from '../../common/utils/History';
-import Checkout from "./main/Checkout";
 import {StorageForm} from "./main/Storage";
 import {ItemDetail} from "./main/ItemDetail";
+import Checkout from "./main/checkout/Checkout";
 
 export class RouteMapping extends React.Component {
 

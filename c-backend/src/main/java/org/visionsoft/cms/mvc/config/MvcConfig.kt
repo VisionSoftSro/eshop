@@ -7,15 +7,13 @@ import org.springframework.boot.web.servlet.ServletRegistrationBean
 import org.springframework.context.annotation.*
 import org.springframework.web.multipart.commons.CommonsMultipartResolver
 import org.springframework.context.annotation.Bean
-import org.springframework.core.io.ClassPathResource
-import org.springframework.core.io.Resource
 import org.springframework.core.io.ResourceLoader
 import org.visionsoft.common.reports.ReportPrinter
 import org.visionsoft.common.reports.ReportRepository
 
 
 @Configuration
-@ComponentScan(basePackages = ["org.visionsoft.cms.mvc.controller.common"])
+@ComponentScan(basePackages = ["org.visionsoft.cms.mvc.controller.common", "org.visionsoft.cms.mvc.service"])
 @Import(WebSecurity::class)
 class MvcConfig {
 

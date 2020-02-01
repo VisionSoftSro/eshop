@@ -76,10 +76,16 @@ class Order {
     @NotNull
     var email:String? = null
 
-    var json:String? = null
+//    var json:String? = null
 
     @Enumerated(EnumType.STRING)
     var status:OrderStatus? = null
+
+    var address:String? = null
+    var city:String? = null
+    var firstName:String? = null
+    var lastName:String? = null
+    var postCode:Int? = null
 
     @OneToMany(mappedBy = "order", cascade = [CascadeType.PERSIST])
     @JsonManagedReference
