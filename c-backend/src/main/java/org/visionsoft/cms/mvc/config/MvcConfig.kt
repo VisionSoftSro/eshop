@@ -43,7 +43,8 @@ class MvcConfig {
 
     @Bean
     fun reportRepository(resourceLoader: ResourceLoader) = ReportRepository(mutableMapOf(
-        "invoice" to resourceLoader.getResource("classpath:reports/invoice.jrxml")
+        "invoice" to resourceLoader.getResource("classpath:reports/invoice.jrxml"),
+        "cod" to resourceLoader.getResource("classpath:reports/payment_cod.jrxml")
     ))
 
 }

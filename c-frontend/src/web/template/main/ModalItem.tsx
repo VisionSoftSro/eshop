@@ -75,7 +75,7 @@ class ModalItem extends React.Component<ItemState> {
                                                     this.props.item.stock > 0 &&
                                                     (
                                                         <Wrapper>
-                                                            <Quantity pcs={this.props.pcs} setQuantity={this.setQuantity}/>
+                                                            <Quantity pcs={this.props.pcs} setQuantity={this.setQuantity} max={this.props.item.stock}/>
                                                             <button type="submit" name="addtocart" value="5" className="cart-submit" onClick={this.addToCart}>
                                                                 {Strings["AddToCart"]}
                                                             </button>

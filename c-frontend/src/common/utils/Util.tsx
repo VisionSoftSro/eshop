@@ -116,3 +116,12 @@ export function GetFingerPrint():Promise<string> {
         }, 500);//podle dokumentace
     }))
 }
+
+export function getHashValue(key:string) {
+    const matches = location.hash.match(new RegExp(key+'=([^&]*)'));
+    return matches ? matches[1] : null;
+}
+
+export function toSeoString(str:string) {
+    return str.toLowerCase().trim().replace(/\s+/g, "-").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}

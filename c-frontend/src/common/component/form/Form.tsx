@@ -301,7 +301,6 @@ export class FormField<CustomOptions = any> extends React.Component<FormFieldPro
  *
  ********************/
 export class FormButtonClickEvent {
-    type?: string;
     modifyUrl?: (url: string) => string;
     requestInit?: RequestInit
 }
@@ -335,7 +334,7 @@ export class FormButton<T> extends React.Component<FormButtonProps<T>, { loading
         }
         // @ts-ignore
         const event = this.props.onSend && this.props.onSend(this.props.form, this.props.type) || new FormButtonClickEvent();
-        event.type = this.props.type;
+        event.requestInit = _.merge({headers:{"type": this.props.type||""}}, event.requestInit);
         this.onButtonClick(event)
     };
     render() {
@@ -383,7 +382,7 @@ export interface FormProps<Data> extends HiddenFormProps {
     onChange?: (form: Form<Data>) => void
 }
 
-const voidFormSubmit = (e: FormEvent) => e.preventDefault();
+export const voidFormSubmit = (e: FormEvent) => e.preventDefault();
 
 class FormState {
     errors: ValidationError = new ValidationError();
@@ -509,8 +508,7 @@ export class Form<Data> extends React.Component<FormProps<Data>, FormState> {
             // headers['Content-Type'] = 'multipart/form-data';
         }
         const init = _.merge({method: method, headers:headers, body: convertMethod(json)}, _.merge(event.requestInit, this.props.requestInit));
-
-        const result = await httpEndpointCustom(url, {...init, ...event.requestInit});
+        const result = await httpEndpointCustom(url, init);
         const response = new FormHttpResponse<Data>();
         response.status = FormStatus.Nothing;
 
