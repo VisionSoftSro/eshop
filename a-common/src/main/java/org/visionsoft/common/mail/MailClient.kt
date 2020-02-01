@@ -14,6 +14,7 @@ import org.thymeleaf.TemplateEngine
 import org.thymeleaf.context.Context
 import java.io.InputStream
 import java.util.logging.Logger
+import javax.mail.internet.InternetAddress
 
 
 @Component
@@ -35,6 +36,8 @@ class MailClient @Autowired constructor(var mailSender: JavaMailSender, var mail
 
     @Value("\${mail.from}")
     lateinit var mailFrom:String
+    @Value("\${mail.from.name}")
+    lateinit var mailFromName:String
 
     @Value("\${mail.info}")
     lateinit var infoEmail:String
@@ -50,7 +53,7 @@ class MailClient @Autowired constructor(var mailSender: JavaMailSender, var mail
         try {
             mailSender.send {
                 val messageHelper = MimeMessageHelper(it, (attachments?.size ?: 0) > 0)
-                messageHelper.setFrom(mailFrom)
+                messageHelper.setFrom(InternetAddress(mailFrom, mailFromName))
                 messageHelper.setTo(recipients)
                 messageHelper.setSubject(subject)
                 val params = parameters.toMutableMap()

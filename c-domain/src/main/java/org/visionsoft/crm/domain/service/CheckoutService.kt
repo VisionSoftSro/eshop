@@ -98,7 +98,7 @@ class CheckoutService {
     fun createInvoice(order:Order) = transaction {
         val orderMerged = it.merge(order)
 //        val checkout = objectMapper.readValue(orderMerged.json, Checkout::class.java)
-//        orderMerged.status = OrderStatus.Invoice
+        orderMerged.status = OrderStatus.Invoice
         val map = mutableMapOf<String, Any?>(
                 "orderId" to order.id!!,
                 "createdDate" to Date(),
@@ -116,8 +116,8 @@ class CheckoutService {
             reports["invoice"].renderToStream(map, JREmptyDataSource(),fos, ReportRenderType.PDF )
             stream = InputStreamSource { FileInputStream(file) }
         }
-        mailClient.send("Vaše faktura k objednávce", "general", "customerOrderInvoiceTemplate", map, stream?.let {a-> listOf(Attachment("faktura_${order.id}.png", a))}, order.email!!)
-        mailClient.send("Byla vygenerována faktura", "general", "storageOrderInvoiceTemplate", map, stream?.let {a-> listOf(Attachment("faktura_${order.id}.png", a))}, storageEmail)
+        mailClient.send("Vaše faktura k objednávce", "general", "customerOrderInvoiceTemplate", map, stream?.let {a-> listOf(Attachment("faktura_${order.id}.pdf", a))}, order.email!!)
+        mailClient.send("Byla vygenerována faktura", "general", "storageOrderInvoiceTemplate", map, stream?.let {a-> listOf(Attachment("faktura_${order.id}.pdf", a))}, storageEmail)
     }
 
     fun ship(order:Order, trackingUrl:String?) = transaction {
