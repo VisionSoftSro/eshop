@@ -12,6 +12,6 @@ export const AssetCache = {
       // Spanish:require('./assets/images/flags/spanish.png'),
       // English:require('./assets/images/flags/usa.png'),
     },
-    czech_post:require('./assets/img/cp_logo.png'),
+    czech_post:require('./assets/img/czech_post.png'),
   } as GenericMap
 };
