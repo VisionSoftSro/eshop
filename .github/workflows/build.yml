@@ -17,3 +17,14 @@ jobs:
           java-version: 1.8
       - name: Build with Maven
         run: mvn package -Pwith-web
+      - name: Deploy on server
+        env:
+          DEPLOY_KEY: ${{ secrets.VS_DEPLOY_KEY }}
+        run: |
+          eval `ssh-agent -s`
+          mkdir -p ~/.ssh
+          ssh-keyscan oslavyadarky.cz >> ~/.ssh/known_hosts
+          ssh-add - <<< "${DEPLOY_KEY}"
+          scp c-boot/target/eshop.jar eshop@oslavyadarky.cz:/home/eshop
+          ssh eshop@oslavyadarky.cz 'sudo systemctl daemon-reload'
+          ssh eshop@oslavyadarky.cz 'sudo systemctl restart eshop'
