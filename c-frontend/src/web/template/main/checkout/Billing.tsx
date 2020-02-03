@@ -11,8 +11,6 @@ import {Mapper} from "../../../../common/utils/objectmapper/Mapper";
 import {CpBranch} from "../../../dto/CzechPostBranch";
 import {SelectProps} from "../../../../common/component/form/FormSelect";
 
-const cpMapper = new Mapper<CpBranch>({constructor: CpBranch});
-
 function FormCzechPostAutocomplete(props: CustomFieldComponentProps<CpBranch, { checkout: CheckoutDto }>) {
     const {checkout} = props.options;
     const [value, setValue] = useState(props.value);
@@ -28,7 +26,8 @@ function FormCzechPostAutocomplete(props: CustomFieldComponentProps<CpBranch, { 
         <StandaloneField type={FormInputType.Select} selectProps={{
             ajax: {
                 url: "ac/cp",
-                mapper: () => cpMapper
+                paginable:true,
+                clazz:CpBranch
             },
             formatOption: value => {
                 return {

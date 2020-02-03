@@ -1,5 +1,4 @@
 import Locs, {LocalizedStrings} from 'react-localization';
-import {GenericMap} from "./utils/Util";
 
 type Type = GenericMap<{}>;
 export const init = (props:Type):LocalizedStrings<Type> => {

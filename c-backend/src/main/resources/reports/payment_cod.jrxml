@@ -22,7 +22,7 @@
 		<![CDATA[]]>
 	</queryString>
 	<detail>
-		<band height="149" splitType="Stretch">
+		<band height="23" splitType="Stretch">
 			<staticText>
 				<reportElement x="0" y="0" width="100" height="20" forecolor="#808080" uuid="5a3c4d02-5c27-4ac1-8222-f39eb139c053"/>
 				<textElement>

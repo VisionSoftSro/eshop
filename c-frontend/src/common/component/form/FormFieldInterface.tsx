@@ -1,5 +1,4 @@
 import * as React from "react";
-import {GenericMap} from "../../utils/Util";
 
 export interface FormFieldInterface {
 

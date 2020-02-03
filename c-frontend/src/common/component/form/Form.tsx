@@ -7,7 +7,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import * as faIcon from "@fortawesome/free-solid-svg-icons";
 import {IconProp} from "@fortawesome/fontawesome-svg-core";
 import {httpEndpoint, httpEndpointCustom} from "../../utils/HttpUtils";
-import {deepEqual, GenericMap, jsonToFormData, jsonToFormUrlEncoded} from "../../utils/Util";
+import {deepEqual, jsonToFormData, jsonToFormUrlEncoded} from "../../utils/Util";
 import {FormSelect, SelectProps} from "./FormSelect";
 import {toast} from "react-toastify";
 import {FormTextarea} from "./FormTextarea";

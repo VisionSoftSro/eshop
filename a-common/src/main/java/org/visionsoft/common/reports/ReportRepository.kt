@@ -73,6 +73,19 @@ class ReportRepository {
     operator fun get(reportName: String): ReportWrapper {
         return compiledReports[reportName] ?: throw IllegalArgumentException("unknown report $reportName")
     }
+    fun exportToStream(stream: OutputStream, type: ReportRenderType, vararg  config: ReportExportConfig) {
+        var initPrint: JasperPrint? = null
+
+        for (c in config) {
+            val print = c.wrapper.print(c.model, c.datasource)
+            if(initPrint==null) {
+                initPrint = print
+            } else {
+                print.pages.forEach { initPrint.addPage(it) }
+            }
+        }
+        reportPrinter.renderToStream(initPrint!!, stream, type)
+    }
 
     fun exportToPdf(vararg  config: ReportExportConfig) : ByteArray {
         var initPrint: JasperPrint? = null

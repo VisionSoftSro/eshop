@@ -1,6 +1,6 @@
 import {toast} from 'react-toastify';
 import _ from 'lodash';
-import {GenericMap, JsonList} from "./Util";
+import {JsonList} from "./Util";
 import {JsonProperty, Mapper} from "./objectmapper/Mapper";
 import {useContext} from "react";
 

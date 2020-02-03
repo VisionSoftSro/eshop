@@ -5,8 +5,8 @@ import Select from 'react-select';
 import Async from 'react-select/lib/Async';
 import {Props as SelectProps2} from "react-select/base";
 import {ActionMeta, GroupedOptionsType, OptionsType, Theme, ValueType} from "react-select/src/types";
-import {exist, GenericMap, JsonList, jsonToFormData} from "../../utils/Util";
-import {ReactElement} from "react";
+import {exist, JsonList, jsonToFormData} from "../../utils/Util";
+import {ReactElement, SyntheticEvent} from "react";
 import {StateManager} from "react-select/src/stateManager";
 import {any} from "prop-types";
 import {httpEndpoint, httpEndpointCustom} from "../../utils/HttpUtils";
@@ -18,21 +18,23 @@ type OptionType = any;
 type OptionTypes = OptionType|OptionsType<OptionType>;
 
 type SelectOptionType<T = any> = {label:any, value:T};
-interface AjaxOptions {
+interface AjaxOptions<T> {
     url:string;
     searchKey?:string;
+    pageKey?:string;
     params?:GenericMap<string>;
-    mapper?():Mapper<any>
+    clazz?:{new():T};
+    paginable?:boolean;
 }
 export class SelectProps<T = any> {
     options?:Array<OptionType>;
     formatOption?(value:OptionType):SelectOptionType<T>;
     formatValue?(value:SelectOptionType<T>):OptionType;
-    labelKey?:string = "label";
-    valueKey?:string = "value";
+    labelKey?:string = null;
+    valueKey?:string = null;
     isMulti?:boolean = false;
     isSearchable?:boolean = false;
-    ajax?:AjaxOptions;
+    ajax?:AjaxOptions<T>;
     theme?:ThemeConfig
 }
 interface FormSelectProps extends FormFieldInterfaceProps<OptionTypes> {
@@ -42,7 +44,6 @@ interface FormSelectProps extends FormFieldInterfaceProps<OptionTypes> {
 class FormSelectState {
     selectedOption:SelectOptionType|OptionsType<SelectOptionType>;
     options:Array<SelectOptionType>;
-
     constructor(selectedOption: any | Array<OptionType>, options: Array<SelectOptionType>) {
         this.selectedOption = selectedOption;
         this.options = options;
@@ -68,8 +69,8 @@ const formatOption = (value:OptionType, props:SelectProps<any>):SelectOptionType
     if(props.formatOption){
         return props.formatOption(value);
     }
-    value["label"] = value[props.labelKey];
-    value["value"] = value[props.valueKey];
+    value["label"] = props.labelKey&&value[props.labelKey]||value;
+    value["value"] = props.valueKey&&value[props.valueKey]||value;
     return value;
 };
 
@@ -79,9 +80,8 @@ export class FormSelect extends React.Component<FormSelectProps, FormSelectState
         formatValue(this.props.value, this.props.selectProps),
         formatOptions(this.props.selectProps.options, this.props.selectProps)
     );
-
     dom:any;
-
+    page:number = 1;
     componentDidMount(): void {
         if(this.props.listeners)this.props.listeners.onLabelClick = this.onLabelClick
     }
@@ -105,9 +105,10 @@ export class FormSelect extends React.Component<FormSelectProps, FormSelectState
     sendValue = (value: ValueType<OptionType>) => {
         let values:any|Array<any> = {};
         const formatFn:(value:OptionType)=> any = (val:SelectOptionType) => {
-            let rv = (val && this.props.selectProps.formatValue) && this.props.selectProps.formatValue(val);
-            if(!exist(rv))
-                rv = val;
+            let rv = val.value;
+            if(this.props.selectProps.formatValue) {
+                rv = this.props.selectProps.formatValue(val);
+            }
             return rv;
         };
         if(Array.isArray(value)) {
@@ -119,18 +120,46 @@ export class FormSelect extends React.Component<FormSelectProps, FormSelectState
         this.props.onValueChanged(values);
     };
 
-    async onLoadOptions (inputValue: string):Promise<any> {
+    async onLoadOptions (inputValue: string, callback:any):Promise<any> {
+        if(typeof callback === "function") {
+            this.page = 1;
+        }
         const {ajax} = this.props.selectProps;
-        const params = ajax.params || {};
-        // @ts-ignore
+        const params:Keyed = ajax.params || {};
         params[ajax.searchKey||"term"] = inputValue;
+        params[ajax.pageKey||"page"] = this.page;
         const result = await httpEndpointCustom(`${ajax.url}?${qs.stringify(params)}`);
         let data = result.json.list;
-        if(ajax.mapper) {
-            data = ajax.mapper().readValueAsArray(data);
+        if(ajax.clazz) {
+            data = new Mapper({constructor:ajax.clazz}).readValueAsArray(data);
         }
         return formatOptions(data, this.props.selectProps);
     };
+
+    loadNextPage() {
+        if(this.props.selectProps.ajax.paginable){
+            const {inputValue, loadedOptions, defaultOptions} = this.dom.state;
+            this.page++;
+            //strankovani - nejak sem to udelal, je to hacky jak svina
+            this.dom.setState({isLoading:true}, ()=>{
+                let options = defaultOptions;
+                let key = "defaultOptions";
+                if(inputValue !== "") {
+                    options = loadedOptions;
+                    key = "loadedOptions";
+                }
+                this.onLoadOptions(inputValue, null).then(result=>{
+                    console.log("next_data", [...options, ...result]);
+                    this.dom.optionsCache = {};
+                    const s = {
+                        isLoading: false
+                    } as Keyed;
+                    s[key] = [...options, ...result]
+                    this.dom.setState(s);
+                })
+            });
+        }
+    }
 
     render() {
         const { selectedOption, options } = this.state;
@@ -145,7 +174,7 @@ export class FormSelect extends React.Component<FormSelectProps, FormSelectState
         const finalProps = {ref:(o:any)=>this.dom=o,theme:themeProps, ...this.props.selectProps, ...props};
         let Component:ReactElement;
         if(this.props.selectProps.ajax) {
-            Component = <Async {...finalProps} loadOptions={this.onLoadOptions.bind(this)} defaultOptions cacheOptions />;
+            Component = <Async {...finalProps} loadOptions={this.onLoadOptions.bind(this)} defaultOptions cacheOptions onMenuScrollToBottom={this.loadNextPage.bind(this)}/>;
         } else {
             Component = <Select {...finalProps} data-tip={this.props.dataTip}/>;
         }

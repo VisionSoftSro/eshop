@@ -3,6 +3,7 @@ package org.visionsoft.cms.mvc.controller.api
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.visionsoft.common.controller.JsonList
 import org.visionsoft.crm.domain.dao.CzechPostGenericDao
@@ -38,8 +39,8 @@ class Autocomplete {
 
 
     @GetMapping("cp")
-    fun findCp(term:String?) = JsonList<CpBranches>().apply {
-        list = dao.findByTerm(term?:"", "zip", "name", "address", "city", "cityPart").list()
+    fun findCp(term:String?, @RequestParam(required = false, defaultValue = "1") page:Int) = JsonList<CpBranches>().apply {
+        list = dao.findByTerm(term?:"", "zip", "name", "address", "city", "cityPart").list(page)
     }
 
 }

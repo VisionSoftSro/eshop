@@ -1,5 +1,3 @@
-import {GenericMap} from "../common/utils/Util";
-
 export const AssetCache = {
   Image: {
     Logo:require('./assets/img/core-img/logo_gift.png'),

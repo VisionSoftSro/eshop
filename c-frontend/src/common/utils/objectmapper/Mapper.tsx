@@ -1,13 +1,12 @@
-import {capitalize} from "../StringExtension";
-import {Converters, FieldType} from "./Mapper.d";
-import {type} from "os";
-import {GenericMap} from "../Util";
+import "reflect-metadata";
 import _ from 'lodash';
+
 
 
 export interface MapperConfig<T> {
     constructor:{new(): T};
-    dataProviders?:(root:T)=>Map<string, any>;
+    texts?:GenericMap;
+    dataProviders?:(root:T)=>GenericMap<GenericMap>;
 }
 export interface JsonPropertyMetaData<T> {
     name?: string,
@@ -23,11 +22,9 @@ export function JsonProperty<T>(metadata?: JsonPropertyMetaData<T>|string): (tar
     } else if (typeof metadata === 'object') {
         decoratorMetaData = metadata as JsonPropertyMetaData<T>;
     }
-    // @ts-ignore
     return Reflect.metadata(JSON_META_DATA_KEY, decoratorMetaData);
 }
 export function JsonIgnore<T>(): (target: Object, targetKey: string | symbol)=> void {
-    // @ts-ignore
     return Reflect.metadata(JSON_IGNORE_META_DATA_KEY, true);
 }
 
@@ -39,6 +36,8 @@ const defaultConverter = (value: any) => value;
 type writeType = {
     springSupport:boolean
 }
+
+
 const defaultWriteConfig = {springSupport:true};
 export class Mapper<A extends Mapped> {
     config:MapperConfig<A>;
@@ -46,11 +45,9 @@ export class Mapper<A extends Mapped> {
         this.config = cfg;
     }
     getJsonProperty<T>(target: any, propertyKey: string): JsonPropertyMetaData<T> {
-        // @ts-ignore
         return Reflect.getMetadata(JSON_META_DATA_KEY, target, propertyKey);
     }
     getJsonIgnore<T>(target: any, propertyKey: string): JsonPropertyMetaData<T> {
-        // @ts-ignore
         return Reflect.getMetadata(JSON_IGNORE_META_DATA_KEY, target, propertyKey);
     }
 
@@ -71,11 +68,36 @@ export class Mapper<A extends Mapped> {
     }
 
 
-
     private readValueInternal(instance:A, data:any):A {
-        if((data || null) === null) {
-            return;
+        const providedFields = new Array<ProvidedField<any>>();
+        const result = this.readValueInternalRecursive(instance, data, providedFields);
+        if(this.config.dataProviders) {
+            const providers = this.config.dataProviders(instance);
+            providedFields.forEach(({type, value, field, target})=>{
+                const provider = providers[type.dataProvider];
+                if(provider) {
+                    const setValue = (newValue?:any) => target[field] = newValue;
+                    const getProviderValue = (refKey:string):any => provider[refKey] || null;
+                    if(type.isArray) {
+                        const array:Array<any> = [];
+                        value.forEach((item:any)=>array.push(getProviderValue(item)));
+                        setValue(array.filter(i=>i!==null));
+                    } else {
+                        setValue(getProviderValue(value));
+                    }
+                }
+            });
         }
+
+        return result;
+    }
+
+
+    private readValueInternalRecursive(instance:A, data:any, providedFields:ProvidedField<any>[]):A {
+        if((data || null) === null) {
+            return instance;
+        }
+
         Object.keys(instance).forEach((oKey: string) => {
             let meta = this.getJsonProperty<any>(instance, oKey) || {};
             let ignore = this.getJsonIgnore(instance, oKey);
@@ -85,64 +107,73 @@ export class Mapper<A extends Mapped> {
             const key:string = meta.name || oKey;
             const value = data[key] || instance[key] || null;
             const type = meta.type || {};
-            const {fromJson} = {...{fromJson: defaultConverter}, ...(meta.converters || ({}))};
+            const {fromJson} = _.merge({fromJson: defaultConverter}, (meta.converters || ({})));
             const setValue = (value?:any, ignoreConverter = false) => {
                 (instance as GenericMap)[oKey] = ignoreConverter ? value : fromJson(value);
             };
             //set null value without converters
             setValue(null, true);
-            if(type.dataProvider) {
-                const providers = this.config.dataProviders(instance);
-                if(providers && value !== undefined) {
-                    const provider = providers.get(type.dataProvider);
-                    if(provider) {
-                        const getProviderValue = (refKey:string):any => {
-                            const pvalue = provider.get(refKey);
-                            if(!pvalue) {
-                                console.warn(`${instance.constructor.name}::${key} reference ${refKey} to provider ${type.dataProvider} not exist`);
-                            }
-                            return pvalue || null;
-                        };
-                        if(Array.isArray(value)) {
-                            const array:Array<any> = [];
-                            value.forEach(item=>array.push(getProviderValue(item)));
-                            setValue(array.filter(i=>i!==null));
-                        } else {
-                            setValue(getProviderValue(value));
-                        }
+            const valueExist = (value || null) !== null;
+            if(type.localize !== undefined) {
+                const cfg:LocalizedProperty = Object.assign({textsProvider:"texts"}, type.localize);
+                const texts = this.config.texts;
+                if(texts === null || typeof texts === 'undefined') {
+                    throw new Error(`Texts provider named ${cfg.textsProvider} is not provided!!! cannot use LocalizedProperty`);
+                }
+                const getLocalizedValue = (locKey:string):string => {
+                    return texts[`${locKey}${cfg.suffix&&`_${cfg.suffix}`||""}`];
+                };
+                if(type.isArray) {
+                    if(valueExist) {
+                        const array:Array<any> = [];
+                        value.forEach((item:any)=>array.push(getLocalizedValue(item)));
+                        setValue(array.filter(i=>i!==null));
+                    }
+                } else {
+                    let locKey = value;
+                    if(cfg.referenceKey) {
+                        locKey = data[cfg.referenceKey];
+                    }
+                    locKey = locKey||cfg.defaultKey;
+                    if(locKey){
+                        setValue(getLocalizedValue(locKey));
                     }
                 }
-            } else if(type.enum) {
-
+            } else if(type.dataProvider && valueExist) {
+                providedFields.push({field:oKey, target: instance, value: value, type: type})
+            } else if(type.enum && valueExist) {
                 const getEnumValue = (enumValue:any):any => {
                     if (typeof enumValue === 'number') {
                         //in the enum there are keys for Enum names but there are number keys too and their values as keys of string names
                         return getEnumValue(type.enum[enumValue]);
                     } else {
-                        return type.enum[enumValue];
+                        const enumKeys = Object.keys(type.enum).filter(enumKey=> enumKey.toLowerCase() === enumValue.toString().toLowerCase());
+                        if(enumKeys.length == 1) {
+                            return type.enum[enumKeys[0]];
+                        }
+                        return null;
                     }
                 };
-
-                if(Array.isArray(value)) {
+                if(type.isArray) {
                     const array:Array<any> = [];
-                    value.forEach(item=>{
+                    value.forEach((item:any)=>{
                         array.push(getEnumValue(item));
                     });
                     setValue(array);
                 } else {
                     setValue(getEnumValue(value));
                 }
-            } else if(type.clazz) {
-                if(Array.isArray(value)) {
+            } else if(type.clazz && valueExist) {
+                if(type.isArray) {
                     const array:Array<any> = [];
-                    value.forEach(item=>{
-                        array.push(this.readValueInternal(new type.clazz(), item));
+                    value.forEach((item:any)=>{
+                        array.push(this.readValueInternalRecursive(new type.clazz(), item, providedFields));
                     });
                     setValue(array);
                 } else {
-                    setValue(this.readValueInternal(new type.clazz(), value))
+                    setValue(this.readValueInternalRecursive(new type.clazz(), value, providedFields))
                 }
-            } else if(value) {
+            } else if(valueExist) {
                 setValue(value)
             }
         });
@@ -158,16 +189,16 @@ export class Mapper<A extends Mapped> {
         const {springSupport} = _.merge(defaultWriteConfig, options);
         const json = {} as GenericMap;
         Object.keys(instance).forEach(oKey=>{
-           let value = instance[oKey];
-           let meta = this.getJsonProperty<any>(instance, oKey) || {};
-           let ignore = this.getJsonIgnore(instance, oKey);
-           const key = meta.name || oKey;
-           if(ignore) {
+            let value = instance[oKey];
+            let meta = this.getJsonProperty<any>(instance, oKey) || {};
+            let ignore = this.getJsonIgnore(instance, oKey);
+            const key = meta.name || oKey;
+            if(ignore) {
                 return;
-           }
-           const {toJson} = {...{toJson: defaultConverter}, ...(meta.converters || ({}))};
+            }
+            const {toJson} = _.merge({toJson: defaultConverter}, (meta.converters || ({})));
 
-           const getValue = (_value:any):any => {
+            const getValue = (_value:any):any => {
                 let newValue = toJson(_value);
                 if(springSupport) {
                     //zde dodelavat spring support converse na objektech
@@ -182,15 +213,15 @@ export class Mapper<A extends Mapped> {
                 }
             };
 
-           if(meta.type&&meta.type.isArray) {
-               if(value&&Array.isArray(value)) {
-                   json[key] = value.map(arrayValue => getValue(arrayValue));
-               }
-           } else {
-               json[key] = getValue(value);
-           }
+            if(meta.type&&meta.type.isArray) {
+                if(value&&Array.isArray(value)) {
+                    json[key] = value.map(arrayValue => getValue(arrayValue));
+                }
+            } else {
+                json[key] = getValue(value);
+            }
 
-           return value;
+            return value;
         });
         return json;
     }

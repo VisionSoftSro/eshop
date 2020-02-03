@@ -68,8 +68,6 @@ export const jsonTo = ({set}:{set:(name:string, value:any)=>void}, json:GenericM
 };
 export const exist = (value?:any) => value !== null && value !== undefined;
 
-export type GenericMap<T = any> = {[key:string]:T}
-
 export class JsonList<E> {
     list:Array<E>;
 }
