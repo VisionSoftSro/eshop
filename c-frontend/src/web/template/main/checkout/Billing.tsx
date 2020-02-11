@@ -39,9 +39,9 @@ function FormCzechPostAutocomplete(props: CustomFieldComponentProps<CpBranch, { 
                 };
             },
             formatValue: value => value,
-            isSearchable: true,
+            isSearchable: true
 
-        } as SelectProps<CpBranch>} placeholder={"Vyberte balíkovnu"} className={"col-12"} onValueChanged={data => {
+        } as SelectProps<CpBranch>} placeholder={"Vyberte poštu"} className={"col-12"} onValueChanged={data => {
             setValue(data.value);
         }} value={value}/>
     );
@@ -97,7 +97,7 @@ export function Billing() {
                                     </div>
                                     <div className="col-12 mb-3">
                                         <FormField type={FormInputType.Custom} name={"czechPost"}
-                                                   customComponent={FormCzechPostAutocomplete} title={"Balíkovna"}
+                                                   customComponent={FormCzechPostAutocomplete} title={"Pobočka České pošty"}
                                                    customComponentOptions={{checkout: checkout}} required/>
                                     </div>
                                     {/*<div className="col-md-6 mb-3">*/}

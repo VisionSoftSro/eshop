@@ -124,7 +124,8 @@ class CheckoutService {
                 "shipmentDS" to JRBeanCollectionDataSource(listOf(1)),
                 "shipment" to cod
         )
-        val file = File("$invoicePath/${order.id!!}.pdf")
+        val name = "faktura_${order.id}.pdf"
+        val file = File("$invoicePath/$name")
         var stream:InputStreamSource? = null
         if(file.createNewFile()) {
             val fos = FileOutputStream(file)
@@ -133,8 +134,8 @@ class CheckoutService {
             }
             stream = InputStreamSource { FileInputStream(file) }
         }
-        mailClient.send("Vaše faktura k objednávce", "general", "customerOrderInvoiceTemplate", map, stream?.let {a-> listOf(Attachment("faktura_${order.id}.pdf", a))}, order.email!!)
-        mailClient.send("Byla vygenerována faktura", "general", "storageOrderInvoiceTemplate", map, stream?.let {a-> listOf(Attachment("faktura_${order.id}.pdf", a))}, storageEmail)
+        mailClient.send("Vaše faktura k objednávce", "general", "customerOrderInvoiceTemplate", map, stream?.let {a-> listOf(Attachment(name, a))}, order.email!!)
+        mailClient.send("Byla vygenerována faktura", "general", "storageOrderInvoiceTemplate", map, stream?.let {a-> listOf(Attachment(name, a))}, storageEmail)
     }
 
     fun ship(order:Order, trackingUrl:String?) = transaction {

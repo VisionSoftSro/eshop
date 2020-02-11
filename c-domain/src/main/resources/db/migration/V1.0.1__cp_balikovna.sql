@@ -4,11 +4,7 @@ CREATE TABLE cp_branches (
   zip text NOT NULL,
   name text NOT NULL,
   address text NOT NULL,
-  kind text NOT NULL,
-  lat decimal(10,2) NOT NULL,
-  lng decimal(10,2) NOT NULL,
-  city text NOT NULL,
-  city_part text NOT NULL
+  city text NOT NULL
 
 );
 CREATE SEQUENCE cp_branches_id_seq INCREMENT 1 START 1

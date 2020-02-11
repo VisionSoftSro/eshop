@@ -208,12 +208,11 @@ class Review extends React.Component<any, ReviewState> {
                                                                     <img src={productImageUrl(i.goods.code, 1)} alt="Product"/>
                                                                 </td>
                                                                 <td>
-                                                                    {/*<a href="#">Bluetooth Speaker</a>*/}
                                                                     {i.goods.name}
                                                                 </td>
                                                                 <td>{i.goods.getPrice().format()}</td>
                                                                 <td>
-                                                                    <Quantity max={i.goods.stock} pcs={i.pcs} setQuantity={value=>{
+                                                                    <Quantity min={1} max={i.goods.stock} pcs={i.pcs} setQuantity={value=>{
                                                                         cartStore.dispatch<CartAction>({type: CartActionType.ChangeCart, item:i, changePcs:value});
                                                                     }}/>
                                                                 </td>

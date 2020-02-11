@@ -40,7 +40,7 @@ class Autocomplete {
 
     @GetMapping("cp")
     fun findCp(term:String?, @RequestParam(required = false, defaultValue = "1") page:Int) = JsonList<CpBranches>().apply {
-        list = dao.findByTerm(term?:"", "zip", "name", "address", "city", "cityPart").list(page)
+        list = dao.findByTerm(term?:"", 100,  "zip", "name", "address", "city").list(page)
     }
 
 }

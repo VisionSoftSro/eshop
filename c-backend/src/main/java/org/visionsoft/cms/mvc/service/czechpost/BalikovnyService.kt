@@ -10,7 +10,7 @@ import java.math.BigDecimal
 
 @Service
 class BalikovnyService {
-    val url = "http://napostu.ceskaposta.cz/vystupy/balikovny.xml"
+    val url = "http://napostu.ceskaposta.cz/vystupy/napostu_1.xml"
 
 
     fun migrate() {
@@ -33,12 +33,8 @@ class BalikovnyService {
                                     when(it.nodeName) {
                                         "ADRESA" -> entity.address = value.nodeValue
                                         "PSC" -> entity.zip = value.nodeValue
-                                        "NAZEV" -> entity.name = value.nodeValue
-                                        "TYP" -> entity.kind = value.nodeValue
-                                        "OBEC" -> entity.city = value.nodeValue
-                                        "C_OBCE" -> entity.cityPart = value.nodeValue
-                                        "SOUR_X" -> entity.lat = BigDecimal(value.nodeValue)
-                                        "SOUR_Y" -> entity.lng = BigDecimal(value.nodeValue)
+                                        "NAZ_PROV" -> entity.name = value.nodeValue
+                                        "OKRES" -> entity.city = value.nodeValue
 
                                     }
                                 }
