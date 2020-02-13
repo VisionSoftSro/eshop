@@ -23,7 +23,7 @@
 	</queryString>
 	<field name="id" class="java.lang.Long"/>
 	<detail>
-		<band height="101" splitType="Stretch">
+		<band height="69" splitType="Stretch">
 			<staticText>
 				<reportElement x="0" y="0" width="120" height="17" forecolor="#808080" uuid="5a3c4d02-5c27-4ac1-8222-f39eb139c053"/>
 				<textElement>
@@ -43,7 +43,7 @@
 				<textElement>
 					<font size="12"/>
 				</textElement>
-				<text><![CDATA[5454646464/0710 ]]></text>
+				<text><![CDATA[2400995747/2010]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="17" width="120" height="17" forecolor="#808080" uuid="8a425bae-50b9-4b15-970c-112b67e42d80"/>
@@ -53,56 +53,28 @@
 				<text><![CDATA[Číslo účtu:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="120" y="34" width="180" height="17" uuid="3ed00103-da6e-4476-9c5d-a08b9a8dd448"/>
-				<textElement>
-					<font size="12"/>
-				</textElement>
-				<text><![CDATA[4146116161]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="34" width="120" height="17" forecolor="#808080" uuid="378b3d09-cb8c-4ed8-bbf2-cb7e09efedfc"/>
-				<textElement>
-					<font size="12"/>
-				</textElement>
-				<text><![CDATA[IBAN:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="120" y="50" width="180" height="17" uuid="adeecbfd-0575-47bb-9b00-487ac81e9f8e"/>
-				<textElement>
-					<font size="12"/>
-				</textElement>
-				<text><![CDATA[CNBACZPP]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="50" width="120" height="17" forecolor="#808080" uuid="e0377a8f-0084-46bb-ab0a-676bab7d6367"/>
-				<textElement>
-					<font size="12"/>
-				</textElement>
-				<text><![CDATA[BIC:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="67" width="120" height="17" forecolor="#808080" uuid="925e3dff-d757-4b27-b0af-6f5c668a1bca"/>
+				<reportElement x="0" y="34" width="120" height="17" forecolor="#808080" uuid="925e3dff-d757-4b27-b0af-6f5c668a1bca"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<text><![CDATA[Variabilní symbol:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="84" width="120" height="17" forecolor="#808080" uuid="a47f8414-5671-4455-9261-639a3f70cd8c"/>
+				<reportElement x="0" y="51" width="120" height="17" forecolor="#808080" uuid="a47f8414-5671-4455-9261-639a3f70cd8c"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<text><![CDATA[Název banky:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="120" y="84" width="180" height="17" uuid="0a1114c4-445e-47db-95fc-0e6d42b8968f"/>
+				<reportElement x="120" y="51" width="180" height="17" uuid="0a1114c4-445e-47db-95fc-0e6d42b8968f"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<text><![CDATA[FIO Banka a.s.]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="120" y="67" width="180" height="17" uuid="213732f4-9d9b-4909-b637-dea6f421da73"/>
+				<reportElement x="120" y="34" width="180" height="17" uuid="213732f4-9d9b-4909-b637-dea6f421da73"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
