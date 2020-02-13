@@ -5,6 +5,7 @@ create table goods (
     description text not null,
     stock integer not null,
     price decimal not null,
+    published boolean not null default true,
     hot boolean not null default false,
     images integer default 0--images are hardbuilded in frontend
 );

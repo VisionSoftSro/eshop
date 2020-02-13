@@ -14,7 +14,8 @@ interface GoodsDao: JpaRepository<Goods, Long> {
 
     @Query("FROM Goods WHERE categories in :categories")
     fun findByCategories(categories:List<Category>, sort:Sort):List<Goods>
-
+    @Query("FROM Goods WHERE published = true")
+    fun findPublished(sort:Sort):List<Goods>
 }
 
 @Repository

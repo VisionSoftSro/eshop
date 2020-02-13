@@ -22,7 +22,7 @@ class GoodsController {
 
 
     @GetMapping
-    fun all() = goodsDao.findAll(Sort.by(Sort.Order.asc("name")))
+    fun all() = goodsDao.findPublished(Sort.by(Sort.Order.asc("name")))
 
     @GetMapping("/detail/{id}")
     fun item(@PathVariable id:Long) = goodsDao.findById(id).orElseThrow { ResponseStatusException(
