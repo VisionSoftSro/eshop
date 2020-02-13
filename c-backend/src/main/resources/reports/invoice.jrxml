@@ -89,11 +89,11 @@
 				<text><![CDATA[Dodavatel]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="100" width="100" height="20" forecolor="#858585" uuid="51b8dd32-1d48-4cd8-8949-ffce7a356d41"/>
+				<reportElement x="0" y="100" width="180" height="20" forecolor="#000000" uuid="51b8dd32-1d48-4cd8-8949-ffce7a356d41"/>
 				<textElement>
-					<font size="14"/>
+					<font size="10"/>
 				</textElement>
-				<text><![CDATA[IČ:05061768 ]]></text>
+				<text><![CDATA[IČ: 05061768]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="120" width="90" height="20" uuid="646d33d2-df04-4df4-a8bc-2d2bd80f911b"/>

@@ -115,7 +115,6 @@ class CheckoutService {
                 pay->  l.add(ReportGoods(pay.localizedName!!, pay.price.toDouble()))
             }
         }
-        val cod = reports["cod"].getCompiledReport();
         val map = mutableMapOf<String, Any?>(
                 "orderId" to order.id!!,
                 "createdDate" to Date(),
@@ -125,8 +124,8 @@ class CheckoutService {
                 "city" to "${order.city}",
                 "ordersDS" to JRBeanCollectionDataSource(reportGoods),
                 "totalPrice" to orderMerged.sum(),
-                "shipmentDS" to JRBeanCollectionDataSource(listOf(1)),
-                "shipment" to cod,
+                "shipmentDS" to JRBeanCollectionDataSource(listOf(orderMerged)),
+                "shipment" to reports[orderMerged.paymentMethod!!.code!!].getCompiledReport(),
                 "branchId" to orderMerged.branchId
         )
         val name = "faktura_${order.id}.pdf"
