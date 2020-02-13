@@ -41,7 +41,8 @@ class Checkout: SimpleCheckout() {
     var phoneNumber:String? = null
     var address:String? = null
     var city:String? = null
-    var postCode:Int? = null
+    var postCode:String? = null
+    var branchId:String? = null
     var shippingMethod:ShippingMethod? = null
     var paymentMethod:PaymentMethod? = null
 }
@@ -79,7 +80,10 @@ class CheckoutService {
         order.firstName = checkout.firstName
         order.lastName = checkout.lastName
         order.postCode = checkout.postCode
-        order.json = objectMapper.writeValueAsString(checkout)
+        order.branchId = checkout.branchId
+        order.paymentMethod = checkout.paymentMethod
+        order.shippingMethod = checkout.shippingMethod
+//        order.json = objectMapper.writeValueAsString(checkout)
         em.persist(order)
 
         checkout.goods.forEach {
@@ -101,14 +105,14 @@ class CheckoutService {
 
     fun createInvoice(order:Order) = transaction {
         val orderMerged = it.merge(order)
-        val checkout = objectMapper.readValue(orderMerged.json, Checkout::class.java)
-//        orderMerged.status = OrderStatus.Invoice
+//        val checkout = objectMapper.readValue(orderMerged.json, Checkout::class.java)
+        orderMerged.status = OrderStatus.Invoice
         val reportGoods = order.goods.map{g-> ReportGoods(g.goods!!.name!!, g.goods!!.price.toDouble()) }.toMutableList().also {l->
-            checkout.shippingMethod?.let {
+            orderMerged.shippingMethod?.let {
               ship->  l.add(ReportGoods(ship.localizedName!!, ship.price.toDouble()))
             }
-            checkout.paymentMethod?.let {
-                ship->  l.add(ReportGoods(ship.localizedName!!, ship.price.toDouble()))
+            orderMerged.paymentMethod?.let {
+                pay->  l.add(ReportGoods(pay.localizedName!!, pay.price.toDouble()))
             }
         }
         val cod = reports["cod"].getCompiledReport();
@@ -120,9 +124,10 @@ class CheckoutService {
                 "address" to "${order.address}",
                 "city" to "${order.city}",
                 "ordersDS" to JRBeanCollectionDataSource(reportGoods),
-                "totalPrice" to (checkout.goods.sumByDouble { it.goods!!.price.multiply(BigDecimal(it.pcs!!)).toDouble()} + checkout.shippingMethod!!.price.toDouble() + checkout.paymentMethod!!.price.toDouble()),
+                "totalPrice" to orderMerged.sum(),
                 "shipmentDS" to JRBeanCollectionDataSource(listOf(1)),
-                "shipment" to cod
+                "shipment" to cod,
+                "branchId" to orderMerged.branchId
         )
         val name = "faktura_${order.id}.pdf"
         val file = File("$invoicePath/$name")

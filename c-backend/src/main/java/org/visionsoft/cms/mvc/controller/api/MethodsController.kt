@@ -9,7 +9,9 @@ import org.visionsoft.common.controller.JsonList
 import org.visionsoft.crm.domain.dao.CzechPostGenericDao
 import org.visionsoft.crm.domain.dao.PaymentMethodDao
 import org.visionsoft.crm.domain.dao.ShippingMethodDao
+import org.visionsoft.crm.domain.dao.ZasilkovnaGenericDao
 import org.visionsoft.crm.domain.scheme.CpBranches
+import org.visionsoft.crm.domain.scheme.Zasilkovna
 
 @RestController
 @RequestMapping("/method/")
@@ -35,12 +37,17 @@ class MethodsController {
 class Autocomplete {
 
     @Autowired
-    lateinit var dao: CzechPostGenericDao
+    lateinit var czechPostGenericDao: CzechPostGenericDao
 
+    @Autowired
+    lateinit var zasilkovnaGenericDao: ZasilkovnaGenericDao
 
     @GetMapping("cp")
     fun findCp(term:String?, @RequestParam(required = false, defaultValue = "1") page:Int) = JsonList<CpBranches>().apply {
-        list = dao.findByTerm(term?:"", 100,  "zip", "name", "address", "city").list(page)
+        list = czechPostGenericDao.findByTerm(term?:"", 100,  "zip", "name", "address", "city").list(page)
     }
-
+    @GetMapping("zasilkovna")
+    fun findZasilkovna(term:String?, @RequestParam(required = false, defaultValue = "1") page:Int) = JsonList<Zasilkovna>().apply {
+        list = zasilkovnaGenericDao.findByTerm(term?:"", 100,  "zip", "name", "address", "city", "place").list(page)
+    }
 }

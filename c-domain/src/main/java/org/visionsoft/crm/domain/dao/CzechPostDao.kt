@@ -9,9 +9,15 @@ import org.visionsoft.common.domain.GenericDao
 import org.visionsoft.crm.domain.scheme.Category
 import org.visionsoft.crm.domain.scheme.CpBranches
 import org.visionsoft.crm.domain.scheme.Goods
+import org.visionsoft.crm.domain.scheme.Zasilkovna
 
 @Repository
 interface CzechPostDao: JpaRepository<CpBranches, Long> {
+
+
+}
+@Repository
+interface ZasilkovnaDao: JpaRepository<Zasilkovna, String> {
 
 
 }
@@ -19,3 +25,6 @@ interface CzechPostDao: JpaRepository<CpBranches, Long> {
 
 @Component
 class CzechPostGenericDao:GenericDao<CpBranches>(CpBranches::class.java)
+
+@Component
+class ZasilkovnaGenericDao:GenericDao<Zasilkovna>(Zasilkovna::class.java)

@@ -5,47 +5,10 @@ import {CheckoutAction, CheckoutActionType} from "../../../redux/reducers/cart/C
 import {Form, FormField, FormInputType} from "../../../../common/component/form/Form";
 import {CheckoutDto} from "../../../dto/CheckoutDto";
 import {Link} from "../../../../common/component/Link";
-import {CustomFieldComponentProps} from "../../../../common/component/form/FormFieldInterface";
-import {StandaloneField} from "../../../../common/component/form/StandaloneField";
-import {Mapper} from "../../../../common/utils/objectmapper/Mapper";
-import {CpBranch} from "../../../dto/CzechPostBranch";
-import {SelectProps} from "../../../../common/component/form/FormSelect";
 
-function FormCzechPostAutocomplete(props: CustomFieldComponentProps<CpBranch, { checkout: CheckoutDto }>) {
-    const {checkout} = props.options;
-    const [value, setValue] = useState(props.value);
-    useEffect(() => {
-        if (value) {
-            checkout.postCode = parseInt(value.zip);
-            checkout.city = value.city;
-            checkout.address = `${value.address}`;
-        }
-        props.onValueChanged(value);
-    }, [value]);
-    return (
-        <StandaloneField type={FormInputType.Select} selectProps={{
-            ajax: {
-                url: "ac/cp",
-                paginable:true,
-                clazz:CpBranch
-            },
-            formatOption: value => {
-                return {
-                    label: (
-                        value.address
+import {FormCzechPostAutocomplete} from "./FormCzechPostAutocomplete";
+import {FormZasilkovnaAutocomplete} from "./FormZasilkovnaAutocomplete";
 
-                    ),
-                    value: value
-                };
-            },
-            formatValue: value => value,
-            isSearchable: true
-
-        } as SelectProps<CpBranch>} placeholder={"Vyberte poštu"} className={"col-12"} onValueChanged={data => {
-            setValue(data.value);
-        }} value={value}/>
-    );
-}
 
 export function Billing() {
     const [canContinue, setCanContinue] = useState(false);
@@ -93,12 +56,19 @@ export function Billing() {
                                                    title={Strings["PhoneNumber"]} validate={{
                                             regexp: /^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\s\./0-9]*$/g,
                                             message: "Vyplňte správné telefonní číslo"
-                                        }}/>
+                                        }} required={checkout.shippingMethod.code==="zasilkovna"}/>
                                     </div>
                                     <div className="col-12 mb-3">
-                                        <FormField type={FormInputType.Custom} name={"czechPost"}
-                                                   customComponent={FormCzechPostAutocomplete} title={"Pobočka České pošty"}
-                                                   customComponentOptions={{checkout: checkout}} required/>
+                                        {checkout.shippingMethod.code === "zasilkovna" && (
+                                            <FormField type={FormInputType.Custom} name={"zasilkovna"}
+                                                       customComponent={FormZasilkovnaAutocomplete} title={"Pobočka Zásilkovny"}
+                                                       customComponentOptions={{checkout: checkout}} required/>
+                                        ) ||
+                                        (
+                                            <FormField type={FormInputType.Custom} name={"czechPost"}
+                                                       customComponent={FormCzechPostAutocomplete} title={"Pobočka České pošty"}
+                                                       customComponentOptions={{checkout: checkout}} required/>
+                                        )}
                                     </div>
                                     {/*<div className="col-md-6 mb-3">*/}
                                     {/*<FormField type={FormInputType.Text} name={"street"} title={Strings["Street"]}*/}
@@ -128,8 +98,7 @@ export function Billing() {
                                 step: 1
                             })} className="btn bigshop-btn mt-2 ml-2">{Strings["Back"]}</Link>
 
-                            <Link href={() => canContinue && next()}
-                                  className={cs("btn bigshop-btn mt-2 ml-2", !canContinue && "disabled")}>{Strings["Continue"]}</Link>
+                            <Link href={() => canContinue && next()} className={cs("btn bigshop-btn mt-2 ml-2", !canContinue && "disabled")}>{Strings["Continue"]}</Link>
                         </div>
                     </div>
                 </div>

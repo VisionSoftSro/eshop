@@ -1,21 +1,26 @@
-package org.visionsoft.cms.mvc.service.czechpost
+package org.visionsoft.cms.mvc.service.shipping
 
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.net.URL
 import javax.xml.parsers.DocumentBuilderFactory
 import org.visionsoft.common.transaction.transaction
+import org.visionsoft.crm.domain.dao.CzechPostDao
 import org.visionsoft.crm.domain.scheme.CpBranches
 import org.w3c.dom.Document
-import java.math.BigDecimal
 
 @Service
-class BalikovnyService {
+class CzechPostService {
     val url = "http://napostu.ceskaposta.cz/vystupy/napostu_1.xml"
 
+    @Autowired
+    lateinit var czechPostDao: CzechPostDao
 
-    fun migrate() {
-        val doc = download()
-        parse(doc)
+    fun import() {
+        if(czechPostDao.count() == 0L) {
+            val doc = download()
+            parse(doc)
+        }
     }
 
 

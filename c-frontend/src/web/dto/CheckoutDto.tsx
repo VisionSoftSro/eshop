@@ -7,8 +7,9 @@ export class CheckoutDto {
     emailAddress:string = null;
     phoneNumber:number = null;
     address:string = null;
+    branchId:string = null;
     city:string = null;
-    postCode:number = null;
+    postCode:string = null;
     shippingMethod:ShippingMethodDto = null;
     paymentMethod:PaymentMethodDto = null;
 }

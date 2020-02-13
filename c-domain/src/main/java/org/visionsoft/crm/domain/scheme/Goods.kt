@@ -76,7 +76,7 @@ class Order {
     @NotNull
     var email:String? = null
 
-    var json:String? = null
+//    var json:String? = null
 
     @Enumerated(EnumType.STRING)
     var status:OrderStatus? = null
@@ -85,13 +85,19 @@ class Order {
     var city:String? = null
     var firstName:String? = null
     var lastName:String? = null
-    var postCode:Int? = null
-
+    var postCode:String? = null
+    var branchId:String? = null
+    @ManyToOne
+    var shippingMethod:ShippingMethod? = null
+    @ManyToOne
+    var paymentMethod:PaymentMethod? = null
     @OneToMany(mappedBy = "order", cascade = [CascadeType.PERSIST])
     @JsonManagedReference
     var goods:List<OrderContent> = listOf()
 
+
+
 }
 
-
+fun Order.sum() = (this.goods.sumByDouble { it.goods!!.price.multiply(BigDecimal(it.pcs!!)).toDouble()} + this.shippingMethod!!.price.toDouble() + this.paymentMethod!!.price.toDouble())
 
