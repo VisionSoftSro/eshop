@@ -16,8 +16,14 @@ export default {
         Price:"Cena",
         Continue:"Pokračovat",
         Categories: {
-            party:"Oslavy",
-            gift:"Dárky"
+            Title: {
+                party:"Oslavy",
+                gift:"Dárky"
+            },
+            Desc: {
+                party:"Najdete tu vše, bez čeho se neobejde žádná dětská oslava. Od balónků, až po party sady.",
+                gift:"Vyberte si z dárků, které potěší každé dítě od 1 roku do 5 let."
+            }
         },
         FirstName:"Jméno",
         LastName:"Příjmení",

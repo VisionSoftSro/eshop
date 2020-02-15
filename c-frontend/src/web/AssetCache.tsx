@@ -12,5 +12,8 @@ export const AssetCache = {
     },
     czech_post:require('./assets/img/czech_post.png'),
     zasilkovna:require('./assets/img/zasilkovna.png'),
+    Happy:require('./assets/img/happy.svg'),
+    Sad:require('./assets/img/sad.svg'),
+
   } as GenericMap
 };

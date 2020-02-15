@@ -7,7 +7,10 @@ export class Category {
     id:string;
 
     getName() {
-        return Strings[`Categories.${this.id}`];
+        return Strings[`Categories.Title.${this.id}`];
+    }
+    getDesc() {
+        return Strings[`Categories.Desc.${this.id}`];
     }
     getSeoName() {
         return toSeoString(this.getName());

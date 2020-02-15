@@ -12,6 +12,7 @@ import {Loader} from "../../../common/component/Loader";
 import Wrapper from "../../../common/component/Wrapper";
 import {getHashValue} from "../../../common/utils/Util";
 import {announceAddedToCart} from "../Root";
+import {StockEmoji} from "./StockEmoji";
 
 class Item extends React.Component<{item:GoodsDto}> {
 
@@ -34,6 +35,7 @@ class Item extends React.Component<{item:GoodsDto}> {
                         {this.props.item.hot && <div className="product_badge">
                             <span>Top</span>
                         </div>}
+                        <StockEmoji stock={this.props.item.stock}/>
                         {/*<div className="product_wishlist">*/}
                         {/*    <a href="wishlist.html"><i className="icofont-heart"/></a>*/}
                         {/*</div>*/}
@@ -92,9 +94,12 @@ class ItemList extends React.Component<DataState> {
                         <div className="row">
                             <div className="col-12">
                                 <h5>{Strings["Goods"]}</h5>
-                                <ol className="breadcrumb">
+                                <ol className="breadcrumb" style={{marginBottom:0}}>
                                     <li className="breadcrumb-item">{Strings["Category"]}</li>
-                                    <li className="breadcrumb-item active">{Strings[`Categories.${this.props.currentCategory.id}`]}</li>
+                                    <li className="breadcrumb-item active">{this.props.currentCategory.getName()}</li>
+                                </ol>
+                                <ol className="breadcrumb" style={{backgroundColor: "transparent"}}>
+                                    <li className="breadcrumb-item">{this.props.currentCategory.getDesc()}</li>
                                 </ol>
                             </div>
                         </div>

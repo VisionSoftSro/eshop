@@ -13,6 +13,7 @@ import Wrapper from "../../../common/component/Wrapper";
 import ModalHeader from "react-bootstrap/ModalHeader";
 import {Quantity} from "../Quantity";
 import {announceAddedToCart} from "../Root";
+import {StockEmoji} from "./StockEmoji";
 
 class ModalItem extends React.Component<ItemState> {
 
@@ -54,6 +55,7 @@ class ModalItem extends React.Component<ItemState> {
                                                         <span className="badge-new">Top</span>
                                                     </div>
                                                 )}
+                                                <StockEmoji stock={this.props.item.stock} />
                                             </div>
                                         </div>
                                         <div className="col-12 col-lg-7">

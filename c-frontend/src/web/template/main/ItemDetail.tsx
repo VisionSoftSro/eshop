@@ -19,6 +19,7 @@ import {
     CarouselItem,
 } from 'reactstrap';
 import cs from 'classnames';
+import {StockEmoji} from "./StockEmoji";
 
 
 
@@ -82,7 +83,7 @@ function Item({item}:{item:GoodsDto}) {
                         <h5>{Strings["Goods"]}</h5>
                         <ol className="breadcrumb">
                             <li className="breadcrumb-item">{Strings["Category"]}</li>
-                            <li className="breadcrumb-item"><Link href={`/${category.getSeoName()}`} callback={()=>dataStore.dispatch<DataAction>({type:DataActionType.SetCategory, currentCategory:category})} >{Strings[`Categories.${category.id}`]}</Link></li>
+                            <li className="breadcrumb-item"><Link href={`/${category.getSeoName()}`} callback={()=>dataStore.dispatch<DataAction>({type:DataActionType.SetCategory, currentCategory:category})} >{category.getName()}</Link></li>
                             <li className="breadcrumb-item">{item.name}</li>
                         </ol>
                     </div>
@@ -111,6 +112,7 @@ function Item({item}:{item:GoodsDto}) {
                                     }
                                 </ol>
                             </Carousel>
+                            <StockEmoji stock={item.stock} />
                         </div>
 
                     </div>
@@ -126,16 +128,22 @@ function Item({item}:{item:GoodsDto}) {
                                 <p><strong>{Strings["Price"]}:</strong> {item.getPrice().format()}</p>
                             </div>
                             <div className="cart clearfix my-5 d-flex flex-wrap align-items-center">
-                                <Quantity max={item.stock} pcs={pcs} setQuantity={setPcs} />
-                                <Link href={()=>{
-                                    if(available) {
-                                        const cg = new CartGoods(item, pcs);
-                                        announceAddedToCart(cg);
-                                        cartStore.dispatch<CartAction>({ type: CartActionType.AddCart, item:cg});
-                                    }
-                                }} className={cs("btn bigshop-btn mt-1 mt-md-0 ml-1 ml-md-3", !available&&"disabled")}>
-                                    {Strings["AddToCart"]}
-                                </Link>
+                                {
+                                    item.stock > 0 &&(
+                                        <>
+                                            <Quantity max={item.stock} pcs={pcs} setQuantity={setPcs} />
+                                            <Link href={()=>{
+                                                if(available) {
+                                                    const cg = new CartGoods(item, pcs);
+                                                    announceAddedToCart(cg);
+                                                    cartStore.dispatch<CartAction>({ type: CartActionType.AddCart, item:cg});
+                                                }
+                                            }} className={cs("btn bigshop-btn mt-1 mt-md-0 ml-1 ml-md-3", !available&&"disabled")}>
+                                                {Strings["AddToCart"]}
+                                            </Link>
+                                        </>
+                                    )||<strong>{Strings["OutOfStock"]}</strong>
+                                }
                             </div>
                         </div>
                     </div>
