@@ -18,6 +18,6 @@ export function Quantity({pcs, setQuantity, max, min}:QuantityProps) {
     );
 }
 
-Quantity.defautlProps = {
+Quantity.defaultProps = {
     min: 0
 };

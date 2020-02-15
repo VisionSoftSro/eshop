@@ -55,8 +55,8 @@ class ModalItem extends React.Component<ItemState> {
                                                         <span className="badge-new">Top</span>
                                                     </div>
                                                 )}
-                                                <StockEmoji stock={this.props.item.stock} />
                                             </div>
+                                            <StockEmoji stock={this.props.item.stock} style={{bottom:0, right:0, position:"absolute"}}/>
                                         </div>
                                         <div className="col-12 col-lg-7">
                                             <div className="quickview_pro_des">

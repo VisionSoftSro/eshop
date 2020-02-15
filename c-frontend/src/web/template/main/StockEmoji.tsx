@@ -1,9 +1,10 @@
 import * as React from "react";
 import {AssetCache} from "../../AssetCache";
+import {CSSProperties} from "react";
 
-export function StockEmoji({stock}:{stock:number}) {
+export function StockEmoji({stock, style}:{stock:number, style:CSSProperties}) {
     return (
-        <div style={{top:0, right:0, position:"absolute"}}>
+        <div style={style}>
             <img src={stock>0?AssetCache.Image.Happy:AssetCache.Image.Sad} />
         </div>
     )

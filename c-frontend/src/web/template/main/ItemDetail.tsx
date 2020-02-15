@@ -112,7 +112,7 @@ function Item({item}:{item:GoodsDto}) {
                                     }
                                 </ol>
                             </Carousel>
-                            <StockEmoji stock={item.stock} />
+
                         </div>
 
                     </div>
@@ -128,9 +128,11 @@ function Item({item}:{item:GoodsDto}) {
                                 <p><strong>{Strings["Price"]}:</strong> {item.getPrice().format()}</p>
                             </div>
                             <div className="cart clearfix my-5 d-flex flex-wrap align-items-center">
+                                <StockEmoji stock={item.stock} style={{marginRight:20}}/>
                                 {
                                     item.stock > 0 &&(
                                         <>
+
                                             <Quantity max={item.stock} pcs={pcs} setQuantity={setPcs} />
                                             <Link href={()=>{
                                                 if(available) {
