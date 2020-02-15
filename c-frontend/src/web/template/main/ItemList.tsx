@@ -35,7 +35,7 @@ class Item extends React.Component<{item:GoodsDto}> {
                         {this.props.item.hot && <div className="product_badge">
                             <span>Top</span>
                         </div>}
-                        <StockEmoji stock={this.props.item.stock}/>
+                        {/*<StockEmoji stock={this.props.item.stock}/>*/}
                         {/*<div className="product_wishlist">*/}
                         {/*    <a href="wishlist.html"><i className="icofont-heart"/></a>*/}
                         {/*</div>*/}
