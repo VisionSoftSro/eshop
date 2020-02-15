@@ -7,10 +7,11 @@ export class Footer extends React.Component {
             <footer className="footer_area" style={{zIndex:0}}>
                 <div className="container">
                     <div className="row">
-                        <div className="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3">
+                        <div className="col-12">
                             <div className="single_footer_area mb-50 mt-50">
                                 <div className="footer_heading mb-4">
                                     <h6>Zákaznická podpora</h6>
+                                    <p>Máte dotaz? Neváhejte nás kdykoliv kontaktovat! Jsme tu pro vás 24/7</p>
                                 </div>
                                 <ul className="footer_content">
                                     <li><span>Email:</span> <a style={{color:"white"}} href={"mailto:info@oslavyadarky.cz"}>info@oslavyadarky.cz</a></li>

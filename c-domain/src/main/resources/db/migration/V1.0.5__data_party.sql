@@ -1,6 +1,6 @@
 insert into goods (code, name, description, hot, images, stock, price) values ('party-1', 'Barevné frkačky (5 ks) ', '<br/>Sada barevných frkaček po 5 kusech.<br/><br/>Vhodné od 3 let.', false, 3, 3, 38);
 insert into goods_category(category, goods) values ('party', currval('goods_id_seq'));
-insert into goods (code, name, description, hot, images, stock, price) values ('party-2', 'Chodící balónek žirafa ', '<br/>Chodící balónek ve tvaru dinosaura.<br/><br/>Velikost: 80 x 42 cm', false, 1, 3, 150);
+insert into goods (code, name, description, hot, images, stock, price) values ('party-2', 'Chodící balónek dinosaurus ', '<br/>Chodící balónek ve tvaru dinosaura.<br/><br/>Velikost: 80 x 42 cm', false, 1, 3, 150);
 insert into goods_category(category, goods) values ('party', currval('goods_id_seq'));
 insert into goods (code, name, description, hot, images, stock, price) values ('party-3', 'Chodící balónek Jednorožec ', '<br/>Chodící balónek ve tvaru jednorožce.<br/><br/>Velikost: 88 x 60 cm', false, 1, 3, 150);
 insert into goods_category(category, goods) values ('party', currval('goods_id_seq'));
