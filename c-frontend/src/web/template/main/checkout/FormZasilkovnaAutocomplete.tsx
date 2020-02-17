@@ -13,9 +13,6 @@ export function FormZasilkovnaAutocomplete(props: CustomFieldComponentProps<Zasi
     const [value, setValue] = useState(props.value);
     useEffect(() => {
         if (value) {
-            checkout.postCode = value.zip;
-            checkout.city = value.city;
-            checkout.address = `${value.address}`;
             checkout.branchId = value.id
         }
         props.onValueChanged(value);

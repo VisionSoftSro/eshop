@@ -98,6 +98,7 @@ class Order {
 
 
 
+
 }
 
 fun Order.sum() = (this.goods.sumByDouble { it.goods!!.price.multiply(BigDecimal(it.pcs!!)).toDouble()} + this.shippingMethod!!.price.toDouble() + this.paymentMethod!!.price.toDouble())

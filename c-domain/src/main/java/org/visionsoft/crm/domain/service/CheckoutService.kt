@@ -13,6 +13,8 @@ import org.visionsoft.common.reports.ReportExportConfig
 import org.visionsoft.common.reports.ReportRenderType
 import org.visionsoft.common.reports.ReportRepository
 import org.visionsoft.common.transaction.transaction
+import org.visionsoft.crm.domain.dao.CzechPostDao
+import org.visionsoft.crm.domain.dao.ZasilkovnaDao
 
 import org.visionsoft.crm.domain.scheme.*
 import java.io.ByteArrayInputStream
@@ -39,7 +41,8 @@ class Checkout: SimpleCheckout() {
     var lastName:String? = null
     var emailAddress:String? = null
     var phoneNumber:String? = null
-    var address:String? = null
+    var street:String? = null
+    var streetNo:String? = null
     var city:String? = null
     var postCode:String? = null
     var branchId:String? = null
@@ -67,6 +70,27 @@ class CheckoutService {
     @Autowired
     lateinit var reports:ReportRepository
 
+    @Autowired
+    lateinit var zasilkovnaDao: ZasilkovnaDao
+
+    @Autowired
+    lateinit var czechPostDao: CzechPostDao
+
+
+    fun getDeliveryAddress(order:Order):String? = when(order.shippingMethod!!.code!!) {
+        "zasilkovna"-> {
+            zasilkovnaDao.findById(order.branchId!!).get().address
+        }
+        "czech_post"-> {
+            czechPostDao.findById(order.branchId!!.toLong()).get().let {value-> "${value.name} - (${value.city}, ${value.address}, ${value.zip})" }
+        }
+        else -> {
+            null
+        }
+    }
+
+
+
     /**
      * Make order. Return goods what are out of stock else
      */
@@ -75,7 +99,7 @@ class CheckoutService {
         order.status = OrderStatus.New
         order.goods = checkout.goods.map { OrderContent().apply { goods = it.goods; pcs = it.pcs; this.order = order } }
         order.email = checkout.emailAddress
-        order.address = checkout.address
+        order.address = "${checkout.street} ${checkout.streetNo}"
         order.city = checkout.city
         order.firstName = checkout.firstName
         order.lastName = checkout.lastName
@@ -96,6 +120,7 @@ class CheckoutService {
         val map = mutableMapOf(
                 "orderId" to order.id!!,
                 "checkout" to checkout,
+                "deliveryAddress" to getDeliveryAddress(order),
                 "totalPrice" to (checkout.goods.sumByDouble { it.goods!!.price.multiply(BigDecimal(it.pcs!!)).toDouble()} + checkout.shippingMethod!!.price.toDouble() + checkout.paymentMethod!!.price.toDouble())
         )
         mailClient.send("Vaše objednávka", "general", "customerOrderAcceptedTemplate", map, checkout.emailAddress!!)
@@ -126,7 +151,8 @@ class CheckoutService {
                 "totalPrice" to orderMerged.sum(),
                 "shipmentDS" to JRBeanCollectionDataSource(listOf(orderMerged)),
                 "shipment" to reports[orderMerged.paymentMethod!!.code!!].getCompiledReport(),
-                "branchId" to orderMerged.branchId
+                "branchId" to orderMerged.branchId,
+                "deliveryAddress" to getDeliveryAddress(order)
         )
         val name = "faktura_${order.id}.pdf"
         val file = File("$invoicePath/$name")

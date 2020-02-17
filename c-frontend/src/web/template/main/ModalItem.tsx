@@ -56,7 +56,6 @@ class ModalItem extends React.Component<ItemState> {
                                                     </div>
                                                 )}
                                             </div>
-                                            <StockEmoji stock={this.props.item.stock} style={{bottom:0, right:0, position:"absolute"}}/>
                                         </div>
                                         <div className="col-12 col-lg-7">
                                             <div className="quickview_pro_des">
@@ -72,6 +71,7 @@ class ModalItem extends React.Component<ItemState> {
                                                 <p><strong>{Strings["Price"]}:</strong> {this.props.item.getPrice().format()}</p>
                                                 {/*<a href="#">View Full Product Details</a>*/}
                                             </div>
+                                            <StockEmoji stock={this.props.item.stock} style={{marginRight:20}}/>
                                             <form className="cart" method="post" onSubmitCapture={voidFormSubmit} onSubmit={voidFormSubmit}>
                                                 {
                                                     this.props.item.stock > 0 &&

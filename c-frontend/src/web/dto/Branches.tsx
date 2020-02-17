@@ -1,5 +1,5 @@
 export class CpBranch {
-    id: number;
+    id: number|string;
     zip: string;
     name: string;
     address: string;

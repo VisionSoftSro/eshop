@@ -56,36 +56,45 @@ export function Billing() {
                                                    title={Strings["PhoneNumber"]} validate={{
                                             regexp: /^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\s\./0-9]*$/g,
                                             message: "Vyplňte správné telefonní číslo"
-                                        }} required={checkout.shippingMethod.code==="zasilkovna"}/>
+                                        }} required={checkout.shippingMethod.code === "zasilkovna"}/>
                                     </div>
+                                </div>
+                                <h5 className="mb-4">Kontaktní adresa</h5>
+                                <div className="row">
+                                    <div className="col-md-6 mb-3">
+                                        <FormField type={FormInputType.Text} name={"street"} title={Strings["Street"]}
+                                                   required/>
+                                    </div>
+                                    <div className="col-md-6 mb-3">
+                                        <FormField type={FormInputType.Text} name={"streetNo"}
+                                                   title={Strings["StreetNo"]} required/>
+                                    </div>
+                                    <div className="col-md-6 mb-3">
+                                        <FormField type={FormInputType.Text} name={"city"} title={Strings["City"]}
+                                                   required/>
+                                    </div>
+                                    <div className="col-md-6 mb-3">
+                                        <FormField type={FormInputType.Number} name={"postCode"}
+                                                   title={Strings["PostCode"]} required/>
+                                    </div>
+                                </div>
+                                <h5 className="mb-4">Dodací adresa</h5>
+                                <div className="row">
                                     <div className="col-12 mb-3">
                                         {checkout.shippingMethod.code === "zasilkovna" && (
                                             <FormField type={FormInputType.Custom} name={"zasilkovna"}
-                                                       customComponent={FormZasilkovnaAutocomplete} title={"Pobočka Zásilkovny"}
+                                                       customComponent={FormZasilkovnaAutocomplete}
+                                                       title={"Pobočka Zásilkovny"}
                                                        customComponentOptions={{checkout: checkout}} required/>
                                         ) ||
                                         (
                                             <FormField type={FormInputType.Custom} name={"czechPost"}
-                                                       customComponent={FormCzechPostAutocomplete} title={"Pobočka České pošty"}
+                                                       customComponent={FormCzechPostAutocomplete}
+                                                       title={"Pobočka České pošty"}
                                                        customComponentOptions={{checkout: checkout}} required/>
                                         )}
                                     </div>
-                                    {/*<div className="col-md-6 mb-3">*/}
-                                    {/*<FormField type={FormInputType.Text} name={"street"} title={Strings["Street"]}*/}
-                                    {/*required/>*/}
-                                    {/*</div>*/}
-                                    {/*<div className="col-md-6 mb-3">*/}
-                                    {/*<FormField type={FormInputType.Text} name={"streetNo"}*/}
-                                    {/*title={Strings["StreetNo"]} required/>*/}
-                                    {/*</div>*/}
-                                    {/*<div className="col-md-6 mb-3">*/}
-                                    {/*<FormField type={FormInputType.Text} name={"city"} title={Strings["City"]}*/}
-                                    {/*required/>*/}
-                                    {/*</div>*/}
-                                    {/*<div className="col-md-6 mb-3">*/}
-                                    {/*<FormField type={FormInputType.Number} name={"postCode"}*/}
-                                    {/*title={Strings["PostCode"]} required/>*/}
-                                    {/*</div>*/}
+
                                 </div>
                             </Form>
                         </div>
@@ -98,7 +107,8 @@ export function Billing() {
                                 step: 1
                             })} className="btn bigshop-btn mt-2 ml-2">{Strings["Back"]}</Link>
 
-                            <Link href={() => canContinue && next()} className={cs("btn bigshop-btn mt-2 ml-2", !canContinue && "disabled")}>{Strings["Continue"]}</Link>
+                            <Link href={() => canContinue && next()}
+                                  className={cs("btn bigshop-btn mt-2 ml-2", !canContinue && "disabled")}>{Strings["Continue"]}</Link>
                         </div>
                     </div>
                 </div>
