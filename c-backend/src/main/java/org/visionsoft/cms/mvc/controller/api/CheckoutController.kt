@@ -26,6 +26,7 @@ class CheckoutController {
     @PostMapping
     fun acceptOrder(checkout:Checkout): CheckoutResult {
         val outOfStock = mutableListOf<Goods>()
+        checkout.goods = checkout.goods.filter { (it.pcs?:0) > 0 }.toMutableList()
         checkout.goods.forEach {
             if(it.goods!!.stock < it.pcs!!) {
                 outOfStock.add(it.goods!!)

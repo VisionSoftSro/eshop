@@ -26,6 +26,7 @@ import {booleanComparator, Loader} from "../../../../common/component/Loader";
 import {JsonProperty} from "../../../../common/utils/objectmapper/Mapper";
 import {Billing} from "./Billing";
 import {AssetCache} from "../../../AssetCache";
+import {Loading} from "../../../../common/component/Loading";
 
 class Complete extends React.Component {
 
@@ -132,64 +133,65 @@ class Review extends React.Component<any, ReviewState> {
                                     <div className="col-12">
                                         <div className="checkout_details_area clearfix">
                                             <h5 className="mb-30">{Strings["ReviewOrder"]}</h5>
-                                            <div className="cart-table">
-                                                {this.state.error&&(
-                                                    <Modal show={true} onHide={() => this.setState({error: false})}>
-                                                        <ModalHeader closeButton>
-                                                            Je nám líto :(
-                                                        </ModalHeader>
-                                                        <ModalBody>
-                                                            <p>Bohužel nastala chyba na straně serveru. Zkuste to prosím později. Pokud problém přetrvává obraťte se prosím na podporu.</p>
-                                                        </ModalBody>
-                                                    </Modal>
-                                                )}
-                                                {this.state.result && this.state.result.outOfStock.length > 0 && (
-                                                    <Modal show={true} onHide={() => this.setState({result: null})} size={"lg"}>
-                                                        <ModalHeader closeButton>
-                                                            Je nám líto :(
-                                                        </ModalHeader>
-                                                        <ModalBody>
-                                                            <p>Bohužel následující zboží již na skladě nemáme. Upravte prosím objednávku
-                                                                dle dostupnosti skladu.</p>
-                                                            <div className="table-responsive">
-                                                                <table className="table table-bordered mb-30">
-                                                                    <thead>
-                                                                    <tr>
-                                                                        <td/>
-                                                                        <td>Náhled</td>
-                                                                        <td>Název produktu</td>
-                                                                        <td>Na skladě</td>
-                                                                        <td>Nový počet</td>
+
+                                            {this.state.error&&(
+                                                <Modal show={true} onHide={() => this.setState({error: false})}>
+                                                    <ModalHeader closeButton>
+                                                        Je nám líto :(
+                                                    </ModalHeader>
+                                                    <ModalBody>
+                                                        <p>Bohužel nastala chyba na straně serveru. Zkuste to prosím později. Pokud problém přetrvává obraťte se prosím na podporu.</p>
+                                                    </ModalBody>
+                                                </Modal>
+                                            )}
+                                            {this.state.result && this.state.result.outOfStock.length > 0 && (
+                                                <Modal show={true} onHide={() => this.setState({result: null})} size={"lg"}>
+                                                    <ModalHeader closeButton>
+                                                        Je nám líto :(
+                                                    </ModalHeader>
+                                                    <ModalBody>
+                                                        <p>Bohužel následující zboží již na skladě nemáme. Upravte prosím objednávku
+                                                            dle dostupnosti skladu.</p>
+                                                        <div className="cart-table table-responsive">
+                                                            <table className="table table-bordered mb-30">
+                                                                <thead>
+                                                                <tr>
+                                                                    <td/>
+                                                                    <td>Náhled</td>
+                                                                    <td>Název produktu</td>
+                                                                    <td>Na skladě</td>
+                                                                    <td>Nový počet</td>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                {cart.filter(i=>this.state.result.outOfStock.map(a=>a.id).includes(i.goods.id)).map(e=>({cart:e, outOfStock:this.state.result.outOfStock.filter(a=>a.id===e.goods.id)[0]})).map(i => (
+                                                                    <tr key={i.cart.goods.id}>
+                                                                        <td>
+                                                                            <Link href={()=>cartStore.dispatch<CartAction>({type: CartActionType.RemoveCart, item:i.cart})}><FontAwesomeIcon icon={faIcon.faTimes} style={{color:"red"}} /></Link>
+                                                                        </td>
+                                                                        <td>
+                                                                            <img width={50} src={productImageUrl(i.cart.goods.code, 1)} alt="Product"/>
+                                                                        </td>
+                                                                        <td>
+                                                                            {i.cart.goods.name}
+                                                                        </td>
+                                                                        <td>
+                                                                            {i.outOfStock.stock} ks
+                                                                        </td>
+                                                                        <td>
+                                                                            <Quantity min={1} max={i.outOfStock.stock} pcs={i.cart.pcs} setQuantity={value=>{
+                                                                                cartStore.dispatch<CartAction>({type: CartActionType.ChangeCart, item:i.cart, changePcs:value});
+                                                                            }}/>
+                                                                        </td>
                                                                     </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                    {cart.filter(i=>this.state.result.outOfStock.map(a=>a.id).includes(i.goods.id)).map(e=>({cart:e, outOfStock:this.state.result.outOfStock.filter(a=>a.id===e.goods.id)[0]})).map(i => (
-                                                                        <tr key={i.cart.goods.id}>
-                                                                            <td>
-                                                                                <Link href={()=>cartStore.dispatch<CartAction>({type: CartActionType.RemoveCart, item:i.cart})}><FontAwesomeIcon icon={faIcon.faTimes} style={{color:"red"}} /></Link>
-                                                                            </td>
-                                                                            <td>
-                                                                                <img width={50} src={productImageUrl(i.cart.goods.code, 1)} alt="Product"/>
-                                                                            </td>
-                                                                            <td>
-                                                                                {i.cart.goods.name}
-                                                                            </td>
-                                                                            <td>
-                                                                                {i.outOfStock.stock} ks
-                                                                            </td>
-                                                                            <td>
-                                                                                <Quantity min={1} max={i.outOfStock.stock} pcs={i.cart.pcs} setQuantity={value=>{
-                                                                                    cartStore.dispatch<CartAction>({type: CartActionType.ChangeCart, item:i.cart, changePcs:value});
-                                                                                }}/>
-                                                                            </td>
-                                                                        </tr>
-                                                                    ))}
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </ModalBody>
-                                                    </Modal>
-                                                )}
+                                                                ))}
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </ModalBody>
+                                                </Modal>
+                                            )}
+                                            <div className="cart-table">
                                                 <div className="table-responsive">
                                                     <table className="table table-bordered mb-30">
                                                         <thead>
@@ -491,18 +493,28 @@ const CheckoutRedux = connect((state: CheckoutState) => reduceStateToPlainObject
 
 class CheckoutPage extends React.Component<CartState> {
 
+
+    state = {loading:true};
+
     componentDidMount(): void {
         window.scrollTo(0, 0);
+        if(checkoutStore.getState().finished) {
+            checkoutStore.dispatch<CheckoutAction>({type: CheckoutActionType.Reset});
+        }
+        this.setState({loading:false});
     }
 
     render() {
+        if(this.state.loading) {
+            return <Loading/>;
+        }
         if(checkoutStore.getState().finished) {
             return <Complete />
         }
         if (this.props.cart.length > 0) {
             return (
                     <Provider store={checkoutStore}>
-                           <CheckoutRedux/>
+                       <CheckoutRedux/>
                     </Provider>
             );
         }

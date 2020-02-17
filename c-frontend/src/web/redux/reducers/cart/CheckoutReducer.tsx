@@ -5,6 +5,7 @@ export enum CheckoutActionType {
     Update="checkout/update",
     SetStep="checkout/set-step",
     Finish="checkout/finish",
+    Reset="checkout/reset",
     UpdateData="checkout/update-data"
 }
 
@@ -28,6 +29,10 @@ export const checkoutReducer = (state:CheckoutState = {step:0, checkout:new Chec
         return {...state, ...{checkout:action.checkout, finished:false}};
     } else if(CheckoutActionType.Finish === action.type) {
         return {finished:true, orderNumber:action.orderNumber}
+    } else if(CheckoutActionType.Reset === action.type) {
+        return {step:0, checkout:new CheckoutDto()};
+    } else if(CheckoutActionType.Finish === action.type) {
+        return {finished:true, orderNumber:action.orderNumber};
     }
     return state;
 };
