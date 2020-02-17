@@ -155,6 +155,7 @@ class Review extends React.Component<any, ReviewState> {
                                                                 <table className="table table-bordered mb-30">
                                                                     <thead>
                                                                     <tr>
+                                                                        <td/>
                                                                         <td>Náhled</td>
                                                                         <td>Název produktu</td>
                                                                         <td>Na skladě</td>
@@ -165,6 +166,9 @@ class Review extends React.Component<any, ReviewState> {
                                                                     {cart.filter(i=>this.state.result.outOfStock.map(a=>a.id).includes(i.goods.id)).map(e=>({cart:e, outOfStock:this.state.result.outOfStock.filter(a=>a.id===e.goods.id)[0]})).map(i => (
                                                                         <tr key={i.cart.goods.id}>
                                                                             <td>
+                                                                                <Link href={()=>cartStore.dispatch<CartAction>({type: CartActionType.RemoveCart, item:i.cart})}><FontAwesomeIcon icon={faIcon.faTimes} style={{color:"red"}} /></Link>
+                                                                            </td>
+                                                                            <td>
                                                                                 <img width={50} src={productImageUrl(i.cart.goods.code, 1)} alt="Product"/>
                                                                             </td>
                                                                             <td>
@@ -174,7 +178,7 @@ class Review extends React.Component<any, ReviewState> {
                                                                                 {i.outOfStock.stock} ks
                                                                             </td>
                                                                             <td>
-                                                                                <Quantity max={i.outOfStock.stock} pcs={i.cart.pcs} setQuantity={value=>{
+                                                                                <Quantity min={1} max={i.outOfStock.stock} pcs={i.cart.pcs} setQuantity={value=>{
                                                                                     cartStore.dispatch<CartAction>({type: CartActionType.ChangeCart, item:i.cart, changePcs:value});
                                                                                 }}/>
                                                                             </td>
