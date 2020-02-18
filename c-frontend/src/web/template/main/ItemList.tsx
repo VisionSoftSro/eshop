@@ -13,13 +13,16 @@ import Wrapper from "../../../common/component/Wrapper";
 import {getHashValue} from "../../../common/utils/Util";
 import {announceAddedToCart} from "../Root";
 import {StockEmoji} from "./StockEmoji";
+import {AssetCache} from "../../AssetCache";
 
 class Item extends React.Component<{item:GoodsDto}> {
 
     addToCart = () => {
-        const cg = new CartGoods(this.props.item, 1);
-        announceAddedToCart(cg);
-        cartStore.dispatch<CartAction>({ type: CartActionType.AddCart, item:cg});
+        if(this.props.item.stock) {
+            const cg = new CartGoods(this.props.item, 1);
+            announceAddedToCart(cg);
+            cartStore.dispatch<CartAction>({ type: CartActionType.AddCart, item:cg});
+        }
     };
 
     showDetail = () => {
@@ -46,8 +49,8 @@ class Item extends React.Component<{item:GoodsDto}> {
 
                     <div className="product_description">
                         <div className="product_add_to_cart">
-                            <Link href={this.addToCart}>
-                                <i className="icofont-cart"/> {Strings["AddToCart"]}
+                            <Link href={this.addToCart} style={this.props.item.stock?{}:{backgroundColor:"gray"}}>
+                                {this.props.item.stock?<><i className="icofont-cart"/> {Strings["AddToCart"]}</>:<span style={{flex:1}}><img src={AssetCache.Image.Sad} style={{width:20}} /> {Strings["OutOfStock"]}</span>}
                             </Link>
                         </div>
 
