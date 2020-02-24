@@ -79,7 +79,7 @@ class CheckoutService {
 
     fun getDeliveryAddress(order:Order):String? = when(order.shippingMethod!!.code!!) {
         "zasilkovna"-> {
-            zasilkovnaDao.findById(order.branchId!!).get().address
+            zasilkovnaDao.findById(order.branchId!!).get().let { "${it.country}, ${it.city}, ${it.address}, ${it.zip})" }
         }
         "czech_post"-> {
             czechPostDao.findById(order.branchId!!.toLong()).get().let {value-> "${value.name} - (${value.city}, ${value.address}, ${value.zip})" }
@@ -144,7 +144,7 @@ class CheckoutService {
                 "orderId" to order.id!!,
                 "createdDate" to Date(),
                 "payday" to Date.from(LocalDate.now().plusDays(5).atStartOfDay(ZoneId.systemDefault()).toInstant()),
-                "name" to "${order.firstName} ${order.firstName}",
+                "name" to "${order.firstName} ${order.lastName}",
                 "address" to "${order.address}",
                 "city" to "${order.city}",
                 "ordersDS" to JRBeanCollectionDataSource(reportGoods),

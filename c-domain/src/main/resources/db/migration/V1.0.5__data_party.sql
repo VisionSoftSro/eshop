@@ -48,3 +48,5 @@ insert into goods (code, name, description, hot, images, stock, price) values ('
 insert into goods_category(category, goods) values ('party', currval('goods_id_seq'));
 insert into goods (code, name, description, hot, images, stock, price) values ('party-35', 'Párty sada -  Tlapková patrola ', '<br/>Tématická sada pro oslavu - Tlapková patrola.<br/><br/>Sada Obsahuje:<br/><br/>10 x papírové talíře<br/>10 x papírové kelímky<br/>10 x plastové nože<br/>10 x plastové lžíce<br/>10 x plastové vidličky<br/>10 x brčka<br/>20 x ubrousky<br/><br/>1 x ubrus (108 x 180 cm)<br/>1 x praporky (2 metry)', false, 6, 1, 455);
 insert into goods_category(category, goods) values ('party', currval('goods_id_seq'));
+insert into goods (code, name, description, hot, images, stock, price) values ('party-36', 'Sada Párty bublifuků', 'Balení obsahuje 7 kusů párty bublifuků v různých barvách.<br/><br/>Velikost: 10.7 x 1.1 cm<br/><br/>Vhodné od 3 let', false, 4, 2, 48);
+insert into goods_category(category, goods) values ('party', currval('goods_id_seq'));
