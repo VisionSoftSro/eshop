@@ -156,16 +156,14 @@ class CheckoutService {
         )
         val name = "faktura_${order.id}.pdf"
         val file = File("$invoicePath/$name")
-        var stream:InputStreamSource? = null
         if(file.createNewFile()) {
             val fos = FileOutputStream(file)
             fos.use {
                 reports["invoice"].renderToStream(map, JREmptyDataSource(),fos, ReportRenderType.PDF )
             }
-            stream = InputStreamSource { FileInputStream(file) }
         }
-        mailClient.send("Vaše faktura k objednávce", "general", "customerOrderInvoiceTemplate", map, stream?.let {a-> listOf(Attachment(name, a))}, order.email!!)
-        mailClient.send("Byla vygenerována faktura", "general", "storageOrderInvoiceTemplate", map, stream?.let {a-> listOf(Attachment(name, a))}, storageEmail)
+        mailClient.send("Vaše faktura k objednávce", "general", "customerOrderInvoiceTemplate", map, listOf(Attachment(name, InputStreamSource { FileInputStream(file) })), order.email!!)
+        mailClient.send("Byla vygenerována faktura", "general", "storageOrderInvoiceTemplate", map, listOf(Attachment(name, InputStreamSource { FileInputStream(file) })), storageEmail)
     }
 
     fun ship(order:Order, trackingUrl:String?) = transaction {
