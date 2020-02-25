@@ -145,7 +145,7 @@ class CheckoutService {
                 "createdDate" to Date(),
                 "payday" to Date.from(LocalDate.now().plusDays(5).atStartOfDay(ZoneId.systemDefault()).toInstant()),
                 "name" to "${order.firstName} ${order.lastName}",
-                "address" to "${order.address}",
+                "address" to "${order.address}, ${order.postCode}",
                 "city" to "${order.city}",
                 "ordersDS" to JRBeanCollectionDataSource(reportGoods),
                 "totalPrice" to orderMerged.sum(),
