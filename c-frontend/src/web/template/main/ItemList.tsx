@@ -34,10 +34,12 @@ class Item extends React.Component<{item:GoodsDto}> {
             <div className="col-9 col-sm-6 col-md-4 col-lg-3">
                 <div className="single-product-area mb-30">
                     <div className="product_image">
-                        <img className="normal_img" src={productImageUrl(this.props.item.code, 1)} alt="" />
-                        {this.props.item.hot && <div className="product_badge">
-                            <span>Top</span>
-                        </div>}
+                        <Link ignoreHash href={`${this.props.item.getUrl()}`}>
+                            <img className="normal_img" src={productImageUrl(this.props.item.code, 1)} alt="" />
+                            {this.props.item.hot && <div className="product_badge">
+                                <span>Top</span>
+                            </div>}
+                        </Link>
                         {/*<StockEmoji stock={this.props.item.stock}/>*/}
                         {/*<div className="product_wishlist">*/}
                         {/*    <a href="wishlist.html"><i className="icofont-heart"/></a>*/}
@@ -85,6 +87,7 @@ function getCatetory():Category {
 class ItemList extends React.Component<DataState> {
     componentDidMount(): void {
         const category = getCatetory();
+        document.title = category.getName();
         dataStore.dispatch<DataAction>({type:DataActionType.SetCategory, currentCategory:category});
     }
 

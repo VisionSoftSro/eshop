@@ -32,3 +32,9 @@ section>div, .checkout_area {
     font-size: medium!important;
     font-weight: bolder;
 }
+.orange-link {
+    color: #ff8400;
+}
+.orange-link:hover {
+    color: #ffd09f;
+}

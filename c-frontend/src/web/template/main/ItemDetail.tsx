@@ -73,6 +73,7 @@ function Item({item}:{item:GoodsDto}) {
     const [index, setIndex] = useCarousel(item);
     const category = item.categories[0];
     useEffect(()=>{
+        document.title = item.name;
         window.scrollTo(0, 0);
     }, []);
     return (

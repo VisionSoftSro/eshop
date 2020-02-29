@@ -497,6 +497,7 @@ class CheckoutPage extends React.Component<CartState> {
     state = {loading:true};
 
     componentDidMount(): void {
+        document.title = "Košík";
         window.scrollTo(0, 0);
         if(checkoutStore.getState().finished) {
             checkoutStore.dispatch<CheckoutAction>({type: CheckoutActionType.Reset});

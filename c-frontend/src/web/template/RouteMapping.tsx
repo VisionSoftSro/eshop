@@ -33,7 +33,7 @@ export class RouteMapping extends React.Component {
                             </Provider>
                         )}/>
                         {categories.map(category=>(
-                            <Route key={`/${category.id}-item`} path={`/${category.getSeoName()}/*`} component={ItemDetail}/>
+                            <Route key={`/${category.id}-item`} path={`/${category.getSeoName()}/*`} component={ItemDetail} />
                         ))}
                         {categories.map(category=>(
                             <Route key={`/${category.id}-category`} path={`/${category.getSeoName()}`} component={ItemList}/>

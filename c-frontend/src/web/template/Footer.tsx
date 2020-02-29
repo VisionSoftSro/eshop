@@ -1,22 +1,24 @@
 import * as React from "react";
 import moment from "moment";
+import {Link} from "../../common/component/Link";
 
 export class Footer extends React.Component {
     render() {
         return (
             <footer className="footer_area" style={{zIndex:0}}>
                 <div className="container">
-                    <div className="row">
-                        <div className="col-12">
-                            <div className="single_footer_area mb-50 mt-50">
+                    <div className="row pt-5">
+                        <div className="col-12 col-lg-6 col-md-6">
+                            <div className="single_footer_area">
                                 <div className="footer_heading mb-4">
                                     <h6>Zákaznická podpora</h6>
-                                    <p>Máte dotaz? Neváhejte nás kdykoliv kontaktovat! Jsme tu pro vás 24/7</p>
+                                    <span style={{fontSize:"small", color:"white"}}>Máte dotaz? Neváhejte nás kdykoliv kontaktovat! Jsme tu pro vás 24/7</span>
                                 </div>
-                                <ul className="footer_content">
-                                    <li><span>Email:</span> <a style={{color:"white"}} href={"mailto:info@oslavyadarky.cz"}>info@oslavyadarky.cz</a></li>
-                                    <li><span>Telefon:</span> <a style={{color:"white"}} href={"tel:+420 608 319 575"}>+420 608 319 575</a></li>
+                                <ul className="footer_widget_menu">
+                                    <li><a href={"mailto:info@oslavyadarky.cz"}><i className="icofont-rounded-right"/> info@oslavyadarky.cz</a></li>
+                                    <li><a href={"tel:+420 608 319 575"}><i className="icofont-rounded-right"/> +420 608 319 575</a></li>
                                 </ul>
+
                                 {/*<div className="footer_social_area mt-15">*/}
                                     {/*<a href="#"><i className="fa fa-facebook" aria-hidden="true"></i></a>*/}
                                     {/*<a href="#"><i className="fa fa-twitter" aria-hidden="true"></i></a>*/}
@@ -27,22 +29,22 @@ export class Footer extends React.Component {
                                 {/*</div>*/}
                             </div>
                         </div>
-                        {/*<div className="col-12 col-sm-6 col-md col-lg-4 col-xl-2">*/}
-                            {/*<div className="single_footer_area mb-100">*/}
-                                {/*<div className="footer_heading mb-4">*/}
-                                    {/*<h6>Information</h6>*/}
-                                {/*</div>*/}
-                                {/*<ul className="footer_widget_menu">*/}
-                                    {/*<li><a href="#"><i className="icofont-rounded-right"></i> Your Account</a></li>*/}
+                        <div className="col-12 col-lg-6 col-md-6">
+                            <div className="single_footer_area mb-100">
+                                <div className="footer_heading mb-4">
+                                    <h6>Informace</h6>
+                                </div>
+                                <ul className="footer_widget_menu">
+                                    <li><Link history={false} target={"_blank"} href={"/static/pdf/VOP.a.OOU.-.final.pdf"}><i className="icofont-rounded-right"/> Ochrana osobních údajů a obchodní podmínky</Link></li>
                                     {/*<li><a href="#"><i className="icofont-rounded-right"></i> Free Shipping Policy</a>*/}
                                     {/*</li>*/}
                                     {/*<li><a href="#"><i className="icofont-rounded-right"></i> Your Cart</a></li>*/}
                                     {/*<li><a href="#"><i className="icofont-rounded-right"></i> Return Policy</a></li>*/}
                                     {/*<li><a href="#"><i className="icofont-rounded-right"></i> Free Coupon</a></li>*/}
                                     {/*<li><a href="#"><i className="icofont-rounded-right"></i> Delivary Info</a></li>*/}
-                                {/*</ul>*/}
-                            {/*</div>*/}
-                        {/*</div>*/}
+                                </ul>
+                            </div>
+                        </div>
                         {/*<div className="col-12 col-sm-6 col-md col-lg-4 col-xl-2">*/}
                             {/*<div className="single_footer_area mb-100">*/}
                                 {/*<div className="footer_heading mb-4">*/}
@@ -107,6 +109,7 @@ export class Footer extends React.Component {
                             <div className="col-12">
                                 <div className="copywrite_text">
                                     <p>oslavyadarky.cz {moment().format('YYYY')}</p>
+                                    <p style={{fontSize:"small"}}>Provozovatelem internetového obchodu oslavyadárky.cz je společnost <a href={"https://vision-soft.cz"} className={"orange-link"}>Vision Soft s.r.o.</a></p>
                                 </div>
                             </div>
                         </div>
