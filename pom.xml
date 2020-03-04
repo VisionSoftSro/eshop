@@ -21,6 +21,7 @@
         <module>c-backend</module>
         <module>c-frontend</module>
         <module>c-boot</module>
+        <module>c-frontend-v2</module>
     </modules>
 
 
