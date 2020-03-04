@@ -13,7 +13,6 @@ module.exports = {
         config.plugins.push(
             new CopyPlugin([
                 { from: 'src/assets/product-img', to: 'static/product-img' },
-                { from: 'src/assets/img', to: 'static/img' },
                 { from: 'src/assets/pdf', to: 'static/pdf' }
             ])
         );
