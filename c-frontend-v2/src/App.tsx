@@ -1,11 +1,14 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Provider} from 'use-http';
 import {PaymentMethod} from "./api/ApiTypes";
 import {productImageUrl} from "./TemplateUtil";
-import {AppBar, Container, Toolbar, ThemeProvider, CssBaseline} from "@material-ui/core";
+import {AppBar, Container, Toolbar, ThemeProvider, CssBaseline, Link} from "@material-ui/core";
 import {theme, useStyles} from "./Styles";
 import {AppContext, useAppContext} from "./context/main/AppContext";
-
+import {useTranslation} from "react-i18next";
+import {BrowserRouter as Router, Redirect, Route, Switch, useHistory, useParams} from "react-router-dom";
+import {Routes} from "./Routes";
+import {GoodsPage} from "./page/GoodsPage";
 const size = "md";
 function Header() {
     // const {push} = useHistory();
@@ -25,26 +28,20 @@ function Header() {
 }
 
 
-function Body() {
-    const {paymentMethods, shippingMethods} = useAppContext();
-
-    return (
-        <div className="App">
-            {paymentMethods.map(item => <div key={item.id}>{item.code}</div>)}
-            {shippingMethods.map(item => <div key={item.id}>{item.code}</div>)}
-        </div>
-    );
-}
-
 function App() {
+    const {t, i18n} = useTranslation();
 
+    console.log("muhehe");
     return (
         <ThemeProvider theme={theme}>
+            {t("app.name")}
             <CssBaseline />
             <Provider url='/api'>
                 <AppContext>
                     <Header />
-                    <Body/>
+                    <Router basename={`${i18n.language}`}>
+                        <Routes/>
+                    </Router>
                 </AppContext>
             </Provider>
         </ThemeProvider>
