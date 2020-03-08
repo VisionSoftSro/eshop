@@ -14,30 +14,32 @@ import org.visionsoft.crm.domain.dao.GoodsDao
 import java.math.BigDecimal
 
 
-@JacksonXmlRootElement(localName = "SHOP")
+const val NS = "http://www.zbozi.cz/ns/offer/1.0"
+
+@JacksonXmlRootElement(localName = "SHOP", namespace = NS)
 class Shop {
     @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "SHOPITEM")
+    @JacksonXmlProperty(localName = "SHOPITEM", namespace = NS)
     var items:List<ShopItem>?=null
 }
 
 class ShopItem {
-    @JacksonXmlProperty(localName = "ITEM_ID")
+    @JacksonXmlProperty(localName = "ITEM_ID", namespace = NS)
     var id:Long?=null
 
-    @JacksonXmlProperty(localName = "PRODUCTNAME")
+    @JacksonXmlProperty(localName = "PRODUCTNAME", namespace = NS)
     var name:String?=null
-    @JacksonXmlProperty(localName = "DESCRIPTION")
+    @JacksonXmlProperty(localName = "DESCRIPTION", namespace = NS)
     var description:String?=null
-    @JacksonXmlProperty(localName = "CATEGORYTEXT")
+    @JacksonXmlProperty(localName = "CATEGORYTEXT", namespace = NS)
     var category:String?=null
-    @JacksonXmlProperty(localName = "URL")
+    @JacksonXmlProperty(localName = "URL", namespace = NS)
     var url:String?=null
-    @JacksonXmlProperty(localName = "IMGURL")
+    @JacksonXmlProperty(localName = "IMGURL", namespace = NS)
     var imgUrl:String?=null
-    @JacksonXmlProperty(localName = "PRICE_VAT")
+    @JacksonXmlProperty(localName = "PRICE_VAT", namespace = NS)
     var price:BigDecimal?=null
-    @JacksonXmlProperty(localName = "DELIVERY_DATE")
+    @JacksonXmlProperty(localName = "DELIVERY_DATE", namespace = NS)
     var delivery:Long?=null
 }
 
