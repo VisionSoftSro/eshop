@@ -1,14 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {Provider} from 'use-http';
-import {PaymentMethod} from "./api/ApiTypes";
-import {productImageUrl} from "./TemplateUtil";
 import {AppBar, Container, Toolbar, ThemeProvider, CssBaseline, Link} from "@material-ui/core";
 import {theme, useStyles} from "./Styles";
 import {AppContext, useAppContext} from "./context/main/AppContext";
 import {useTranslation} from "react-i18next";
-import {BrowserRouter as Router, Redirect, Route, Switch, useHistory, useParams} from "react-router-dom";
+import {Router, Redirect, Route, Switch, useHistory, useParams} from "react-router";
+import {createBrowserHistory} from 'history';
 import {Routes} from "./Routes";
-import {GoodsPage} from "./page/GoodsPage";
+const history = createBrowserHistory();
 const size = "md";
 function Header() {
     // const {push} = useHistory();
@@ -29,22 +28,21 @@ function Header() {
 
 
 function App() {
-    const {t, i18n} = useTranslation();
-
-    console.log("muhehe");
+    const {i18n} = useTranslation();
+    console.log("lang", i18n.language);
     return (
-        <ThemeProvider theme={theme}>
-            {t("app.name")}
-            <CssBaseline />
-            <Provider url='/api'>
-                <AppContext>
-                    <Header />
-                    <Router basename={`${i18n.language}`}>
-                        <Routes/>
-                    </Router>
-                </AppContext>
-            </Provider>
-        </ThemeProvider>
+        <Router history={history}>
+            <Routes/>
+            {/*<ThemeProvider theme={theme}>*/}
+                {/*<CssBaseline />*/}
+                {/*<Provider url='/api'>*/}
+                    {/*<AppContext>*/}
+                        {/*<Header />*/}
+                        {/*<Routes/>*/}
+                    {/*</AppContext>*/}
+                {/*</Provider>*/}
+            {/*</ThemeProvider>*/}
+        </Router>
     );
 }
 

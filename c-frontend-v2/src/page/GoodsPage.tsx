@@ -7,7 +7,7 @@ import {useHistory, useParams} from "react-router";
 
 export function LanguageLink({lang}:{lang:string}) {
     const {push} = useHistory();
-    return <Link onClick={async ()=>{
+    return <Link href={"#"} onClick={async ()=>{
         await i18n.changeLanguage(lang);
     }}>{lang}</Link>;
 }
@@ -23,7 +23,7 @@ export function GoodsPage() {
             <LanguageLink lang={"en"}/><br/>
             name: {t("app.name")}<br/>
             lang: {lang}<br/>
-            lang2: {i18n.language}<br/>
+            lang2: {i18n.language}<br/><br/><br/><br/>
             <Link href="#" onClick={()=>push("/nekam")}>nekam</Link>
             {/*{paymentMethods.map(item => <div key={item.id}>{item.code}</div>)}*/}
             {/*{shippingMethods.map(item => <div key={item.id}>{item.code}</div>)}*/}

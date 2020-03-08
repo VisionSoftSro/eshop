@@ -1,5 +1,6 @@
 package org.visionsoft.cms.mvc.controller.api
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 import org.springframework.beans.factory.annotation.Autowired
@@ -7,16 +8,18 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import org.visionsoft.common.unaccent
 import org.visionsoft.crm.domain.dao.GoodsDao
 import java.math.BigDecimal
 
 
 @JacksonXmlRootElement(localName = "SHOP")
 class Shop {
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "SHOPITEM")
     var items:List<ShopItem>?=null
 }
 
-@JacksonXmlRootElement(localName = "SHOPITEM")
 class ShopItem {
     @JacksonXmlProperty(localName = "ITEM_ID")
     var id:Long?=null
@@ -37,6 +40,9 @@ class ShopItem {
     var delivery:Long?=null
 }
 
+
+val seoCategoriesCZNames = mapOf("gift" to "darky", "party" to "oslavy")
+
 @RestController
 @RequestMapping("feed/")
 class FeedController {
@@ -50,14 +56,14 @@ class FeedController {
     @GetMapping("seznam")
     fun getSeznam() = Shop().apply {
         items = goodsDao.findAll().map { ShopItem().apply {
-            this.category = it.categories[0].id
+            this.category = seoCategoriesCZNames[it.categories[0].id]
             this.id = it.id
-            this.name = it.name
+            this.name = it.name!!.trim()
             this.delivery = if(it.stock > 0) {0} else {-1}
             this.description = it.description
             this.price = it.price
-            this.imgUrl = ""
-            this.url = ""
+            this.url = "$domain/$category/${name!!.unaccent().replace(" ", "-")}#pid=$id"
+            this.imgUrl = "$domain/static/product-img/${it.code!!}/1.jpg"
         } }
     }
 
