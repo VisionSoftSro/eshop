@@ -5,6 +5,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -53,7 +54,7 @@ class FeedController {
     @Autowired
     lateinit var goodsDao: GoodsDao
 
-    @GetMapping("seznam")
+    @GetMapping("seznam", produces= [MediaType.APPLICATION_XML_VALUE])
     fun getSeznam() = Shop().apply {
         items = goodsDao.findAll().map { ShopItem().apply {
             this.category = seoCategoriesCZNames[it.categories[0].id]

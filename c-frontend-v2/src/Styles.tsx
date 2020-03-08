@@ -48,8 +48,3 @@ export const useStyles = makeStyles(theme => ({
         padding: 20
     }
 }));
-
-
-declare module MyModule {
-
-}
