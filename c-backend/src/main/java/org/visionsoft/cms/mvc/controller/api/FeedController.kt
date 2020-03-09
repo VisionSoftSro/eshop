@@ -59,7 +59,7 @@ class FeedController {
     @GetMapping("seznam", produces= [MediaType.APPLICATION_XML_VALUE])
     fun getSeznam() = Shop().apply {
         items = goodsDao.findAll().map { ShopItem().apply {
-            this.category = seoCategoriesCZNames[it.categories[0].id]
+            this.category = "Oslavy a dárky"
             this.id = it.id
             this.name = it.name!!.trim()
             this.delivery = if(it.stock > 0) {0} else {-1}
@@ -70,5 +70,8 @@ class FeedController {
         } }
     }
 
+
+    @GetMapping("heureka", produces= [MediaType.APPLICATION_XML_VALUE])
+    fun getHeureka() = getSeznam()
 
 }
