@@ -65,7 +65,7 @@ class FeedController {
             this.delivery = if(it.stock > 0) {0} else {-1}
             this.description = it.description
             this.price = it.price
-            this.url = "$domain/$category/${name!!.unaccent().replace(" ", "-")}#pid=$id"
+            this.url = "$domain/${seoCategoriesCZNames[it.categories[0].id]}/${name!!.unaccent().replace(" ", "-")}#pid=$id"
             this.imgUrl = "$domain/static/product-img/${it.code!!}/1.jpg"
         } }
     }
