@@ -9,18 +9,17 @@ import java.io.FileInputStream
 
 
 
-val mapping = mapOf("gift" to ("Dárky" to 2), "party" to ("Oslavy" to 3))
-val exportPath = "C:\\Users\\heris\\Downloads\\export\\dest\\"
+val mapping = mapOf("gift" to ("Dárky" to 25), "party" to ("Oslavy" to 37))
+val exportPath = "/Users/tremll/Documents/export/dest/"
 fun main() {
     mapping.forEach {
-        DataExporter("C:\\Users\\heris\\Downloads\\export\\source\\${it.value.first}/", it.key, it.value.second).export()
+        DataExporter("/Users/tremll/Documents/export/source/${it.value.first}/", it.key, it.value.second).export()
     }
 }
 
-class DataExporter(val path: String, val category: String, val version:Int) {
+class DataExporter(val path: String, val category: String, var index: Int) {
     val sqlBuffer = StringBuffer()
     val exportDir = File("$exportPath/$category")
-    var index = 0
     fun export() {
         if(exportDir.exists()) exportDir.deleteRecursively()
         if(!exportDir.exists()) exportDir.mkdirs()
@@ -40,7 +39,7 @@ class DataExporter(val path: String, val category: String, val version:Int) {
     }
 
     private fun save() {
-        FileWriter("$exportDir/V1.0.${version}__data_$category.sql").use {
+        FileWriter("$exportDir/V1.0.change__data_$category.sql").use {
             it.write(sqlBuffer.toString())
         }
     }
@@ -61,10 +60,11 @@ class ProductProcessor(index: Int, val category: String, val productFolder: File
     }
 
     private fun processSql() {
-        productFolder.list()?.firstOrNull { it == "Text.txt" }?.let {
+        val popis = "popis a cena.txt"
+        productFolder.list()?.firstOrNull { it == popis }?.let {
             val file = File("${productFolder.absolutePath}/${it}")
-            if(it == "Text.txt") {
-                InputStreamReader(FileInputStream(file), "ISO-8859-2").use { txt->
+            if(it == popis) {
+                InputStreamReader(FileInputStream(file), "UTF-8").use { txt->
                     parseData(txt.readText())?.let {tmpl->
                         sqlBuffer.append(tmpl.toSql())
                         sqlBuffer.append("\n")
