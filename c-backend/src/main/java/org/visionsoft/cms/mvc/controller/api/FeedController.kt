@@ -14,32 +14,64 @@ import org.visionsoft.crm.domain.dao.GoodsDao
 import java.math.BigDecimal
 
 
-const val NS = "http://www.zbozi.cz/ns/offer/1.0"
+const val NSSeznam = "http://www.zbozi.cz/ns/offer/1.0"
 
-@JacksonXmlRootElement(localName = "SHOP", namespace = NS)
-class Shop {
+@JacksonXmlRootElement(localName = "SHOP", namespace = NSSeznam)
+class ShopSeznam {
     @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "SHOPITEM", namespace = NS)
-    var items:List<ShopItem>?=null
+    @JacksonXmlProperty(localName = "SHOPITEM", namespace = NSSeznam)
+    var items:List<ShopItemSeznam>?=null
 }
 
-class ShopItem {
-    @JacksonXmlProperty(localName = "ITEM_ID", namespace = NS)
+class ShopItemSeznam {
+    @JacksonXmlProperty(localName = "ITEM_ID", namespace = NSSeznam)
     var id:Long?=null
 
-    @JacksonXmlProperty(localName = "PRODUCTNAME", namespace = NS)
+    @JacksonXmlProperty(localName = "PRODUCTNAME", namespace = NSSeznam)
     var name:String?=null
-    @JacksonXmlProperty(localName = "DESCRIPTION", namespace = NS)
+    @JacksonXmlProperty(localName = "DESCRIPTION", namespace = NSSeznam)
     var description:String?=null
-    @JacksonXmlProperty(localName = "CATEGORYTEXT", namespace = NS)
+    @JacksonXmlProperty(localName = "CATEGORYTEXT", namespace = NSSeznam)
     var category:String?=null
-    @JacksonXmlProperty(localName = "URL", namespace = NS)
+    @JacksonXmlProperty(localName = "URL", namespace = NSSeznam)
     var url:String?=null
-    @JacksonXmlProperty(localName = "IMGURL", namespace = NS)
+    @JacksonXmlProperty(localName = "IMGURL", namespace = NSSeznam)
     var imgUrl:String?=null
-    @JacksonXmlProperty(localName = "PRICE_VAT", namespace = NS)
+    @JacksonXmlProperty(localName = "PRICE_VAT", namespace = NSSeznam)
     var price:BigDecimal?=null
-    @JacksonXmlProperty(localName = "DELIVERY_DATE", namespace = NS)
+    @JacksonXmlProperty(localName = "DELIVERY_DATE", namespace = NSSeznam)
+    var delivery:Long?=null
+}
+
+
+const val NSHeureka = "http://www.zbozi.cz/ns/offer/1.0"
+
+@JacksonXmlRootElement(localName = "SHOP", namespace = NSHeureka)
+class ShopHeureka {
+    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlProperty(localName = "SHOPITEM", namespace = NSHeureka)
+    var items:List<ShopItemHeureka>?=null
+}
+
+class ShopItemHeureka {
+    @JacksonXmlProperty(localName = "ITEM_ID", namespace = NSHeureka)
+    var id:Long?=null
+
+    @JacksonXmlProperty(localName = "PRODUCTNAME", namespace = NSHeureka)
+    var name:String?=null
+    @JacksonXmlProperty(localName = "MANUFACTURER", namespace = NSHeureka)
+    var manufacturer:String?=null
+    @JacksonXmlProperty(localName = "DESCRIPTION", namespace = NSHeureka)
+    var description:String?=null
+    @JacksonXmlProperty(localName = "CATEGORYTEXT", namespace = NSHeureka)
+    var category:String?=null
+    @JacksonXmlProperty(localName = "URL", namespace = NSHeureka)
+    var url:String?=null
+    @JacksonXmlProperty(localName = "IMGURL", namespace = NSHeureka)
+    var imgUrl:String?=null
+    @JacksonXmlProperty(localName = "PRICE_VAT", namespace = NSHeureka)
+    var price:BigDecimal?=null
+    @JacksonXmlProperty(localName = "DELIVERY_DATE", namespace = NSHeureka)
     var delivery:Long?=null
 }
 
@@ -57,8 +89,8 @@ class FeedController {
     lateinit var goodsDao: GoodsDao
 
     @GetMapping("seznam", produces= [MediaType.APPLICATION_XML_VALUE])
-    fun getSeznam() = Shop().apply {
-        items = goodsDao.findAll().map { ShopItem().apply {
+    fun getSeznam() = ShopSeznam().apply {
+        items = goodsDao.findAll().map { ShopItemSeznam().apply {
             this.category = "Oslavy a dárky"
             this.id = it.id
             this.name = it.name!!.trim()
@@ -72,6 +104,18 @@ class FeedController {
 
 
     @GetMapping("heureka", produces= [MediaType.APPLICATION_XML_VALUE])
-    fun getHeureka() = getSeznam()
+    fun getHeureka() = ShopHeureka().apply {
+        items = getSeznam().items?.map { ShopItemHeureka().apply {
+            this.category = it.category
+            this.id = it.id
+            this.name = it.name
+            this.manufacturer = it.name
+            this.delivery = it.delivery
+            this.description = it.description
+            this.price = it.price
+            this.url = it.url
+            this.imgUrl = it.imgUrl
+        } }
+    }
 
 }
