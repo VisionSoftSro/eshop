@@ -44,7 +44,7 @@ class ShopItemSeznam {
 }
 
 
-const val NSHeureka = "http://www.zbozi.cz/ns/offer/1.0"
+const val NSHeureka = ""
 
 @JacksonXmlRootElement(localName = "SHOP", namespace = NSHeureka)
 class ShopHeureka {
