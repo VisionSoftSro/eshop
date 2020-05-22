@@ -1,4 +1,4 @@
-name: oslavyadarky.cz CI
+name: oslavyadarky.cz CI - deploy
 
 on:
   release:
