@@ -1,15 +1,17 @@
 package org.visionsoft
 
 
-import org.springframework.util.StringUtils
-import java.io.*
-import java.math.BigDecimal
 import org.apache.commons.io.FileUtils
+import org.springframework.util.StringUtils
+import java.io.File
 import java.io.FileInputStream
+import java.io.FileWriter
+import java.io.InputStreamReader
+import java.math.BigDecimal
+import java.util.regex.Pattern
 
 
-
-val mapping = mapOf("gift" to ("Dárky" to 25), "party" to ("Oslavy" to 37))
+val mapping = mapOf("gift" to ("Dárky" to 35), "party" to ("Oslavy" to 37))
 val exportPath = "/Users/tremll/Documents/export/dest/"
 fun main() {
     mapping.forEach {
@@ -39,7 +41,7 @@ class DataExporter(val path: String, val category: String, var index: Int) {
     }
 
     private fun save() {
-        FileWriter("$exportDir/V1.0.change__data_$category.sql").use {
+        FileWriter("$exportDir/V1.0.x__change__data_$category.sql").use {
             it.write(sqlBuffer.toString())
         }
     }
@@ -60,7 +62,7 @@ class ProductProcessor(index: Int, val category: String, val productFolder: File
     }
 
     private fun processSql() {
-        val popis = "popis a cena.txt"
+        val popis = "text.txt"
         productFolder.list()?.firstOrNull { it == popis }?.let {
             val file = File("${productFolder.absolutePath}/${it}")
             if(it == popis) {
@@ -113,9 +115,10 @@ class ProductProcessor(index: Int, val category: String, val productFolder: File
                 name = "$name - ${cols[1]}"
             }
             val priceCol = cols[startIndex]
-            val price = priceCol.trim().let { it.substring(0, it.indexOf("k")).trim().toBigDecimal() }
+            val m = Pattern.compile("[kK]")
+            val price = priceCol.trim().let { m.matcher(it).let {match -> if(match.find()) it.substring(0, match.start()).trim().toBigDecimal() else BigDecimal.valueOf(0)} }
             val stockCol = cols[startIndex+3]
-            val stock = stockCol.trim().let { it.substring(0, it.indexOf("k")).trim().toInt() }
+            val stock = stockCol.trim().let { m.matcher(it).let {match -> if(match.find()) it.substring(0, match.start()).trim().toInt() else 0} }
             return Triple(name, stock, price)
         }
         return null
