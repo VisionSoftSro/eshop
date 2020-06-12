@@ -1,7 +1,7 @@
 import * as React from "react";
 import {ReactElement, useEffect, useState} from "react";
 import {CartGoods, GoodsDto} from "../../dto/GoodsDto";
-import {clamp, getHashValue} from "../../../common/utils/Util";
+import {clamp, getHashValue, loopNumber} from "../../../common/utils/Util";
 import {booleanComparator, Loader} from "../../../common/component/Loader";
 import {httpEndpoint} from "../../../common/utils/HttpUtils";
 import {Page404} from "./Page404";
@@ -92,7 +92,7 @@ function Item({item}:{item:GoodsDto}) {
                 <div className="row justify-content-center">
                     <div className="col-12 col-lg-6">
                         <div className={"single_product_thumb"}>
-                            <Carousel interval={false} id="product_details_slider" indicators={false} activeIndex={index} next={()=>setIndex(index+1)} previous={()=>setIndex(index-1)} autoPlay={false}>
+                            <Carousel id="product_details_slider" activeIndex={index} next={()=>setIndex(loopNumber(index+1, 0, item.images-1))} previous={()=>setIndex(loopNumber(index-1, 0, item.images-1))}>
                                 {
                                     imageIterator(number=>(
                                         <CarouselItem key={number} style={{height:500}}>
@@ -103,17 +103,17 @@ function Item({item}:{item:GoodsDto}) {
                                         </CarouselItem>
                                     ))
                                 }
-                                <ol className="carousel-indicators">
-                                    {
-                                        imageIterator(number=>(
-                                            <li className={number-1===index&&"active"||""} key={number} onClick={()=>setIndex(number-1)}
-                                                style={{backgroundImage:`url(${productImageUrl(item.code, number)})`}}>
-                                            </li>
-                                        ))
-                                    }
-                                </ol>
-                            </Carousel>
 
+                            </Carousel>
+                            <ol className="carousel-indicators" style={{position:"relative"}}>
+                                {
+                                    imageIterator(number=>(
+                                        <li className={number-1===index&&"active"||""} key={number} onClick={()=>setIndex(number-1)}
+                                            style={{backgroundImage:`url(${productImageUrl(item.code, number)})`}}>
+                                        </li>
+                                    ))
+                                }
+                            </ol>
                         </div>
 
                     </div>

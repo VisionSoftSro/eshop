@@ -13,6 +13,7 @@ export const formatPrice = (value:number, currency:string) => {
 };
 
 export function clamp(v:number, min:number, max:number) { return v < min ? min : v > max ? max : v; }
+export function loopNumber(v:number, min:number, max:number) { return v < min ? max : v > max ? min : v; }
 
 
 type jsonToFormDataType = {

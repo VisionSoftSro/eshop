@@ -17,6 +17,8 @@ export class Footer extends React.Component {
                                 <ul className="footer_widget_menu">
                                     <li><a href={"mailto:info@oslavyadarky.cz"}><i className="icofont-rounded-right"/> info@oslavyadarky.cz</a></li>
                                     <li><a href={"tel:+420 608 319 575"}><i className="icofont-rounded-right"/> +420 608 319 575</a></li>
+                                    <li><a href={"https://or.justice.cz/ias/ui/rejstrik-firma.vysledky?subjektId=933314&typ=UPLNY"}><i className="icofont-rounded-right"/> IČO 05061768</a></li>
+
                                 </ul>
 
                                 {/*<div className="footer_social_area mt-15">*/}

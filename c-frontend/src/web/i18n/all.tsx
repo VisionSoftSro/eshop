@@ -1,6 +1,6 @@
 export default {
     cs: {
-        Goods:"Zboží",
+        Goods:"U nás vybavíte dětskou oslavu i dárek pro oslavence",
         Offers:"Pro vás",
         Projects:"Naše projekty",
         Contact:"Kontakt",
