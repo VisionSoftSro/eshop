@@ -8,6 +8,9 @@ import org.springframework.web.servlet.resource.PathResourceResolver
 
 import java.io.IOException
 
+
+const val CACHE_PERIOD = 3600*24*7
+
 @Configuration
 class WebApplicationConfiguration : WebMvcConfigurerAdapter() {
 
@@ -15,7 +18,7 @@ class WebApplicationConfiguration : WebMvcConfigurerAdapter() {
 
         registry
                 .addResourceHandler("/static/**")
-                .addResourceLocations("classpath:/public/static/")
+                .addResourceLocations("classpath:/public/static/").setCachePeriod(CACHE_PERIOD)
                 .resourceChain(false)
         registry
                 .addResourceHandler("/favicon.ico")
