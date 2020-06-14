@@ -9,21 +9,16 @@ import org.springframework.core.io.InputStreamSource
 import org.springframework.stereotype.Component
 import org.visionsoft.common.mail.Attachment
 import org.visionsoft.common.mail.MailClient
-import org.visionsoft.common.reports.ReportExportConfig
 import org.visionsoft.common.reports.ReportRenderType
 import org.visionsoft.common.reports.ReportRepository
 import org.visionsoft.common.transaction.transaction
 import org.visionsoft.crm.domain.dao.CzechPostDao
 import org.visionsoft.crm.domain.dao.ZasilkovnaDao
-
 import org.visionsoft.crm.domain.scheme.*
-import java.io.ByteArrayInputStream
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
-
+import java.io.*
 import java.math.BigDecimal
-import java.time.Instant
+import java.net.HttpURLConnection
+import java.net.URL
 import java.time.LocalDate
 import java.time.ZoneId
 import java.util.*
@@ -162,8 +157,39 @@ class CheckoutService {
                 reports["invoice"].renderToStream(map, JREmptyDataSource(),fos, ReportRenderType.PDF )
             }
         }
-        mailClient.send("Vaše faktura k objednávce", "general", "customerOrderInvoiceTemplate", map, listOf(Attachment(name, InputStreamSource { FileInputStream(file) })), order.email!!)
-        mailClient.send("Byla vygenerována faktura", "general", "storageOrderInvoiceTemplate", map, listOf(Attachment(name, InputStreamSource { FileInputStream(file) })), storageEmail)
+        try {
+            mailClient.send("Vaše faktura k objednávce", "general", "customerOrderInvoiceTemplate", map, listOf(Attachment(name, InputStreamSource { FileInputStream(file) })), order.email!!)
+            mailClient.send("Byla vygenerována faktura", "general", "storageOrderInvoiceTemplate", map, listOf(Attachment(name, InputStreamSource { FileInputStream(file) })), storageEmail)
+        } finally {
+
+        }
+
+    }
+
+    fun sendConfirmedByCustomers(order:Order) {
+        val url = URL("https://api.heureka.cz/shop-certification/v2/order/log")
+        val con: HttpURLConnection = url.openConnection() as HttpURLConnection
+        con.requestMethod = "POST"
+        con.doOutput = true
+        con.addRequestProperty("Content-Type", "application/json;charset=utf-8")
+        val out = DataOutputStream(con.outputStream)
+        val json = ObjectMapper().writeValueAsString(mapOf(
+                "apiKey" to "bd571f8f14ab22850e09fa18c267d540",
+                "email" to order.email!!,
+                "productItemIds" to order.goods.map { "${it.goods!!.id!!}" },
+                "orderId" to order.id!!
+        ))
+        out.writeBytes(json)
+        out.flush()
+        out.close()
+        val `in` = BufferedReader(
+                InputStreamReader(con.inputStream))
+        var inputLine: String?
+        val content = StringBuffer()
+        while (`in`.readLine().also { inputLine = it } != null) {
+            content.append(inputLine)
+        }
+        `in`.close()
     }
 
     fun ship(order:Order, trackingUrl:String?) = transaction {
@@ -179,7 +205,11 @@ class CheckoutService {
         if(trackingUrl != null) {
             map["trackingUrl"] = trackingUrl
         }
-        mailClient.send("Objednávka byla expedována", "general", "customerOrderShippingTemplate", map, order.email!!)
+        try {
+            mailClient.send("Objednávka byla expedována", "general", "customerOrderShippingTemplate", map, order.email!!)
+        } finally {
+            this.sendConfirmedByCustomers(order)
+        }
     }
 
     fun cancel(order:Order, sendEmail:Boolean) = transaction {em->

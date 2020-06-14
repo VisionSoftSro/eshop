@@ -57,7 +57,7 @@ class Item extends React.Component<{item:GoodsDto}> {
                         </div>
 
                         <div className="product_quick_view">
-                            <Link href={this.showDetail}>
+                            <Link ignoreHash href={`${this.props.item.getUrl()}`}>
                                 <i className="icofont-eye-alt"/> {Strings["QuickView"]}
                             </Link>
                         </div>

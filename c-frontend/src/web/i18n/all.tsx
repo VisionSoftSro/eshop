@@ -5,7 +5,7 @@ export default {
         Projects:"Naše projekty",
         Contact:"Kontakt",
         AddToCart:"Přidat do košíku",
-        QuickView:"Náhled",
+        QuickView:"Detail",
         Detail:"Zobrazit zboží",
         TotalPrice:"Celkem",
         CartIsEmpty:"Košík je prázdný",
