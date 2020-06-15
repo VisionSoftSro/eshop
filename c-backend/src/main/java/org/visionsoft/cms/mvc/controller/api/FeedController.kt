@@ -5,6 +5,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.data.domain.Sort
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -90,7 +91,7 @@ class FeedController {
 
     @GetMapping("seznam", produces= [MediaType.APPLICATION_XML_VALUE])
     fun getSeznam() = ShopSeznam().apply {
-        items = goodsDao.findAll().map { ShopItemSeznam().apply {
+        items = goodsDao.findPublished(Sort.by(Sort.Order.asc("name"))).map { ShopItemSeznam().apply {
             this.category = "Oslavy a dárky"
             this.id = it.id
             this.name = it.name!!.trim()
