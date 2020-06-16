@@ -11,7 +11,7 @@ import java.math.BigDecimal
 import java.util.regex.Pattern
 
 
-val mapping = mapOf("gift" to ("Dárky" to 35), "party" to ("Oslavy" to 37))
+val mapping = mapOf("gift" to ("Dárky" to 35), "party" to ("Oslavy" to 40))
 val exportPath = "/Users/tremll/Documents/export/dest/"
 fun main() {
     mapping.forEach {
@@ -62,17 +62,16 @@ class ProductProcessor(index: Int, val category: String, val productFolder: File
     }
 
     private fun processSql() {
-        val popis = "text.txt"
-        productFolder.list()?.firstOrNull { it == popis }?.let {
+        val popis = "txt"
+        val list = productFolder.list()
+        list?.firstOrNull { it.endsWith("txt") }?.let {
             val file = File("${productFolder.absolutePath}/${it}")
-            if(it == popis) {
-                InputStreamReader(FileInputStream(file), "UTF-8").use { txt->
-                    parseData(txt.readText())?.let {tmpl->
-                        sqlBuffer.append(tmpl.toSql())
-                        sqlBuffer.append("\n")
-                        sqlBuffer.append("insert into goods_category(category, goods) values ('${category}', currval('goods_id_seq'));")
-                        sqlBuffer.append("\n")
-                    }
+            InputStreamReader(FileInputStream(file), "UTF-8").use { txt->
+                parseData(txt.readText())?.let {tmpl->
+                    sqlBuffer.append(tmpl.toSql())
+                    sqlBuffer.append("\n")
+                    sqlBuffer.append("insert into goods_category(category, goods) values ('${category}', currval('goods_id_seq'));")
+                    sqlBuffer.append("\n")
                 }
             }
         }
@@ -92,7 +91,9 @@ class ProductProcessor(index: Int, val category: String, val productFolder: File
     private fun processImages() {
         val exportProductDirectory = File("$exportPath/$category/$code")
         if(!exportProductDirectory.exists()) exportProductDirectory.mkdir()
-        productFolder.list()?.forEach {
+        val list = productFolder.list()
+        list?.sort()
+        list?.forEach {
             if(it.endsWith("jpg")) {
                 images++
                 FileUtils.copyFile(File("${productFolder.absolutePath}/$it"), File("${exportProductDirectory.absolutePath}/$images.jpg"))

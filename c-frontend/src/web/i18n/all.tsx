@@ -21,7 +21,7 @@ export default {
                 gift:"Dárky"
             },
             Desc: {
-                party:"Najdete tu vše, bez čeho se neobejde žádná dětská oslava. Od balónků, až po party sady.",
+                party:"Připravili jsme pro vás PARTY BOXY, které obsahují vše potřebné pro skvělou dětskou oslavu.",
                 gift:"Vyberte si z dárků, které potěší každé dítě od 1 roku do 5 let."
             }
         },
