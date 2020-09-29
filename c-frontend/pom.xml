@@ -32,8 +32,8 @@
                                     <goal>install-node-and-npm</goal>
                                 </goals>
                                 <configuration>
-                                    <nodeVersion>v10.15.3</nodeVersion>
-                                    <npmVersion>6.9.0</npmVersion>
+                                    <nodeVersion>v12.18.4</nodeVersion>
+                                    <npmVersion>6.14.6</npmVersion>
                                 </configuration>
                             </execution>
                             <execution>
@@ -42,7 +42,7 @@
                                     <goal>npm</goal>
                                 </goals>
                                 <configuration>
-                                    <arguments>install</arguments>
+                                    <arguments>install -- --max-old-space-size=8000</arguments>
                                 </configuration>
                             </execution>
                             <execution>
@@ -51,7 +51,7 @@
                                     <goal>npm</goal>
                                 </goals>
                                 <configuration>
-                                    <arguments>run-script build</arguments>
+                                    <arguments>run-script build -- --max-old-space-size=8000</arguments>
                                 </configuration>
                             </execution>
                         </executions>
