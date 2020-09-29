@@ -1,0 +1,14 @@
+insert into goods (code, name, description, hot, images, stock, price) values ('gift-42', 'Plyšová hračka Prasátko Peppa a Tomík  -  dva plyšáci za jednu cenu ', '<br/>Plyšová hračka Prasátko Peppa a Tomík - dva plyšáci z oblíbeného seriálu.<br/><br/>Velikost: 19 cm', false, 1, 3, 255);
+insert into goods_category(category, goods) values ('gift', currval('goods_id_seq'));
+insert into goods (code, name, description, hot, images, stock, price) values ('gift-43', 'Plyšová hračka Tlapková patrola  -  Marshall ', '<br/>Plyšák z oblíbeného seriálu Tlapková patrola.<br/><br/>Velikost: 20 cm', false, 1, 2, 220);
+insert into goods_category(category, goods) values ('gift', currval('goods_id_seq'));
+insert into goods (code, name, description, hot, images, stock, price) values ('gift-44', 'Plyšová hračka Tlapková patrola  -  Rubble ', '<br/>Plyšák z oblíbeného seriálu Tlapková patrola.<br/><br/>Velikost: 20 cm', false, 1, 2, 220);
+insert into goods_category(category, goods) values ('gift', currval('goods_id_seq'));
+insert into goods (code, name, description, hot, images, stock, price) values ('gift-45', 'Plyšová hračka Tlapková patrola  -  Sky ', '<br/>Plyšák z oblíbeného seriálu Tlapková patrola.<br/><br/>Velikost: 20 cm', false, 1, 2, 220);
+insert into goods_category(category, goods) values ('gift', currval('goods_id_seq'));
+insert into goods (code, name, description, hot, images, stock, price) values ('gift-46', 'Plyšový batoh do školky  -  Medvídek Pů ', '<br/>Dětský plyšový batoh s motivem seriálu Medvídek Pů.<br/><br/>Velikost: 23 cm x 23 cm', false, 1, 1, 295);
+insert into goods_category(category, goods) values ('gift', currval('goods_id_seq'));
+insert into goods (code, name, description, hot, images, stock, price) values ('gift-47', 'Plyšový batoh do školky  -  Minnie Mouse ', '<br/>Dětský plyšový batoh s motivem Minnie Mouse.<br/><br/>Velikost: 23 cm x 23 cm', false, 1, 1, 295);
+insert into goods_category(category, goods) values ('gift', currval('goods_id_seq'));
+insert into goods (code, name, description, hot, images, stock, price) values ('gift-48', 'Plyšový batoh do školky  -  Spiderman ', '<br/>Dětský plyšový batoh s motivem oblíbeného Spidermana.<br/><br/>Velikost: 23 cm x 23 cm', false, 1, 1, 295);
+insert into goods_category(category, goods) values ('gift', currval('goods_id_seq'));

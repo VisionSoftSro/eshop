@@ -1,0 +1,2 @@
+update goods set published = true where id in (select goods from goods_category where category = 'party');
+update goods set published = false where name like '%Box plný hraček%' or name like '%Party box%';

@@ -11,11 +11,11 @@ import java.math.BigDecimal
 import java.util.regex.Pattern
 
 
-val mapping = mapOf("gift" to ("Dárky" to 35), "party" to ("Oslavy" to 40))
-val exportPath = "/Users/tremll/Documents/export/dest/"
+val mapping = mapOf("gift" to ("Dárky" to 42))//, "party" to ("Oslavy" to 40)
+val exportPath = "C:\\devel\\Nově naskladněno 28.09.2020-20200929T123244Z-001\\dest"
 fun main() {
     mapping.forEach {
-        DataExporter("/Users/tremll/Documents/export/source/${it.value.first}/", it.key, it.value.second).export()
+        DataExporter("C:\\devel\\Nově naskladněno 28.09.2020-20200929T123244Z-001\\source\\${it.value.first}\\", it.key, it.value.second).export()
     }
 }
 
