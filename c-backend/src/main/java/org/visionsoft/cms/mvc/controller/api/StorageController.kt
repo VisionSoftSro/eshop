@@ -9,6 +9,8 @@ import org.visionsoft.common.JsonWrapper
 import org.visionsoft.common.controller.CRUDController
 import org.visionsoft.common.controller.DataControllerSingleType
 import org.visionsoft.common.controller.WebError
+import org.visionsoft.common.domain.JpaCriteria
+import org.visionsoft.common.lowerLike
 import org.visionsoft.common.toJson
 import org.visionsoft.common.transaction.transaction
 import org.visionsoft.crm.domain.dao.OrdersDao
@@ -16,6 +18,10 @@ import org.visionsoft.crm.domain.scheme.Goods
 import org.visionsoft.crm.domain.scheme.Order
 import org.visionsoft.crm.domain.scheme.OrderStatus
 import org.visionsoft.crm.domain.service.CheckoutService
+import java.math.BigDecimal
+import javax.persistence.criteria.CriteriaBuilder
+import javax.persistence.criteria.Predicate
+import javax.persistence.criteria.Root
 import javax.servlet.http.HttpServletRequest
 
 data class Passcode(val passcode: String, val value:Boolean)
@@ -40,7 +46,30 @@ abstract class StorageDataController<T>:DataControllerSingleType<T>() {
 
 @RestController
 @RequestMapping("/storage/goods")
-class StorageGoodsController:StorageDataController<Goods>()
+class StorageGoodsController:StorageDataController<Goods>() {
+    override fun where(criteria: JpaCriteria<Goods>, criteriaBuilder: CriteriaBuilder, root: Root<Goods>): Predicate? {
+        val preds = mutableListOf<Predicate>()
+        parameter<String>("name") {
+            preds.add(criteriaBuilder.lowerLike(root.get(Goods::name.name), it))
+        }
+        parameter<String>("description") {
+            preds.add(criteriaBuilder.lowerLike(root.get(Goods::description.name), it))
+        }
+        parameter<String>("price") {priceParam->
+            val price = priceParam.split("-").filter { it.isNotEmpty() }.map { BigDecimal(it) }
+            if(price.size == 1) {
+                preds.add(criteriaBuilder.equal(root.get<BigDecimal>(Goods::price.name), price[0]))
+            }
+            if(price.size == 2) {
+                preds.add(criteriaBuilder.between(root.get<BigDecimal>(Goods::price.name), price[0], price[1]))
+            }
+        }
+        parameter<Boolean>("published") {
+            preds.add(criteriaBuilder.equal(root.get<Boolean>(Goods::published.name), it))
+        }
+        return criteriaBuilder.and(*preds.toTypedArray())
+    }
+}
 @RestController
 @RequestMapping("/storage/goods")
 class StorageGoodsCRUDController: CRUDController<Goods, Goods>() {
@@ -57,7 +86,21 @@ class StorageGoodsCRUDController: CRUDController<Goods, Goods>() {
 
 @RestController
 @RequestMapping("/storage/list")
-class StorageListController:StorageDataController<Order>()
+class StorageListController:StorageDataController<Order>() {
+    override fun where(criteria: JpaCriteria<Order>, criteriaBuilder: CriteriaBuilder, root: Root<Order>): Predicate? {
+        val preds = mutableListOf<Predicate>()
+        parameters<OrderStatus>("status") {
+            preds.add(root.get<OrderStatus>(Order::status.name).`in`(it))
+        }
+        parameter<Long>("id") {
+            preds.add(criteriaBuilder.equal(root.get<OrderStatus>(Order::id.name), it))
+        }
+        parameter<String>("email") {
+            preds.add(criteriaBuilder.equal(root.get<String>(Order::email.name), it))
+        }
+        return criteriaBuilder.and(*preds.toTypedArray())
+    }
+}
 
 
 @RestController

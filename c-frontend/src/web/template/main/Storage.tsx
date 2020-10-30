@@ -12,7 +12,7 @@ import {getHashValue} from "../../../common/utils/Util";
 import ModalHeader from "react-bootstrap/ModalHeader";
 import {useOrdersQuery} from "../../api/StorageApi";
 import {Goods} from "./StorageGoods";
-import {Typography} from "@material-ui/core";
+import {AppBar, Box, Tab, Tabs, Typography} from "@material-ui/core";
 
 class StorageData {
     trackingNumber:string
@@ -126,14 +126,13 @@ function Orders({passcode}:{passcode:string}) {
 
     return (
         <>
-            <Typography variant={"h3"}>Objednávky</Typography>
             <OrderForm onResult={async()=>{
                 // @ts-ignore
                 tableRef.current.onQueryChange();
             }} passcode={passcode} ref={formRef} />
             <MaterialTable tableRef={tableRef} columns={[
                 {field:"id", title:"ID"},
-                {field:"status", title:"status"},
+                {field:"status", title:"status", lookup:OrderStatus},
                 {field:"email", title:"email"}
             ]} data={doQuery} actions={[
                 {
@@ -142,24 +141,62 @@ function Orders({passcode}:{passcode:string}) {
                         formRef.current.setOrder(row as OrderDto);
                     }
                 }
-            ]} options={{search:false}}/>
+            ]} options={{search:false, filtering:true}} title={"Objednávky"}/>
         </>
     )
 }
 
-class AccessedForm extends React.Component<{id?:number, passcode:string}, AccessedFormState> {
+interface TabPanelProps {
+    children?: React.ReactNode;
+    index: any;
+    value: any;
+}
+function TabPanel(props:TabPanelProps) {
+    const { children, value, index, ...other } = props;
 
-    state:AccessedFormState = {id:this.props.id};
-
-
-    render() {
-        return <Wrapper>
-            <Goods passcode={this.props.passcode} />
-            <hr/>
-            <Orders passcode={this.props.passcode} />
-        </Wrapper>
-    }
-
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`simple-tabpanel-${index}`}
+            aria-labelledby={`simple-tab-${index}`}
+            {...other}
+        >
+            {value === index && (
+                <Box p={3}>
+                    <Typography>{children}</Typography>
+                </Box>
+            )}
+        </div>
+    );
+}
+function a11yProps(index: any) {
+    return {
+        id: `simple-tab-${index}`,
+        'aria-controls': `simple-tabpanel-${index}`,
+    };
+}
+function AccessedForm({passcode}:{passcode:string}) {
+    const [value, setValue] = React.useState(0);
+    const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+        setValue(newValue);
+    };
+    return (
+        <>
+            <AppBar position="static">
+                <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
+                    <Tab label="Objednávky" {...a11yProps(0)} />
+                    <Tab label="Zboží" {...a11yProps(1)} />
+                </Tabs>
+            </AppBar>
+            <TabPanel value={value} index={0}>
+                <Orders passcode={passcode} />
+            </TabPanel>
+            <TabPanel value={value} index={1}>
+                <Goods passcode={passcode} />
+            </TabPanel>
+        </>
+    );
 }
 
 interface PasscodeState {

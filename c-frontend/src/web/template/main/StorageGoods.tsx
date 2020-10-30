@@ -47,7 +47,6 @@ export function Goods({passcode}: { passcode: string }) {
     const tableRef = useRef();
     return (
         <>
-            <Typography variant={"h3"}>Zboží</Typography>
             <GoodsForm onResult={async () => {
                 // @ts-ignore
                 tableRef.current.onQueryChange();
@@ -57,7 +56,7 @@ export function Goods({passcode}: { passcode: string }) {
                 {field: "code", title: "code"},
                 {field: "name", title: "name"},
                 {field: "price", title: "cena"},
-                {field: "published", title: "Publikováno", render:data => data.published ? <i className={"fa fa-check"}/> : <i className={"fa fa-times"}/>}
+                {field: "published", title: "Publikováno", render:data => data.published ? <i className={"fa fa-check"}/> : <i className={"fa fa-times"}/>, lookup: {true:"Ano", false:"Ne"}}
             ]} data={listQuery} actions={[
                 {
                     icon: "edit",
@@ -65,7 +64,7 @@ export function Goods({passcode}: { passcode: string }) {
                         formRef.current.setData(row as GoodsDto);
                     }
                 }
-            ]} options={{search: false}} tableRef={tableRef}/>
+            ]} options={{search: false, filtering:true}} tableRef={tableRef} title={"Zboží"}/>
         </>
     );
 }
