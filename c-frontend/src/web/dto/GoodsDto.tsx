@@ -26,6 +26,8 @@ export class GoodsDto {
     price:number;
     images:number;
     hot:boolean;
+    published:boolean;
+
 
     @JsonProperty({type:{clazz:Category, isArray:true}})
     categories:Array<Category>;

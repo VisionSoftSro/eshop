@@ -33,7 +33,7 @@ export class FormInput extends React.Component<FormInputProps, {value:string, ba
             value: value === ""? null : value,
             isEmpty: !value
         }, ()=>{
-            this.props.onValueChanged(this.state.value);
+            this.props.onValueChanged&&this.props.onValueChanged(this.state.value);
         });
     }
 

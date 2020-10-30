@@ -19,6 +19,7 @@ import moment from "moment";
 import _ from 'lodash';
 import {Mapper} from "../../utils/objectmapper/Mapper";
 import {FieldError, ValidationError} from "./ValidationError";
+import {Button} from "@material-ui/core";
 
 // export const ISO_DATETIME_STRING = "YYYY-MM-DD[T]HH:mm:ss.SSSZZ";
 // export const ISO_LOCAL_DATETIME_STRING = "YYYY-MM-DD[T]HH:mm:ss.SSS";
@@ -43,6 +44,7 @@ export enum FormInputType {
 type Validation = {regexp: RegExp, message:string}
 export interface FormFieldProps<CustomOptions = any> {
     type: FormInputType | string;
+    wysiwyg?:boolean,
     name: string;
     title?: string;
     required?: boolean;
@@ -207,6 +209,7 @@ export class FormField<CustomOptions = any> extends React.Component<FormFieldPro
         return this.renderByStyle(() => {
             return <FormTextarea 
                 {...this.createDefaultProps()}
+                wysiwyg={this.props.wysiwyg}
             />;
         }, faIcon.faPencilAlt);
     }
@@ -342,7 +345,7 @@ export class FormButton<T> extends React.Component<FormButtonProps<T>, { loading
             return <button className={cs("btn", this.props.className)} disabled={true}><LoadingIcon faSize={"1x"}/></button>;
         }
         // @ts-ignore
-        return <button onClick={this.doClick} className={cs("btn", this.props.className)} disabled={this.state.disabled}>{this.props.children}</button>;
+        return <Button variant={"contained"} onClick={this.doClick} className={cs("btn", this.props.className)} disabled={this.state.disabled}>{this.props.children}</Button>;
     }
 }
 

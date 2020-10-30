@@ -1,8 +1,9 @@
 import * as React from "react";
 import {FormFieldInterface, FormFieldInterfaceProps} from "./FormFieldInterface";
+import JoditEditor from "jodit-react";
 
 export interface FormTextareaProps extends FormFieldInterfaceProps<any> {
-
+    wysiwyg?:boolean
 }
 
 export class FormTextarea extends React.Component<FormTextareaProps> implements FormFieldInterface {
@@ -17,7 +18,7 @@ export class FormTextarea extends React.Component<FormTextareaProps> implements 
         const triggerFocus = nextProps.focused !== this.props.focused && nextProps.focused;
         this.setState({value:nextProps.value}, ()=>{
             if(triggerFocus) {
-                this.dom.focus();
+                this.dom&& this.dom.focus();
             }
         });
     }
@@ -29,6 +30,12 @@ export class FormTextarea extends React.Component<FormTextareaProps> implements 
     }
 
     render() {
+    if(this.props.wysiwyg) {
+        return <JoditEditor
+            value={this.state.value}
+            onChange={this.onValueChange.bind(this)}
+        />
+    }
      return <textarea
          ref={(input) => { this.dom = input; }}
          disabled={this.props.disabled}

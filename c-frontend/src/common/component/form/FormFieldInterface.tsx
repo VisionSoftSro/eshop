@@ -16,7 +16,7 @@ export interface FormFieldInterfaceProps<T> {
     placeholder?:string;
     simpleLabel?:boolean;
     dataTip?:string;
-    onValueChanged:(value:any)=>void
+    onValueChanged?:(value:any)=>void
     listeners?:FormFieldListeners,
     focused?:boolean,
     enableFocusSupport?:VoidFunction,

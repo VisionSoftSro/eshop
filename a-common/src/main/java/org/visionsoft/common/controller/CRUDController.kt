@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
 import org.visionsoft.common.transaction.entityManager
 import org.visionsoft.common.transaction.transaction
+import javax.servlet.http.HttpServletRequest
 import javax.validation.Valid
 
 open class CRUDControllerSingleType<E>: CRUDController<E, E>() {
@@ -17,14 +18,16 @@ open class CRUDControllerSingleType<E>: CRUDController<E, E>() {
 
 abstract class CRUDController<E, W>: AdHocController() {
 
+    open fun testAccess(request: HttpServletRequest) {}
 
     open val model:E? @ModelAttribute("entity") get() {
+        testAccess(request.request)
         val clazz = GenericTypeResolver.resolveTypeArguments(javaClass, CRUDController::class.java)
         val entityClazz = clazz[0] as Class<E>
         val e: E = (if(isNew) {
             entityClazz.newInstance()
         } else {
-            entityManager.find(entityClazz, pathVariables["id"]) as E
+            entityManager.find(entityClazz, pathVariables["id"]?.toLong()) as E
         }) ?: throw WebError.createException(HttpStatus.NOT_FOUND, "Entity with id ${pathVariables["id"]} does not exist")
         updateEntityOnLoad(e)
         return e

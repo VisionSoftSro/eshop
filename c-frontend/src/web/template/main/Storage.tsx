@@ -7,10 +7,12 @@ import {OrderDto, OrderStatus} from "../../dto/OrderDto";
 import {productImageUrl} from "../../TemplateUtil";
 import {Price} from "../../dto/GoodsDto";
 import {Modal, ModalBody} from "react-bootstrap";
-import MaterialTable, {Query, QueryResult} from "material-table";
-import {getHashValue, ScrollableList} from "../../../common/utils/Util";
+import MaterialTable from "material-table";
+import {getHashValue} from "../../../common/utils/Util";
 import ModalHeader from "react-bootstrap/ModalHeader";
-import {Mapper} from "../../../common/utils/objectmapper/Mapper";
+import {useOrdersQuery} from "../../api/StorageApi";
+import {Goods} from "./StorageGoods";
+import {Typography} from "@material-ui/core";
 
 class StorageData {
     trackingNumber:string
@@ -21,37 +23,7 @@ interface AccessedFormState {
     detail?:OrderDto
 }
 
-const useQuery = (passcode:string) => {
-  const doQuery = async(query:Query<OrderDto>):Promise<QueryResult<OrderDto>> => {
-      let params = new Array<string>();
 
-      //column filter
-      if(query.filters.length > 0) {
-          params.push(`${query.filters.map(filter=>`${filter.column.field}=${filter.value}`).join("&")}`);
-      }
-      //order by
-      if(query.orderBy) {
-          params.push(`sortBy=${query.orderBy.field}&sortDir=${query.orderDirection}`);
-      }
-      //search
-      if(query.search) {
-          params.push(`term=${query.search}`);
-      }
-      //pagination
-      if(query.page !== null && query.pageSize !== null) {
-          params.push(`page=${query.page + 1}&pageSize=${query.pageSize}`);
-      }
-      let url = `storage-list?${params.join("&")}`;
-      const result = await httpEndpoint<ScrollableList<OrderDto>>(ScrollableList, url, {method:"GET", headers:{"passcode":passcode}});
-      console.log(result);
-      return {
-          data:new Mapper({constructor:OrderDto}).readValueAsArray(result.data.list),
-          page:0,
-          totalCount:1
-      }
-  };
-  return [doQuery];
-};
 
 type OrderFormExposed = {
     setOrder(order:OrderDto):void
@@ -133,8 +105,11 @@ const OrderForm = forwardRef<OrderFormExposed, {passcode:string, onResult:()=>vo
     );
 });
 
+
+
+
 function Orders({passcode}:{passcode:string}) {
-    const [doQuery] = useQuery(passcode);
+    const [doQuery] = useOrdersQuery(passcode);
     const formRef = useRef(null as OrderFormExposed);
     const tableRef = useRef();
     useEffect(()=>{
@@ -151,6 +126,7 @@ function Orders({passcode}:{passcode:string}) {
 
     return (
         <>
+            <Typography variant={"h3"}>Objednávky</Typography>
             <OrderForm onResult={async()=>{
                 // @ts-ignore
                 tableRef.current.onQueryChange();
@@ -178,6 +154,8 @@ class AccessedForm extends React.Component<{id?:number, passcode:string}, Access
 
     render() {
         return <Wrapper>
+            <Goods passcode={this.props.passcode} />
+            <hr/>
             <Orders passcode={this.props.passcode} />
         </Wrapper>
     }

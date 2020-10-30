@@ -41,7 +41,7 @@ export const jsonTo = ({set}:{set:(name:string, value:any)=>void}, json:GenericM
     const {dataConverter, skipNull} = _.merge(defaultOptions, userOptions);
     Object.keys(json).forEach(e=>{
         const value = json[e];
-        if(value) {
+        if(exist(value)) {
             const resultValue = dataConverter(e, value);
             if(resultValue !== null || !skipNull) {
                 if(Array.isArray(resultValue)) {

@@ -41,7 +41,7 @@ abstract class DataController<E, W> : AdHocController() {
 
     val useDistinct = false
 
-    open fun testAccess(request: HttpServletRequest) {}
+    fun testAccess(request: HttpServletRequest) {}
 
     @GetMapping("", "/")
     operator fun get(@Min(0) @RequestParam(value = "page", defaultValue = "1") start: Int,
