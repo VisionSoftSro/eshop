@@ -99,7 +99,7 @@ class StorageListController:StorageDataController<Order>() {
             preds.add(criteriaBuilder.equal(root.get<OrderStatus>(Order::id.name), it))
         }
         parameter<String>("email") {
-            preds.add(criteriaBuilder.equal(root.get<String>(Order::email.name), it))
+            preds.add(criteriaBuilder.lowerLike(root.get<String>(Order::email.name), it))
         }
         return criteriaBuilder.and(*preds.toTypedArray())
     }
