@@ -1,5 +1,6 @@
 import "reflect-metadata";
 import _ from 'lodash';
+import {exist} from "../Util";
 
 
 
@@ -105,7 +106,8 @@ export class Mapper<A extends Mapped> {
                 return;
             }
             const key:string = meta.name || oKey;
-            const value = data[key] || instance[key] || null;
+            let value = data[key];
+            if(!exist(value)) value = instance[key] || null;
             const type = meta.type || {};
             const {fromJson} = _.merge({fromJson: defaultConverter}, (meta.converters || ({})));
             const setValue = (value?:any, ignoreConverter = false) => {
@@ -113,7 +115,7 @@ export class Mapper<A extends Mapped> {
             };
             //set null value without converters
             setValue(null, true);
-            const valueExist = (value || null) !== null;
+            const valueExist = exist(value);
             if(type.localize !== undefined) {
                 const cfg:LocalizedProperty = Object.assign({textsProvider:"texts"}, type.localize);
                 const texts = this.config.texts;
