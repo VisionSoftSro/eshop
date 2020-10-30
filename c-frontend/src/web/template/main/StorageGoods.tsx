@@ -30,6 +30,7 @@ const GoodsForm = forwardRef<GoodsFormExposed, { passcode: string, onResult: () 
                         }} data={data} url={`storage/goods/${data.id}`} inputGroupEnabled={false}
                                     simpleLabel={true} requestInit={{method: "POST", headers: {"passcode": passcode}}}>
                         <FormField type={"number"} name={"price"} title={"Cena"}/>
+                        <FormField type={"number"} name={"stock"} title={"Skladem"}/>
                         <FormField type={"text"} name={"name"} title={"Název"}/>
                         <FormField type={"textarea"} name={"description"} title={"Popis"} wysiwyg/>
                         <FormField type={"checkbox"} name={"published"} title={"Publikovat"}/>
@@ -56,6 +57,7 @@ export function Goods({passcode}: { passcode: string }) {
                 {field: "code", title: "code"},
                 {field: "name", title: "name"},
                 {field: "price", title: "cena"},
+                {field: "stock", title: "skladem"},
                 {field: "published", title: "Publikováno", render:data => data.published ? <i className={"fa fa-check"}/> : <i className={"fa fa-times"}/>, lookup: {true:"Ano", false:"Ne"}}
             ]} data={listQuery} actions={[
                 {

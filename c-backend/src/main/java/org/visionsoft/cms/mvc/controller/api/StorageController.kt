@@ -67,6 +67,9 @@ class StorageGoodsController:StorageDataController<Goods>() {
         parameter<Boolean>("published") {
             preds.add(criteriaBuilder.equal(root.get<Boolean>(Goods::published.name), it))
         }
+        parameter<Int>("stock") {
+            preds.add(criteriaBuilder.equal(root.get<Int>(Goods::stock.name), it))
+        }
         return criteriaBuilder.and(*preds.toTypedArray())
     }
 }
