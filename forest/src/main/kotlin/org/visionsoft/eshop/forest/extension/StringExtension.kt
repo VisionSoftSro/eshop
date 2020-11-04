@@ -1,4 +1,4 @@
-package org.visionsoft.eshop.extension
+package org.visionsoft.eshop.forest.extension
 
 import java.text.Normalizer
 

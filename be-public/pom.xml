@@ -9,14 +9,17 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>backend</artifactId>
+    <artifactId>be-public</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>org.visionsoft</groupId>
+            <artifactId>forest</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.visionsoft</groupId>
             <artifactId>domain</artifactId>
         </dependency>
-
         <!-- spring modules -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -99,16 +102,6 @@
         <testSourceDirectory>src/test/kotlin</testSourceDirectory>
         <finalName>eshop</finalName>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <forkMode>always</forkMode>
-                    <argLine>
-                        -javaagent:${settings.localRepository}/org/springframework/spring-agent/2.5.6/spring-agent-2.5.6.jar
-                    </argLine>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

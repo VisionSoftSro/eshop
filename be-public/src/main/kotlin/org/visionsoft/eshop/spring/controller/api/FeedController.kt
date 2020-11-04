@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import org.visionsoft.crm.domain.dao.GoodsDao
-import org.visionsoft.eshop.extension.unaccent
+import org.visionsoft.eshop.forest.extension.unaccent
 import java.math.BigDecimal
 
 

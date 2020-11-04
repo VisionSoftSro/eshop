@@ -17,8 +17,10 @@
 
     <modules>
         <module>domain</module>
-        <module>public-backend</module>
-        <module>c-frontend</module>
+        <module>forest</module>
+        <module>c-frontend</module><!-- remove this-->
+        <module>be-public</module>
+        <module>be-admin</module>
     </modules>
 
 
@@ -53,22 +55,11 @@
             <artifactId>kotlinx-coroutines-core</artifactId>
             <version>${kotlinx.version}</version>
         </dependency>
-
-
-
-
     </dependencies>
 
     <dependencyManagement>
         <dependencies>
-
             <!-- app modules -->
-            <dependency>
-                <groupId>org.visionsoft</groupId>
-                <artifactId>backend</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
             <dependency>
                 <groupId>org.visionsoft</groupId>
                 <artifactId>domain</artifactId>
@@ -76,10 +67,9 @@
             </dependency>
             <dependency>
                 <groupId>org.visionsoft</groupId>
-                <artifactId>cms-frontend</artifactId>
+                <artifactId>forest</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
             <!-- spring modules -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
