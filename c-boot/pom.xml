@@ -49,20 +49,20 @@
             </resource>
         </resources>
         <plugins>
-<!--            <plugin>-->
-<!--                <artifactId>maven-war-plugin</artifactId>-->
-<!--                <configuration>-->
-<!--                    <archive>-->
-<!--                        <manifest>-->
-<!--                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>-->
-<!--                        </manifest>-->
-<!--                        <manifestEntries>-->
-<!--                            <Build-Time>${maven.build.timestamp}</Build-Time>-->
-<!--                        </manifestEntries>-->
-<!--                    </archive>-->
-<!--                    <failOnMissingWebXml>false</failOnMissingWebXml>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
+            <!--            <plugin>-->
+            <!--                <artifactId>maven-war-plugin</artifactId>-->
+            <!--                <configuration>-->
+            <!--                    <archive>-->
+            <!--                        <manifest>-->
+            <!--                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>-->
+            <!--                        </manifest>-->
+            <!--                        <manifestEntries>-->
+            <!--                            <Build-Time>${maven.build.timestamp}</Build-Time>-->
+            <!--                        </manifestEntries>-->
+            <!--                    </archive>-->
+            <!--                    <failOnMissingWebXml>false</failOnMissingWebXml>-->
+            <!--                </configuration>-->
+            <!--            </plugin>-->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
