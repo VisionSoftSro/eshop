@@ -9,12 +9,12 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>cms-frontend</artifactId>
+    <artifactId>c-frontend-v2</artifactId>
     <packaging>jar</packaging>
 
     <profiles>
         <profile>
-            <id>with-web</id>
+            <id>with-web-v2</id>
             <build>
                 <plugins>
                     <plugin>
@@ -32,8 +32,8 @@
                                     <goal>install-node-and-npm</goal>
                                 </goals>
                                 <configuration>
-                                    <nodeVersion>v12.18.4</nodeVersion>
-                                    <npmVersion>6.14.6</npmVersion>
+                                    <nodeVersion>v10.15.3</nodeVersion>
+                                    <npmVersion>6.9.0</npmVersion>
                                 </configuration>
                             </execution>
                             <execution>
