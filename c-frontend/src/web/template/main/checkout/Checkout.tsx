@@ -332,7 +332,7 @@ class Payment extends React.Component<MethodsState, ContinueState> {
                                         <tbody>
                                         {this.props.payment.map((i) => (
                                             <tr key={i.id}>
-                                                <th scope="row">{Strings[`PaymentsTexts.${i.code}.name`]}{i.price&&` ( ${new Price(i.price, 'CZK').format()} )`}</th>
+                                                <th scope="row">{Strings[`PaymentsTexts.${i.code}.name`]}{i.price > 0 && ` ( ${new Price(i.price, 'CZK').format()} )`}</th>
                                                 <td>{Strings[`PaymentsTexts.${i.code}.description`]}</td>
                                                 <td>
                                                     <div className="custom-control custom-radio">
